@@ -12,4 +12,9 @@ public class Pawn extends Piece {
     void move() {
 
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s Pawn", getColor());
+    }
 }

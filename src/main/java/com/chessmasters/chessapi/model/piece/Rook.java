@@ -12,4 +12,9 @@ public class Rook extends Piece {
     void move() {
 
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s Rook", getColor());
+    }
 }

@@ -12,4 +12,9 @@ public class Bishop extends Piece {
     void move() {
 
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s Bishop", getColor());
+    }
 }

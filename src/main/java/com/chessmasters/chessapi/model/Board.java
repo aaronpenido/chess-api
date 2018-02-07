@@ -5,6 +5,7 @@ import com.chessmasters.chessapi.model.piece.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.chessmasters.chessapi.enums.PieceColor.*;
 import static com.chessmasters.chessapi.model.Coordinate.*;
@@ -12,6 +13,7 @@ import static com.chessmasters.chessapi.model.Coordinate.*;
 public class Board {
     private List<Piece> pieces;
     private List<Square> squares;
+    private PieceColor nextMoveColor = PieceColor.WHITE;
 
     public Board() {
         initializeSquares();
@@ -67,7 +69,7 @@ public class Board {
         fillRooks();
         fillBishops();
         fillKnights();
-        fillPawns();
+        fillAllPawns();
     }
 
     private void fillKings() {
@@ -122,13 +124,13 @@ public class Board {
                         new Coordinate(LetterFile.G, 8)));
     }
 
-    private void fillPawns() {
-        fillPawn(PieceColor.WHITE, 2);
-        fillPawn(PieceColor.BLACK, 7);
+    private void fillAllPawns() {
+        fillPawns(PieceColor.WHITE, 2);
+        fillPawns(PieceColor.BLACK, 7);
     }
 
-    private void fillPawn(PieceColor color, int number) {
-        for (int i = 1; i < LetterFile.values().length; i++) {
+    private void fillPawns(PieceColor color, int number) {
+        for (int i = 0; i < LetterFile.values().length; i++) {
             LetterFile letter = LetterFile.values()[i];
             Coordinate coordinate = new Coordinate(letter, number);
             fillPiece(Pawn.class, color, coordinate);
@@ -159,5 +161,34 @@ public class Board {
                 .filter(s -> s.getCoordinate().equals(coordinate))
                 .findFirst()
                 .orElse(null);
+    }
+
+    private Square getSquareFromPiece(Piece piece) {
+        return squares
+                .stream()
+                .filter(s -> s.getPiece() != null)
+                .filter(s -> s.getPiece().equals(piece))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public PieceColor getNextMoveColor() {
+        return nextMoveColor;
+    }
+
+    public void movePiece() {
+        if(nextMoveColor.equals(PieceColor.WHITE)) {
+            nextMoveColor = PieceColor.BLACK;
+        } else {
+            nextMoveColor = PieceColor.WHITE;
+        }
+    }
+
+    public void fillSquare(Piece piece, Coordinate coordinate) {
+        Square oldSquare = getSquareFromPiece(piece);
+        oldSquare.fill(null);
+
+        Square square = getSquare(coordinate);
+        square.fill(piece);
     }
 }

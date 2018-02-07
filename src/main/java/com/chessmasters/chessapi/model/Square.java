@@ -21,4 +21,12 @@ public class Square {
     public void fill(Piece piece) {
         this.piece = piece;
     }
+
+    @Override
+    public String toString() {
+        return "Square{" +
+                "piece=" + piece +
+                ", coordinate=" + coordinate +
+                '}';
+    }
 }

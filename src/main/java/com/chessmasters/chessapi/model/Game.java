@@ -1,7 +1,5 @@
 package com.chessmasters.chessapi.model;
 
-import com.sun.media.jfxmedia.events.PlayerStateEvent;
-
 public class Game {
 
     private Board board = new Board();

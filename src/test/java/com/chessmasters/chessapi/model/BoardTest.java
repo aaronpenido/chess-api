@@ -151,6 +151,51 @@ public class BoardTest {
         }
     }
 
+    @Test
+    public void evenMovesAreFromWhitePieces() {
+        Board board = new Board();
+
+        for (int i = 1; i < 10; i=i+2) {
+            assertThat(board.getNextMoveColor()).isEqualTo(PieceColor.WHITE);
+            board.movePiece();
+            board.movePiece();
+        }
+    }
+
+    @Test
+    public void oddMovesAreFromBlackPieces() {
+        Board board = new Board();
+
+        for (int i = 2; i <= 10; i=i+2) {
+            board.movePiece();
+            assertThat(board.getNextMoveColor()).isEqualTo(PieceColor.BLACK);
+            board.movePiece();
+        }
+    }
+
+    @Test
+    public void squareIsFilledWithMovedPiece() {
+        Board board = new Board();
+        Coordinate coordinate = new Coordinate(LetterFile.A, 3);
+        Pawn pawn = new Pawn(PieceColor.WHITE);
+
+        board.fillSquare(pawn, coordinate);
+
+        assertThat(board.getSquare(coordinate).getPiece()).isNotNull();
+    }
+
+    @Test
+    public void squareFromMovedPieceIsEmpty() {
+        Board board = new Board();
+        Pawn pawn = new Pawn(PieceColor.WHITE);
+        Coordinate oldCoordinate = new Coordinate(LetterFile.A, 2);
+        Coordinate nextCoordinate = new Coordinate(LetterFile.A, 3);
+
+        board.fillSquare(pawn, nextCoordinate);
+
+        assertThat(board.getSquare(oldCoordinate).getPiece()).isNull();
+    }
+
     private void assertThatPieceTypeAndCoordinateAreRight(Class pieceClass,
                                                           Coordinate coordinate,
                                                           PieceColor color) {
