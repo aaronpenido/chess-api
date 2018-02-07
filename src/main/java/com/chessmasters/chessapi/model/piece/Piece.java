@@ -1,7 +1,9 @@
 package com.chessmasters.chessapi.model.piece;
 
 import com.chessmasters.chessapi.enums.PieceColor;
+import com.chessmasters.chessapi.model.Coordinate;
 
+import java.util.List;
 import java.util.Objects;
 
 public abstract class Piece {
@@ -13,6 +15,8 @@ public abstract class Piece {
     }
 
     abstract void move();
+    public abstract List<Coordinate> getValidCoordinates(Coordinate actualCoordinate);
+
     public PieceColor getColor() {
         return color;
     }
@@ -29,4 +33,6 @@ public abstract class Piece {
     public int hashCode() {
         return Objects.hash(color);
     }
+
+
 }

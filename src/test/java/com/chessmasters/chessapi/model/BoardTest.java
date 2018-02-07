@@ -2,7 +2,6 @@ package com.chessmasters.chessapi.model;
 
 import com.chessmasters.chessapi.enums.PieceColor;
 import com.chessmasters.chessapi.model.piece.*;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
