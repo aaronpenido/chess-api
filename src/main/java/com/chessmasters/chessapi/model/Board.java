@@ -1,7 +1,9 @@
 package com.chessmasters.chessapi.model;
 
+import com.chessmasters.chessapi.enums.PieceColor;
 import com.chessmasters.chessapi.model.piece.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,6 +67,15 @@ public class Board {
         fillBoardWithBlackPieces();
     }
 
+    private void fillBoardWithBlackPieces() {
+        fillBlackKing();
+        fillBlackQueen();
+        fillBlackRooks();
+        fillBlackBishops();
+        fillBlackKnights();
+        fillBlackPawns();
+    }
+
     private void fillBoardWithWhitePieces() {
         fillWhiteKing();
         fillWhiteQueen();
@@ -75,93 +86,169 @@ public class Board {
     }
 
     private void fillWhiteKing() {
+        int number = 1;
+        Coordinate coordinate = new Coordinate(LetterFile.E, number);
+        fillKing(PieceColor.WHITE, coordinate);
+    }
+
+    private void fillBlackKing() {
+        int number = 8;
+        Coordinate coordinate = new Coordinate(LetterFile.E, number);
+        fillKing(PieceColor.BLACK, coordinate);
+    }
+
+    private void fillKing(PieceColor color, Coordinate coordinate) {
         King king = pieces
                 .stream()
-                .filter(p -> p.getColor().equals(WHITE))
+                .filter(p -> p.getColor().equals(color))
                 .filter(King.class::isInstance)
                 .map(King.class::cast)
                 .findFirst()
                 .orElse(null);
 
-        Square square = getSquare(new Coordinate(LetterFile.E, 1));
+        Square square = getSquare(coordinate);
         square.fill(king);
     }
 
     private void fillWhiteQueen() {
-         Queen queen = pieces
+        int number = 1;
+        Coordinate coordinate = new Coordinate(LetterFile.D, number);
+        fillQueen(PieceColor.WHITE, coordinate);
+    }
+
+    private void fillBlackQueen() {
+        int number = 8;
+        Coordinate coordinate = new Coordinate(LetterFile.D, number);
+        fillQueen(PieceColor.BLACK, coordinate);
+    }
+
+    private void fillQueen(PieceColor color, Coordinate coordinate) {
+        Queen queen = pieces
                 .stream()
-                 .filter(p -> p.getColor().equals(WHITE))
+                .filter(p -> p.getColor().equals(color))
                 .filter(Queen.class::isInstance)
                 .map(Queen.class::cast)
                 .findFirst()
                 .orElse(null);
 
-        Square square = getSquare(new Coordinate(LetterFile.D, 1));
+        Square square = getSquare(coordinate);
         square.fill(queen);
     }
 
     private void fillWhiteRooks() {
+        final int number = 1;
+
+        fillRooks(PieceColor.WHITE, Arrays.asList(
+                new Coordinate(LetterFile.A, number),
+                new Coordinate(LetterFile.H, number)));
+    }
+
+    private void fillBlackRooks() {
+        final int number = 8;
+
+        fillRooks(PieceColor.BLACK, Arrays.asList(
+                new Coordinate(LetterFile.A, number),
+                new Coordinate(LetterFile.H, number)));
+    }
+
+    private void fillRooks(PieceColor color, List<Coordinate> coordinates) {
         List<Rook> rooks = pieces
                 .stream()
-                .filter(p -> p.getColor().equals(WHITE))
+                .filter(p -> p.getColor().equals(color))
                 .filter(Rook.class::isInstance)
                 .map(Rook.class::cast)
                 .collect(Collectors.toList());
 
-        Square square = getSquare(new Coordinate(LetterFile.A, 1));
+        Square square = getSquare(coordinates.get(0));
         square.fill(rooks.get(0));
 
-        square = getSquare(new Coordinate(LetterFile.H, 1));
+        square = getSquare(coordinates.get(1));
         square.fill(rooks.get(1));
     }
 
     private void fillWhiteBishops() {
+        final int number = 1;
+
+        fillBishops(PieceColor.WHITE, Arrays.asList(
+                new Coordinate(LetterFile.C, number),
+                new Coordinate(LetterFile.F, number)));
+    }
+
+    private void fillBlackBishops() {
+        final int number = 8;
+
+        fillBishops(PieceColor.BLACK, Arrays.asList(
+                new Coordinate(LetterFile.C, number),
+                new Coordinate(LetterFile.F, number)));
+    }
+
+    private void fillBishops(PieceColor color, List<Coordinate> coordinates) {
         List<Bishop> bishops = pieces
                 .stream()
-                .filter(p -> p.getColor().equals(WHITE))
+                .filter(p -> p.getColor().equals(color))
                 .filter(Bishop.class::isInstance)
                 .map(Bishop.class::cast)
                 .collect(Collectors.toList());
 
-        Square square = getSquare(new Coordinate(LetterFile.C, 1));
+        Square square = getSquare(coordinates.get(0));
         square.fill(bishops.get(0));
 
-        square = getSquare(new Coordinate(LetterFile.F, 1));
+        square = getSquare(coordinates.get(1));
         square.fill(bishops.get(1));
     }
 
     private void fillWhiteKnights() {
+        final int number = 1;
+
+        fillKnights(PieceColor.WHITE, Arrays.asList(
+                new Coordinate(LetterFile.B, number),
+                new Coordinate(LetterFile.G, number)));
+    }
+
+    private void fillBlackKnights() {
+        final int number = 8;
+
+        fillKnights(PieceColor.BLACK, Arrays.asList(
+                new Coordinate(LetterFile.B, number),
+                new Coordinate(LetterFile.G, number)));
+    }
+
+    private void fillKnights(PieceColor color, List<Coordinate> coordinates) {
         List<Knight> knights = pieces
                 .stream()
-                .filter(p -> p.getColor().equals(WHITE))
+                .filter(p -> p.getColor().equals(color))
                 .filter(Knight.class::isInstance)
                 .map(Knight.class::cast)
                 .collect(Collectors.toList());
 
-        Square square = getSquare(new Coordinate(LetterFile.B, 1));
+        Square square = getSquare(coordinates.get(0));
         square.fill(knights.get(0));
 
-        square = getSquare(new Coordinate(LetterFile.G, 1));
+        square = getSquare(coordinates.get(1));
         square.fill(knights.get(1));
     }
 
     private void fillWhitePawns() {
+        fillPawns(PieceColor.WHITE, 2);
+    }
+
+    private void fillBlackPawns() {
+        fillPawns(PieceColor.BLACK, 7);
+    }
+
+    private void fillPawns(PieceColor color, int number) {
         List<Pawn> pawns = pieces
                 .stream()
-                .filter(p -> p.getColor().equals(WHITE))
+                .filter(p -> p.getColor().equals(color))
                 .filter(Pawn.class::isInstance)
                 .map(Pawn.class::cast)
                 .collect(Collectors.toList());
 
         for (int i = 1; i < LetterFile.values().length; i++) {
             LetterFile letter = LetterFile.values()[i];
-            Square square = getSquare(new Coordinate(letter, 2));
+            Square square = getSquare(new Coordinate(letter, number));
             square.fill(pawns.get(i));
         }
-    }
-
-    private void fillBoardWithBlackPieces() {
-
     }
 
     public Square getSquare(Coordinate coordinate) {

@@ -5,6 +5,9 @@ import com.chessmasters.chessapi.model.piece.*;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static com.chessmasters.chessapi.model.Coordinate.*;
 
@@ -30,111 +33,137 @@ public class BoardTest {
 
     @Test
     public void whiteKingIsOnE1Coordinate() {
-        Coordinate coordinate = new Coordinate(LetterFile.E, 1);
-        King whiteKing = getPieceFromCoordinate(coordinate);
-
-        assertThat(whiteKing).isNotNull();
-        assertThat(whiteKing.getColor()).isEqualTo(PieceColor.WHITE);
+        final int number = 1;
+        Coordinate coordinate = new Coordinate(LetterFile.E, number);
+        assertThatPieceTypeAndCoordinateAreRight(King.class, coordinate, PieceColor.WHITE);
     }
 
     @Test
     public void whiteQueenIsOnD1Coordinate() {
-        Coordinate coordinate = new Coordinate(LetterFile.D, 1);
-        Queen whiteQueen = getPieceFromCoordinate(coordinate);
-
-        assertThat(whiteQueen).isNotNull();
-        assertThat(whiteQueen.getColor()).isEqualTo(PieceColor.WHITE);
+        final int number = 1;
+        Coordinate coordinate = new Coordinate(LetterFile.D, number);
+        assertThatPieceTypeAndCoordinateAreRight(Queen.class, coordinate, PieceColor.WHITE);
     }
 
     @Test
-    public void whiteRookIsOnA1Coordinate() {
-        Coordinate coordinate = new Coordinate(LetterFile.A, 1);
-        Rook whiteRook = getPieceFromCoordinate(coordinate);
-
-        assertThat(whiteRook).isNotNull();
-        assertThat(whiteRook.getColor()).isEqualTo(PieceColor.WHITE);
+    public void blackKingIsOnE8Coordinate() {
+        final int number = 8;
+        Coordinate coordinate = new Coordinate(LetterFile.E, number);
+        assertThatPieceTypeAndCoordinateAreRight(King.class, coordinate, PieceColor.BLACK);
     }
 
     @Test
-    public void whiteRookIsOnH1Coordinate() {
-        Coordinate coordinate = new Coordinate(LetterFile.H, 1);
-        Rook whiteRook = getPieceFromCoordinate(coordinate);
-
-        assertThat(whiteRook).isNotNull();
-        assertThat(whiteRook.getColor()).isEqualTo(PieceColor.WHITE);
+    public void blackQueenIsOnD8Coordinate() {
+        final int number = 8;
+        Coordinate coordinate = new Coordinate(LetterFile.D, number);
+        assertThatPieceTypeAndCoordinateAreRight(Queen.class, coordinate, PieceColor.BLACK);
     }
 
     @Test
-    public void whiteBishopIsOnC1Coordinate() {
-        Coordinate coordinate = new Coordinate(LetterFile.C, 1);
-        Bishop whiteBishop = getPieceFromCoordinate(coordinate);
+    public void whiteRooksAreOnA1AndH1Coordinates() {
+        int number = 1;
+        List<Coordinate> coordinates = Arrays.asList(
+                new Coordinate(LetterFile.A, number),
+                new Coordinate(LetterFile.H, number));
 
-        assertThat(whiteBishop).isNotNull();
-        assertThat(whiteBishop.getColor()).isEqualTo(PieceColor.WHITE);
+        for (Coordinate coordinate : coordinates) {
+            assertThatPieceTypeAndCoordinateAreRight(Rook.class, coordinate, PieceColor.WHITE);
+        }
     }
 
     @Test
-    public void whiteBishopIsOnF1Coordinate() {
-        Coordinate coordinate = new Coordinate(LetterFile.F, 1);
-        Bishop whiteBishop = getPieceFromCoordinate(coordinate);
+    public void blackRooksAreOnA8AndH8Coordinates() {
+        int number = 8;
+        List<Coordinate> coordinates = Arrays.asList(
+                new Coordinate(LetterFile.A, number),
+                new Coordinate(LetterFile.H, number));
 
-        assertThat(whiteBishop).isNotNull();
-        assertThat(whiteBishop.getColor()).isEqualTo(PieceColor.WHITE);
+        for (Coordinate coordinate : coordinates) {
+            assertThatPieceTypeAndCoordinateAreRight(Rook.class, coordinate, PieceColor.BLACK);
+        }
     }
 
     @Test
-    public void whiteKnightIsOnB1Coordinate() {
-        Coordinate coordinate = new Coordinate(LetterFile.B, 1);
-        Knight whiteKnight = getPieceFromCoordinate(coordinate);
+    public void whiteBishopsAreOnC1AndF1Coordinates() {
+        int number = 1;
+        List<Coordinate> coordinates = Arrays.asList(
+                new Coordinate(LetterFile.C, number),
+                new Coordinate(LetterFile.F, number));
 
-        assertThat(whiteKnight).isNotNull();
-        assertThat(whiteKnight.getColor()).isEqualTo(PieceColor.WHITE);
+        for (Coordinate coordinate : coordinates) {
+            assertThatPieceTypeAndCoordinateAreRight(Bishop.class, coordinate, PieceColor.WHITE);
+        }
     }
 
     @Test
-    public void whiteKnightIsOnG1Coordinate() {
-        Coordinate coordinate = new Coordinate(LetterFile.G, 1);
-        Knight whiteKnight = getPieceFromCoordinate(coordinate);
+    public void blackBishopsAreOnC8AndF8Coordinates() {
+        int number = 8;
+        List<Coordinate> coordinates = Arrays.asList(
+                new Coordinate(LetterFile.C, number),
+                new Coordinate(LetterFile.F, number));
 
-        assertThat(whiteKnight).isNotNull();
-        assertThat(whiteKnight.getColor()).isEqualTo(PieceColor.WHITE);
+        for (Coordinate coordinate : coordinates) {
+            assertThatPieceTypeAndCoordinateAreRight(Bishop.class, coordinate, PieceColor.BLACK);
+        }
+    }
+
+    @Test
+    public void whiteKnightsAreOnB1AndG1Coordinate() {
+        int number = 1;
+        List<Coordinate> coordinates = Arrays.asList(
+                new Coordinate(LetterFile.B, number),
+                new Coordinate(LetterFile.G, number));
+
+        for (Coordinate coordinate : coordinates) {
+            assertThatPieceTypeAndCoordinateAreRight(Knight.class, coordinate, PieceColor.WHITE);
+        }
+    }
+
+    @Test
+    public void blackKnightsAreOnB8AndG8Coordinate() {
+        int number = 8;
+        List<Coordinate> coordinates = Arrays.asList(
+                new Coordinate(LetterFile.B, number),
+                new Coordinate(LetterFile.G, number));
+
+        for (Coordinate coordinate : coordinates) {
+            assertThatPieceTypeAndCoordinateAreRight(Knight.class, coordinate, PieceColor.BLACK);
+        }
     }
 
     @Test
     public void whitePawnsAreOnRightCoordinates() {
         for (int i = 1; i < LetterFile.values().length; i++) {
             LetterFile letterFile = LetterFile.values()[i];
-            Coordinate coordinate = new Coordinate(letterFile, 2);
-            Pawn pawn = getPieceFromCoordinate(coordinate);
-
-            assertThat(pawn).isNotNull();
-            assertThat(pawn.getColor()).isEqualTo(PieceColor.WHITE);
+            int number = 2;
+            Coordinate coordinate = new Coordinate(letterFile, number);
+            assertThatPieceTypeAndCoordinateAreRight(Pawn.class, coordinate, PieceColor.WHITE);
         }
     }
 
-    @Ignore
     @Test
-    public void blackRookIsOnA8Coordinate() {
-        Coordinate coordinate = new Coordinate(LetterFile.A, 8);
-        Rook blackRook = getPieceFromCoordinate(coordinate);
-
-        assertThat(blackRook).isNotNull();
-        assertThat(blackRook.getColor()).isEqualTo(PieceColor.BLACK);
+    public void blackPawnsAreOnRightCoordinates() {
+        for (int i = 1; i < LetterFile.values().length; i++) {
+            LetterFile letterFile = LetterFile.values()[i];
+            int number = 7;
+            Coordinate coordinate = new Coordinate(letterFile, number);
+            assertThatPieceTypeAndCoordinateAreRight(Pawn.class, coordinate, PieceColor.BLACK);
+        }
     }
 
-    @Ignore
-    @Test
-    public void blackRookIsOnH8Coordinate() {
-        Coordinate coordinate = new Coordinate(LetterFile.H, 8);
-        Rook blackRook   = getPieceFromCoordinate(coordinate);
+    private void assertThatPieceTypeAndCoordinateAreRight(Class pieceClass,
+                                                          Coordinate coordinate,
+                                                          PieceColor color) {
+        Piece piece = getPieceFromCoordinate(coordinate);
 
-        assertThat(blackRook).isNotNull();
-        assertThat(blackRook.getColor()).isEqualTo(PieceColor.BLACK);
+        assertThat(piece).isNotNull();
+        assertThat(piece.getClass()).isEqualTo(pieceClass);
+        assertThat(piece.getColor()).isEqualTo(color);
     }
 
-    private <T extends Piece> T getPieceFromCoordinate(Coordinate coordinate) {
+    private Piece getPieceFromCoordinate(Coordinate coordinate) {
         Board board = new Board();
 
-        return (T)board.getSquare(coordinate).getPiece();
+        return board.getSquare(coordinate).getPiece();
     }
 }
