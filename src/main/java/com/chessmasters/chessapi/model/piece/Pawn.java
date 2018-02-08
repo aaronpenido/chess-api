@@ -2,6 +2,9 @@ package com.chessmasters.chessapi.model.piece;
 
 import com.chessmasters.chessapi.enums.PieceColor;
 import com.chessmasters.chessapi.model.Coordinate;
+import com.chessmasters.chessapi.model.piece.move.BlackPawnMove;
+import com.chessmasters.chessapi.model.piece.move.PawnMove;
+import com.chessmasters.chessapi.model.piece.move.WhitePawnMove;
 
 import static com.chessmasters.chessapi.model.Coordinate.*;
 
@@ -10,10 +13,8 @@ import java.util.List;
 
 public class Pawn extends Piece {
 
-    private static final int BLACK_INITIAL_NUMBER = 7;
-    private static final int WHITE_INITIAL_NUMBER = 2;
-    private static final int BLACK_MAX_NUMBER = 1;
-    private static final int WHITE_MAX_NUMBER = 8;
+    private PawnMove pawnMove;
+    private Coordinate actualCoordinate;
 
     public Pawn(PieceColor color) {
         super(color);
@@ -26,69 +27,44 @@ public class Pawn extends Piece {
 
     @Override
     public List<Coordinate> getValidCoordinates(Coordinate actualCoordinate) {
+        this.actualCoordinate = actualCoordinate;
         if(this.getColor().equals(PieceColor.WHITE)) {
-            return getValidWhiteCoordinates(actualCoordinate);
+            pawnMove = new WhitePawnMove(actualCoordinate);
+        } else {
+            pawnMove = new BlackPawnMove(actualCoordinate);
         }
-        return getValidBlackCoordinates(actualCoordinate);
+        return getValidCoordinates();
     }
 
-    private List<Coordinate> getValidWhiteCoordinates(Coordinate actualCoordinate) {
-        final int nextNumber = actualCoordinate.getNumber() + 1;
-        final int nextTwoNumbers = actualCoordinate.getNumber() + 2;
-
-        return getValidCoordinatesFromBothColors(actualCoordinate,
-                WHITE_INITIAL_NUMBER,
-                WHITE_MAX_NUMBER,
-                nextNumber,
-                nextTwoNumbers);
-    }
-
-    private List<Coordinate> getValidBlackCoordinates(Coordinate actualCoordinate) {
-        final int nextNumber = actualCoordinate.getNumber() - 1;
-        final int nextTwoNumbers = actualCoordinate.getNumber() - 2;
-
-        return getValidCoordinatesFromBothColors(actualCoordinate,
-                BLACK_INITIAL_NUMBER,
-                BLACK_MAX_NUMBER,
-                nextNumber,
-                nextTwoNumbers);
-    }
-
-    private List<Coordinate> getValidCoordinatesFromBothColors(Coordinate actualCoordinate,
-                                                               final int initialNumber,
-                                                               final int maxNumber,
-                                                               final int nextNumber,
-                                                               final int nextTwoNumbers) {
+    private List<Coordinate> getValidCoordinates() {
         final int actualNumber = actualCoordinate.getNumber();
         final List<Coordinate> coordinates = new ArrayList<>();
 
-        if(actualNumber == maxNumber) {
+        if(actualNumber == pawnMove.getMaxNumber()) {
             return coordinates;
         }
 
-        final Coordinate nextSquareCoordinate = new Coordinate(actualCoordinate.getLetter(), nextNumber);
+        final Coordinate nextSquareCoordinate = new Coordinate(actualCoordinate.getLetter(), pawnMove.getNextNumber());
         coordinates.add(nextSquareCoordinate);
-        coordinates.addAll(nextTwoSquaresCoordinate(actualCoordinate, initialNumber, nextTwoNumbers));
-        coordinates.addAll(leftDiagonalCoordinate(actualCoordinate, nextNumber));
-        coordinates.addAll(rightDiagonalCoordinate(actualCoordinate, nextNumber));
+        coordinates.addAll(nextTwoSquaresCoordinate(actualCoordinate));
+        coordinates.addAll(leftDiagonalCoordinate(actualCoordinate));
+        coordinates.addAll(rightDiagonalCoordinate(actualCoordinate));
 
         return coordinates;
     }
 
-    private List<Coordinate> nextTwoSquaresCoordinate(final Coordinate actualCoordinate,
-                                                      final int initialNumber,
-                                                      final int nextTwoNumbers) {
+    private List<Coordinate> nextTwoSquaresCoordinate(final Coordinate actualCoordinate) {
         final List<Coordinate> coordinates = new ArrayList<>();
         final int actualNumber = actualCoordinate.getNumber();
         final LetterFile actualLetter = actualCoordinate.getLetter();
 
-        if(actualNumber == initialNumber) {
-            coordinates.add(new Coordinate(actualLetter, nextTwoNumbers));
+        if(actualNumber == pawnMove.getInitialNumber()) {
+            coordinates.add(new Coordinate(actualLetter, pawnMove.getNextTwoNumbers()));
         }
         return coordinates;
     }
 
-    private List<Coordinate> leftDiagonalCoordinate(final Coordinate actualCoordinate, final int nextNumber) {
+    private List<Coordinate> leftDiagonalCoordinate(final Coordinate actualCoordinate) {
         final List<Coordinate> coordinates = new ArrayList<>();
         final int letterIndex = actualCoordinate.getLetter().ordinal();
         final LetterFile[] letterValues = Coordinate.LetterFile.values();
@@ -96,13 +72,13 @@ public class Pawn extends Piece {
         final boolean isLetterNotOnLeftBorder = letterIndex >= 1;
         if(isLetterNotOnLeftBorder) {
             final LetterFile leftLetter = letterValues[letterIndex - 1];
-            coordinates.add(new Coordinate(leftLetter, nextNumber));
+            coordinates.add(new Coordinate(leftLetter, pawnMove.getNextNumber()));
         }
 
         return coordinates;
     }
 
-    private List<Coordinate> rightDiagonalCoordinate(final Coordinate actualCoordinate, final int nextNumber) {
+    private List<Coordinate> rightDiagonalCoordinate(final Coordinate actualCoordinate) {
         final List<Coordinate> coordinates = new ArrayList<>();
         final int letterIndex = actualCoordinate.getLetter().ordinal();
         final LetterFile[] letterValues = Coordinate.LetterFile.values();
@@ -110,7 +86,7 @@ public class Pawn extends Piece {
 
         if(isLetterNotOnRightBorder) {
             final LetterFile rightLetter = letterValues[letterIndex + 1];
-            coordinates.add(new Coordinate(rightLetter, nextNumber));
+            coordinates.add(new Coordinate(rightLetter, pawnMove.getNextNumber()));
         }
 
         return coordinates;

@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PawnTest {
 
     @Test
-    public void whiteMovesTwoSquaresAheadOnlyInRankNumberSeven() {
+    public void whiteMovesTwoSquaresAheadOnlyInRankNumberTwo() {
         final int rankNumberTwo = 2;
         final int nextSquare = rankNumberTwo + 1;
         final int twoSquaresAhead = nextSquare + 1;
