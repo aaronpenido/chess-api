@@ -10,6 +10,11 @@ import java.util.List;
 
 public class Pawn extends Piece {
 
+    private static final int BLACK_INITIAL_NUMBER = 7;
+    private static final int WHITE_INITIAL_NUMBER = 2;
+    private static final int BLACK_MAX_NUMBER = 1;
+    private static final int WHITE_MAX_NUMBER = 8;
+
     public Pawn(PieceColor color) {
         super(color);
     }
@@ -28,61 +33,84 @@ public class Pawn extends Piece {
     }
 
     private List<Coordinate> getValidWhiteCoordinates(Coordinate actualCoordinate) {
-        final int maxNumber = 8;
-        final int initialNumber = 2;
         final int nextNumber = actualCoordinate.getNumber() + 1;
         final int nextTwoNumbers = actualCoordinate.getNumber() + 2;
 
         return getValidCoordinatesFromBothColors(actualCoordinate,
-                maxNumber,
-                initialNumber,
+                WHITE_INITIAL_NUMBER,
+                WHITE_MAX_NUMBER,
                 nextNumber,
                 nextTwoNumbers);
     }
 
     private List<Coordinate> getValidBlackCoordinates(Coordinate actualCoordinate) {
-        final int maxNumber = 1;
-        final int initialNumber = 7;
         final int nextNumber = actualCoordinate.getNumber() - 1;
         final int nextTwoNumbers = actualCoordinate.getNumber() - 2;
 
         return getValidCoordinatesFromBothColors(actualCoordinate,
-                maxNumber,
-                initialNumber,
+                BLACK_INITIAL_NUMBER,
+                BLACK_MAX_NUMBER,
                 nextNumber,
                 nextTwoNumbers);
     }
 
     private List<Coordinate> getValidCoordinatesFromBothColors(Coordinate actualCoordinate,
-                                                               final int maxNumber,
                                                                final int initialNumber,
+                                                               final int maxNumber,
                                                                final int nextNumber,
                                                                final int nextTwoNumbers) {
         final int actualNumber = actualCoordinate.getNumber();
-        final LetterFile actualLetter = actualCoordinate.getLetter();
+        final List<Coordinate> coordinates = new ArrayList<>();
 
         if(actualNumber == maxNumber) {
-            return null;
+            return coordinates;
         }
 
-        List<Coordinate> coordinates = new ArrayList<>();
-        coordinates.add(new Coordinate(actualLetter, nextNumber));
+        final Coordinate nextSquareCoordinate = new Coordinate(actualCoordinate.getLetter(), nextNumber);
+        coordinates.add(nextSquareCoordinate);
+        coordinates.addAll(nextTwoSquaresCoordinate(actualCoordinate, initialNumber, nextTwoNumbers));
+        coordinates.addAll(leftDiagonalCoordinate(actualCoordinate, nextNumber));
+        coordinates.addAll(rightDiagonalCoordinate(actualCoordinate, nextNumber));
+
+        return coordinates;
+    }
+
+    private List<Coordinate> nextTwoSquaresCoordinate(final Coordinate actualCoordinate,
+                                                      final int initialNumber,
+                                                      final int nextTwoNumbers) {
+        final List<Coordinate> coordinates = new ArrayList<>();
+        final int actualNumber = actualCoordinate.getNumber();
+        final LetterFile actualLetter = actualCoordinate.getLetter();
 
         if(actualNumber == initialNumber) {
             coordinates.add(new Coordinate(actualLetter, nextTwoNumbers));
         }
+        return coordinates;
+    }
 
-        final int letterIndex = actualLetter.ordinal();
-        final Coordinate.LetterFile[] letterValues = Coordinate.LetterFile.values();
+    private List<Coordinate> leftDiagonalCoordinate(final Coordinate actualCoordinate, final int nextNumber) {
+        final List<Coordinate> coordinates = new ArrayList<>();
+        final int letterIndex = actualCoordinate.getLetter().ordinal();
+        final LetterFile[] letterValues = Coordinate.LetterFile.values();
 
         final boolean isLetterNotOnLeftBorder = letterIndex >= 1;
         if(isLetterNotOnLeftBorder) {
-            coordinates.add(new Coordinate(letterValues[letterIndex - 1], nextNumber));
+            final LetterFile leftLetter = letterValues[letterIndex - 1];
+            coordinates.add(new Coordinate(leftLetter, nextNumber));
         }
 
+        return coordinates;
+    }
+
+    private List<Coordinate> rightDiagonalCoordinate(final Coordinate actualCoordinate, final int nextNumber) {
+        final List<Coordinate> coordinates = new ArrayList<>();
+        final int letterIndex = actualCoordinate.getLetter().ordinal();
+        final LetterFile[] letterValues = Coordinate.LetterFile.values();
         final boolean isLetterNotOnRightBorder = letterIndex < letterValues.length - 1;
+
         if(isLetterNotOnRightBorder) {
-            coordinates.add(new Coordinate(letterValues[letterIndex + 1], nextNumber));
+            final LetterFile rightLetter = letterValues[letterIndex + 1];
+            coordinates.add(new Coordinate(rightLetter, nextNumber));
         }
 
         return coordinates;

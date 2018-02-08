@@ -80,7 +80,7 @@ public class PawnTest {
 
         List<Coordinate> validCoordinates = pawn.getValidCoordinates(coordinate);
 
-        assertThat(validCoordinates).isNull();
+        assertThat(validCoordinates).isEmpty();
     }
 
     @Test
@@ -152,6 +152,6 @@ public class PawnTest {
 
         List<Coordinate> validCoordinates = pawn.getValidCoordinates(coordinate);
 
-        assertThat(validCoordinates).isNull();
+        assertThat(validCoordinates).isEmpty();
     }
 }
