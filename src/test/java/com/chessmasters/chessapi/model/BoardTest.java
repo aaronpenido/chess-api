@@ -180,7 +180,7 @@ public class BoardTest {
 
         board.fillSquare(pawn, coordinate);
 
-        assertThat(board.getSquare(coordinate).getPiece()).isNotNull();
+        assertThat(board.getSquareByCoordinate(coordinate).getPiece()).isNotNull();
     }
 
     @Test
@@ -192,7 +192,7 @@ public class BoardTest {
 
         board.fillSquare(pawn, nextCoordinate);
 
-        assertThat(board.getSquare(oldCoordinate).getPiece()).isNull();
+        assertThat(board.getSquareByCoordinate(oldCoordinate).getPiece()).isNull();
     }
 
     private void assertThatPieceTypeAndCoordinateAreRight(Class pieceClass,
@@ -208,6 +208,6 @@ public class BoardTest {
     private Piece getPieceFromCoordinate(Coordinate coordinate) {
         Board board = new Board();
 
-        return board.getSquare(coordinate).getPiece();
+        return board.getSquareByCoordinate(coordinate).getPiece();
     }
 }
