@@ -27,27 +27,31 @@ public class Pawn extends Piece {
 
     private List<Coordinate> getValidWhiteCoordinates(Coordinate actualCoordinate) {
         final int MAX_NUMBER = 8;
-        if(actualCoordinate.getNumber() == MAX_NUMBER) {
+        final int INITIAL_NUMBER = 2;
+        final int actualNumber = actualCoordinate.getNumber();
+
+        if(actualNumber == MAX_NUMBER) {
             return null;
         }
 
-        Coordinate firstCoordinate = new Coordinate(actualCoordinate.getLetter(), 3);
-        Coordinate secondCoordinate = new Coordinate(actualCoordinate.getLetter(), 4);
-
+        Coordinate firstCoordinate = new Coordinate(actualCoordinate.getLetter(), actualNumber + 1);
         List<Coordinate> coordinates = new ArrayList<>();
-
         coordinates.add(firstCoordinate);
-        coordinates.add(secondCoordinate);
+
+        if(actualNumber == INITIAL_NUMBER) {
+            Coordinate secondCoordinate = new Coordinate(actualCoordinate.getLetter(), actualNumber + 2);
+            coordinates.add(secondCoordinate);
+        }
 
         final int letterIndex = actualCoordinate.getLetter().ordinal();
         final Coordinate.LetterFile[] letterValues = Coordinate.LetterFile.values();
 
         if(letterIndex >= 1) {
-            coordinates.add(new Coordinate(letterValues[letterIndex - 1], 3));
+            coordinates.add(new Coordinate(letterValues[letterIndex - 1], actualNumber + 1));
         }
 
         if(letterIndex < letterValues.length - 1) {
-            coordinates.add(new Coordinate(letterValues[letterIndex + 1], 3));
+            coordinates.add(new Coordinate(letterValues[letterIndex + 1], actualNumber + 1));
         }
 
         return coordinates;
@@ -55,27 +59,31 @@ public class Pawn extends Piece {
 
     private List<Coordinate> getValidBlackCoordinates(Coordinate actualCoordinate) {
         final int MAX_NUMBER = 1;
+        final int INITIAL_NUMBER = 7;
+        final int actualNumber = actualCoordinate.getNumber();
+
         if(actualCoordinate.getNumber() == MAX_NUMBER) {
             return null;
         }
 
-        Coordinate firstCoordinate = new Coordinate(actualCoordinate.getLetter(), 6);
-        Coordinate secondCoordinate = new Coordinate(actualCoordinate.getLetter(), 5);
-
+        Coordinate firstCoordinate = new Coordinate(actualCoordinate.getLetter(), actualNumber - 1);
         List<Coordinate> coordinates = new ArrayList<>();
-
         coordinates.add(firstCoordinate);
-        coordinates.add(secondCoordinate);
+
+        if(actualNumber == INITIAL_NUMBER) {
+            Coordinate secondCoordinate = new Coordinate(actualCoordinate.getLetter(), actualNumber - 2);
+            coordinates.add(secondCoordinate);
+        }
 
         final int letterIndex = actualCoordinate.getLetter().ordinal();
         final Coordinate.LetterFile[] letterValues = Coordinate.LetterFile.values();
 
         if(letterIndex >= 1) {
-            coordinates.add(new Coordinate(letterValues[letterIndex - 1], 6));
+            coordinates.add(new Coordinate(letterValues[letterIndex - 1], actualNumber - 1));
         }
 
         if(letterIndex < letterValues.length - 1) {
-            coordinates.add(new Coordinate(letterValues[letterIndex + 1], 6));
+            coordinates.add(new Coordinate(letterValues[letterIndex + 1], actualNumber - 1));
         }
 
         return coordinates;

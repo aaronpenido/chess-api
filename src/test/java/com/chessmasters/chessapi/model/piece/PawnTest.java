@@ -5,55 +5,72 @@ import com.chessmasters.chessapi.model.Coordinate;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PawnTest {
 
     @Test
-    public void validWhiteMoveInLeftBorder() {
+    public void whiteMovesTwoSquaresAheadOnlyInRankNumberSeven() {
+        final int rankNumberTwo = 2;
+        final int nextSquare = rankNumberTwo + 1;
+        final int twoSquaresAhead = nextSquare + 1;
         Pawn pawn = new Pawn(PieceColor.WHITE);
-        Coordinate coordinate = new Coordinate(Coordinate.LetterFile.A, 2);
+        Coordinate coordinate = new Coordinate(Coordinate.LetterFile.A, rankNumberTwo);
 
         List<Coordinate> validCoordinates = pawn.getValidCoordinates(coordinate);
 
         assertThat(validCoordinates).isNotNull();
-        assertThat(validCoordinates.size()).isEqualTo(3);
         assertThat(validCoordinates).contains(
-                new Coordinate(Coordinate.LetterFile.A, 3),
-                new Coordinate(Coordinate.LetterFile.A, 4),
-                new Coordinate(Coordinate.LetterFile.B, 3));
+                new Coordinate(Coordinate.LetterFile.A, nextSquare),
+                new Coordinate(Coordinate.LetterFile.A, twoSquaresAhead));
     }
 
     @Test
-    public void validWhiteMoveInCenter() {
+    public void validWhiteMovesInLeftBorderAreOneNumberAheadAndOneSquareInRightDiagonal() {
+        final int randomNumberFromThreeToSeven = new Random().nextInt(4) + 3;
+        final int nextSquare = randomNumberFromThreeToSeven + 1;
         Pawn pawn = new Pawn(PieceColor.WHITE);
-        Coordinate coordinate = new Coordinate(Coordinate.LetterFile.E, 2);
+        Coordinate coordinate = new Coordinate(Coordinate.LetterFile.A, randomNumberFromThreeToSeven);
 
         List<Coordinate> validCoordinates = pawn.getValidCoordinates(coordinate);
 
         assertThat(validCoordinates).isNotNull();
-        assertThat(validCoordinates.size()).isEqualTo(4);
-        assertThat(validCoordinates).contains(
-                new Coordinate(Coordinate.LetterFile.E, 3),
-                new Coordinate(Coordinate.LetterFile.E, 4),
-                new Coordinate(Coordinate.LetterFile.D, 3),
-                new Coordinate(Coordinate.LetterFile.F, 3));
+        assertThat(validCoordinates).containsExactlyInAnyOrder(
+                new Coordinate(Coordinate.LetterFile.A, nextSquare),
+                new Coordinate(Coordinate.LetterFile.B, nextSquare));
     }
 
     @Test
-    public void validWhiteMoveInRightBorder() {
+    public void validWhiteMovesInCenterAreOneNumberAheadAndOneSquareInBothDiagonals() {
+        final int randomNumberFromThreeToSeven = new Random().nextInt(4) + 3;
+        final int nextSquare = randomNumberFromThreeToSeven + 1;
         Pawn pawn = new Pawn(PieceColor.WHITE);
-        Coordinate coordinate = new Coordinate(Coordinate.LetterFile.H, 2);
+        Coordinate coordinate = new Coordinate(Coordinate.LetterFile.E, randomNumberFromThreeToSeven);
 
         List<Coordinate> validCoordinates = pawn.getValidCoordinates(coordinate);
 
         assertThat(validCoordinates).isNotNull();
-        assertThat(validCoordinates.size()).isEqualTo(3);
-        assertThat(validCoordinates).contains(
-                new Coordinate(Coordinate.LetterFile.H, 3),
-                new Coordinate(Coordinate.LetterFile.H, 4),
-                new Coordinate(Coordinate.LetterFile.G, 3));
+        assertThat(validCoordinates).containsExactlyInAnyOrder(
+                new Coordinate(Coordinate.LetterFile.E, nextSquare),
+                new Coordinate(Coordinate.LetterFile.D, nextSquare),
+                new Coordinate(Coordinate.LetterFile.F, nextSquare));
+    }
+
+    @Test
+    public void validWhiteMovesInRightBorderAreOneNumberAheadAndOneSquareInLeftDiagonal() {
+        final int randomNumberFromThreeToSeven = new Random().nextInt(4) + 3;
+        final int nextSquare = randomNumberFromThreeToSeven + 1;
+        Pawn pawn = new Pawn(PieceColor.WHITE);
+        Coordinate coordinate = new Coordinate(Coordinate.LetterFile.H, randomNumberFromThreeToSeven);
+
+        List<Coordinate> validCoordinates = pawn.getValidCoordinates(coordinate);
+
+        assertThat(validCoordinates).isNotNull();
+        assertThat(validCoordinates).containsExactlyInAnyOrder(
+                new Coordinate(Coordinate.LetterFile.H, nextSquare),
+                new Coordinate(Coordinate.LetterFile.G, nextSquare));
     }
 
     @Test
@@ -67,49 +84,65 @@ public class PawnTest {
     }
 
     @Test
-    public void validBlackMoveInRightBorder() {
+    public void blackMovesTwoSquaresAheadOnlyInRankNumberSeven() {
+        final int rankNumberSeven = 7;
+        final int nextSquare = rankNumberSeven - 1;
+        final int twoSquaresAhead = nextSquare - 1;
         Pawn pawn = new Pawn(PieceColor.BLACK);
-        Coordinate coordinate = new Coordinate(Coordinate.LetterFile.A, 7);
+        Coordinate coordinate = new Coordinate(Coordinate.LetterFile.A, rankNumberSeven);
 
         List<Coordinate> validCoordinates = pawn.getValidCoordinates(coordinate);
 
         assertThat(validCoordinates).isNotNull();
-        assertThat(validCoordinates.size()).isEqualTo(3);
         assertThat(validCoordinates).contains(
-                new Coordinate(Coordinate.LetterFile.A, 6),
-                new Coordinate(Coordinate.LetterFile.A, 5),
-                new Coordinate(Coordinate.LetterFile.B, 6));
+                new Coordinate(Coordinate.LetterFile.A, nextSquare),
+                new Coordinate(Coordinate.LetterFile.A, twoSquaresAhead));
     }
 
     @Test
-    public void validBlackMoveInCenter() {
+    public void validBlackMovesInRightBorderAreOneNumberAheadAndOneSquareInLeftDiagonal() {
+        final int randomNumberFromSixToTwo = new Random().nextInt(4) + 2;
+        final int nextSquare = randomNumberFromSixToTwo - 1;
         Pawn pawn = new Pawn(PieceColor.BLACK);
-        Coordinate coordinate = new Coordinate(Coordinate.LetterFile.E, 7);
+        Coordinate coordinate = new Coordinate(Coordinate.LetterFile.A, randomNumberFromSixToTwo);
 
         List<Coordinate> validCoordinates = pawn.getValidCoordinates(coordinate);
 
         assertThat(validCoordinates).isNotNull();
-        assertThat(validCoordinates.size()).isEqualTo(4);
-        assertThat(validCoordinates).contains(
-                new Coordinate(Coordinate.LetterFile.E, 6),
-                new Coordinate(Coordinate.LetterFile.E, 5),
-                new Coordinate(Coordinate.LetterFile.D, 6),
-                new Coordinate(Coordinate.LetterFile.F, 6));
+        assertThat(validCoordinates).containsExactlyInAnyOrder(
+                new Coordinate(Coordinate.LetterFile.A, nextSquare),
+                new Coordinate(Coordinate.LetterFile.B, nextSquare));
     }
 
     @Test
-    public void validBlackMoveInLeftBorder() {
+    public void validBlackMovesInCenterAreOneNumberAheadAndOneSquareInBothDiagonals() {
+        final int randomNumberFromSixToTwo = new Random().nextInt(4) + 2;
+        final int nextSquare = randomNumberFromSixToTwo - 1;
         Pawn pawn = new Pawn(PieceColor.BLACK);
-        Coordinate coordinate = new Coordinate(Coordinate.LetterFile.H, 7);
+        Coordinate coordinate = new Coordinate(Coordinate.LetterFile.E, randomNumberFromSixToTwo);
 
         List<Coordinate> validCoordinates = pawn.getValidCoordinates(coordinate);
 
         assertThat(validCoordinates).isNotNull();
-        assertThat(validCoordinates.size()).isEqualTo(3);
-        assertThat(validCoordinates).contains(
-                new Coordinate(Coordinate.LetterFile.H, 6),
-                new Coordinate(Coordinate.LetterFile.H, 5),
-                new Coordinate(Coordinate.LetterFile.G, 6));
+        assertThat(validCoordinates).containsExactlyInAnyOrder(
+                new Coordinate(Coordinate.LetterFile.E, nextSquare),
+                new Coordinate(Coordinate.LetterFile.D, nextSquare),
+                new Coordinate(Coordinate.LetterFile.F, nextSquare));
+    }
+
+    @Test
+    public void validBlackMovesInLeftBorderAreOneNumberAheadAndOneSquareInRightDiagonal() {
+        final int randomNumberFromSixToTwo = new Random().nextInt(4) + 2;
+        final int nextSquare = randomNumberFromSixToTwo - 1;
+        Pawn pawn = new Pawn(PieceColor.BLACK);
+        Coordinate coordinate = new Coordinate(Coordinate.LetterFile.H, randomNumberFromSixToTwo);
+
+        List<Coordinate> validCoordinates = pawn.getValidCoordinates(coordinate);
+
+        assertThat(validCoordinates).isNotNull();
+        assertThat(validCoordinates).containsExactlyInAnyOrder(
+                new Coordinate(Coordinate.LetterFile.H, nextSquare),
+                new Coordinate(Coordinate.LetterFile.G, nextSquare));
     }
 
     @Test
