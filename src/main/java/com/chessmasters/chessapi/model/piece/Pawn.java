@@ -3,6 +3,8 @@ package com.chessmasters.chessapi.model.piece;
 import com.chessmasters.chessapi.enums.PieceColor;
 import com.chessmasters.chessapi.model.Coordinate;
 
+import static com.chessmasters.chessapi.model.Coordinate.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,64 +28,61 @@ public class Pawn extends Piece {
     }
 
     private List<Coordinate> getValidWhiteCoordinates(Coordinate actualCoordinate) {
-        final int MAX_NUMBER = 8;
-        final int INITIAL_NUMBER = 2;
-        final int actualNumber = actualCoordinate.getNumber();
+        final int maxNumber = 8;
+        final int initialNumber = 2;
+        final int nextNumber = actualCoordinate.getNumber() + 1;
+        final int nextTwoNumbers = actualCoordinate.getNumber() + 2;
 
-        if(actualNumber == MAX_NUMBER) {
-            return null;
-        }
-
-        Coordinate firstCoordinate = new Coordinate(actualCoordinate.getLetter(), actualNumber + 1);
-        List<Coordinate> coordinates = new ArrayList<>();
-        coordinates.add(firstCoordinate);
-
-        if(actualNumber == INITIAL_NUMBER) {
-            Coordinate secondCoordinate = new Coordinate(actualCoordinate.getLetter(), actualNumber + 2);
-            coordinates.add(secondCoordinate);
-        }
-
-        final int letterIndex = actualCoordinate.getLetter().ordinal();
-        final Coordinate.LetterFile[] letterValues = Coordinate.LetterFile.values();
-
-        if(letterIndex >= 1) {
-            coordinates.add(new Coordinate(letterValues[letterIndex - 1], actualNumber + 1));
-        }
-
-        if(letterIndex < letterValues.length - 1) {
-            coordinates.add(new Coordinate(letterValues[letterIndex + 1], actualNumber + 1));
-        }
-
-        return coordinates;
+        return getValidCoordinatesFromBothColors(actualCoordinate,
+                maxNumber,
+                initialNumber,
+                nextNumber,
+                nextTwoNumbers);
     }
 
     private List<Coordinate> getValidBlackCoordinates(Coordinate actualCoordinate) {
-        final int MAX_NUMBER = 1;
-        final int INITIAL_NUMBER = 7;
-        final int actualNumber = actualCoordinate.getNumber();
+        final int maxNumber = 1;
+        final int initialNumber = 7;
+        final int nextNumber = actualCoordinate.getNumber() - 1;
+        final int nextTwoNumbers = actualCoordinate.getNumber() - 2;
 
-        if(actualCoordinate.getNumber() == MAX_NUMBER) {
+        return getValidCoordinatesFromBothColors(actualCoordinate,
+                maxNumber,
+                initialNumber,
+                nextNumber,
+                nextTwoNumbers);
+    }
+
+    private List<Coordinate> getValidCoordinatesFromBothColors(Coordinate actualCoordinate,
+                                                               final int maxNumber,
+                                                               final int initialNumber,
+                                                               final int nextNumber,
+                                                               final int nextTwoNumbers) {
+        final int actualNumber = actualCoordinate.getNumber();
+        final LetterFile actualLetter = actualCoordinate.getLetter();
+
+        if(actualNumber == maxNumber) {
             return null;
         }
 
-        Coordinate firstCoordinate = new Coordinate(actualCoordinate.getLetter(), actualNumber - 1);
         List<Coordinate> coordinates = new ArrayList<>();
-        coordinates.add(firstCoordinate);
+        coordinates.add(new Coordinate(actualLetter, nextNumber));
 
-        if(actualNumber == INITIAL_NUMBER) {
-            Coordinate secondCoordinate = new Coordinate(actualCoordinate.getLetter(), actualNumber - 2);
-            coordinates.add(secondCoordinate);
+        if(actualNumber == initialNumber) {
+            coordinates.add(new Coordinate(actualLetter, nextTwoNumbers));
         }
 
-        final int letterIndex = actualCoordinate.getLetter().ordinal();
+        final int letterIndex = actualLetter.ordinal();
         final Coordinate.LetterFile[] letterValues = Coordinate.LetterFile.values();
 
-        if(letterIndex >= 1) {
-            coordinates.add(new Coordinate(letterValues[letterIndex - 1], actualNumber - 1));
+        final boolean isLetterNotOnLeftBorder = letterIndex >= 1;
+        if(isLetterNotOnLeftBorder) {
+            coordinates.add(new Coordinate(letterValues[letterIndex - 1], nextNumber));
         }
 
-        if(letterIndex < letterValues.length - 1) {
-            coordinates.add(new Coordinate(letterValues[letterIndex + 1], actualNumber - 1));
+        final boolean isLetterNotOnRightBorder = letterIndex < letterValues.length - 1;
+        if(isLetterNotOnRightBorder) {
+            coordinates.add(new Coordinate(letterValues[letterIndex + 1], nextNumber));
         }
 
         return coordinates;
