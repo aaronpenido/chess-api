@@ -165,36 +165,20 @@ public class BoardTest {
     }
 
     @Test
-    public void evenMovesAreFromWhitePieces() {
-        for (int i = 1; i < 10; i=i+2) {
-            assertThat(board.getNextMoveColor()).isEqualTo(PieceColor.WHITE);
-            Coordinate origin = new Coordinate(LetterFile.A, 2);
-            Coordinate destination = new Coordinate(LetterFile.A, 3);
+    public void nextMoveColorIsAlternated() {
+        Coordinate origin = new Coordinate(LetterFile.A, 2);
+        Coordinate destination = new Coordinate(LetterFile.A, 3);
 
-            board.fillSquare(origin, destination);
+        board.fillSquare(origin, destination);
 
-            origin = new Coordinate(LetterFile.A, 7);
-            destination = new Coordinate(LetterFile.A, 6);
+        assertThat(board.getNextMoveColor()).isEqualTo(PieceColor.BLACK);
 
-            board.fillSquare(origin, destination);
-        }
-    }
+        origin = new Coordinate(LetterFile.A, 7);
+        destination = new Coordinate(LetterFile.A, 6);
 
-    @Test
-    public void oddMovesAreFromBlackPieces() {
-        for (int i = 2; i <= 10; i=i+2) {
-            Coordinate origin = new Coordinate(LetterFile.A, 7);
-            Coordinate destination = new Coordinate(LetterFile.A, 6);
+        board.fillSquare(origin, destination);
 
-            board.fillSquare(origin, destination);
-
-            assertThat(board.getNextMoveColor()).isEqualTo(PieceColor.BLACK);
-
-            origin = new Coordinate(LetterFile.A, 2);
-            destination = new Coordinate(LetterFile.A, 3);
-
-            board.fillSquare(origin, destination);
-        }
+        assertThat(board.getNextMoveColor()).isEqualTo(PieceColor.WHITE);
     }
 
     @Test
@@ -208,6 +192,18 @@ public class BoardTest {
 
         assertThat(board.getPieceFromCoordinate(oldCoordinate)).isNull();
         assertThat(board.getPieceFromCoordinate(nextCoordinate)).isEqualTo(pawn);
+    }
+
+    @Test
+    public void invalidMoveDoesntChangePieceSquare() {
+        Coordinate oldCoordinate = new Coordinate(LetterFile.A, 2);
+        Pawn pawn = (Pawn)board.getPieceFromCoordinate(oldCoordinate);
+        Coordinate invalidCoordinate = new Coordinate(LetterFile.A, 5);
+
+        board.fillSquare(oldCoordinate, invalidCoordinate);
+
+        assertThat(board.getPieceFromCoordinate(oldCoordinate)).isEqualTo(pawn);
+        assertThat(board.getPieceFromCoordinate(invalidCoordinate)).isNotEqualTo(pawn);
     }
 
     private void assertThatPieceTypeAndCoordinateAreRight(

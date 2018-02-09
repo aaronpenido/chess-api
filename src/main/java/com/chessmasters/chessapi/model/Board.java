@@ -49,12 +49,18 @@ public class Board {
         Square destinationSquare = getSquareByCoordinate(destination);
 
         Piece originPiece = originSquare.getPiece();
-        destinationSquare.fill(originPiece);
 
-        originSquare.fill(null);
-        destinationSquare.fill(originPiece);
+        for (Coordinate coordinate : originPiece.getValidCoordinates(origin)) {
+            if(coordinate.equals(destination)) {
+                destinationSquare.fill(originPiece);
 
-        movePiece();
+                originSquare.fill(null);
+                destinationSquare.fill(originPiece);
+
+                movePiece();
+                break;
+            }
+        }
     }
 
     private void initializeSquares() {
