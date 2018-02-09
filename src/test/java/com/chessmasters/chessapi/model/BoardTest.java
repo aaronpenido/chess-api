@@ -2,38 +2,50 @@ package com.chessmasters.chessapi.model;
 
 import com.chessmasters.chessapi.enums.PieceColor;
 import com.chessmasters.chessapi.model.piece.*;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static com.chessmasters.chessapi.model.Coordinate.*;
 
 public class BoardTest {
 
-    @Test
-    public void boardHasAllPieces() {
-        final int NUMBER_OF_PIECES = 32;
-        Board board = new Board();
+    private Board board;
 
-        assertThat(board.getPieces()).isNotNull();
-        assertThat(board.getPieces().size()).isEqualTo(NUMBER_OF_PIECES);
+    @Before
+    public void setUp() {
+        board = new Board();
     }
 
     @Test
     public void boardHasAllSquares() {
         final int NUMBER_OF_SQUARES = 64;
-        Board board = new Board();
 
         assertThat(board.getSquares()).isNotNull();
         assertThat(board.getSquares().size()).isEqualTo(NUMBER_OF_SQUARES);
     }
 
     @Test
+    public void boardHasThirtyTwoSquaresFilledWithPieces() {
+        final int NUMBER_OF_SQUARES_FILLED = 32;
+
+        assertThat(board.getSquares()).isNotNull();
+        assertThat(board.getSquares()
+                .stream()
+                .filter(s -> s.getPiece() != null)
+                .collect(Collectors.toList())
+                .size()).isEqualTo(NUMBER_OF_SQUARES_FILLED);
+    }
+
+    @Test
     public void whiteKingIsOnE1Coordinate() {
         final int number = 1;
         Coordinate coordinate = new Coordinate(LetterFile.E, number);
+
         assertThatPieceTypeAndCoordinateAreRight(King.class, coordinate, PieceColor.WHITE);
     }
 
@@ -41,6 +53,7 @@ public class BoardTest {
     public void whiteQueenIsOnD1Coordinate() {
         final int number = 1;
         Coordinate coordinate = new Coordinate(LetterFile.D, number);
+
         assertThatPieceTypeAndCoordinateAreRight(Queen.class, coordinate, PieceColor.WHITE);
     }
 
@@ -48,6 +61,7 @@ public class BoardTest {
     public void blackKingIsOnE8Coordinate() {
         final int number = 8;
         Coordinate coordinate = new Coordinate(LetterFile.E, number);
+
         assertThatPieceTypeAndCoordinateAreRight(King.class, coordinate, PieceColor.BLACK);
     }
 
@@ -152,62 +166,59 @@ public class BoardTest {
 
     @Test
     public void evenMovesAreFromWhitePieces() {
-        Board board = new Board();
-
         for (int i = 1; i < 10; i=i+2) {
             assertThat(board.getNextMoveColor()).isEqualTo(PieceColor.WHITE);
-            board.movePiece();
-            board.movePiece();
+            Coordinate origin = new Coordinate(LetterFile.A, 2);
+            Coordinate destination = new Coordinate(LetterFile.A, 3);
+
+            board.fillSquare(origin, destination);
+
+            origin = new Coordinate(LetterFile.A, 7);
+            destination = new Coordinate(LetterFile.A, 6);
+
+            board.fillSquare(origin, destination);
         }
     }
 
     @Test
     public void oddMovesAreFromBlackPieces() {
-        Board board = new Board();
-
         for (int i = 2; i <= 10; i=i+2) {
-            board.movePiece();
+            Coordinate origin = new Coordinate(LetterFile.A, 7);
+            Coordinate destination = new Coordinate(LetterFile.A, 6);
+
+            board.fillSquare(origin, destination);
+
             assertThat(board.getNextMoveColor()).isEqualTo(PieceColor.BLACK);
-            board.movePiece();
+
+            origin = new Coordinate(LetterFile.A, 2);
+            destination = new Coordinate(LetterFile.A, 3);
+
+            board.fillSquare(origin, destination);
         }
     }
 
     @Test
-    public void squareIsFilledWithMovedPiece() {
-        Board board = new Board();
-        Coordinate coordinate = new Coordinate(LetterFile.A, 3);
-        Pawn pawn = new Pawn(PieceColor.WHITE);
-
-        board.fillSquare(pawn, coordinate);
-
-        assertThat(board.getSquareByCoordinate(coordinate).getPiece()).isNotNull();
-    }
-
-    @Test
-    public void squareFromMovedPieceIsEmpty() {
-        Board board = new Board();
-        Pawn pawn = new Pawn(PieceColor.WHITE);
+    public void movedPieceIsInRightSquareAnOldSquareIsEmpty() {
         Coordinate oldCoordinate = new Coordinate(LetterFile.A, 2);
-        Coordinate nextCoordinate = new Coordinate(LetterFile.A, 3);
+        Pawn pawn = (Pawn)board.getPieceFromCoordinate(oldCoordinate);
+        List<Coordinate> pawnCoordinates = pawn.getValidCoordinates(oldCoordinate);
+        Coordinate nextCoordinate = pawnCoordinates.get(0);
 
-        board.fillSquare(pawn, nextCoordinate);
+        board.fillSquare(oldCoordinate, nextCoordinate);
 
-        assertThat(board.getSquareByCoordinate(oldCoordinate).getPiece()).isNull();
+        assertThat(board.getPieceFromCoordinate(oldCoordinate)).isNull();
+        assertThat(board.getPieceFromCoordinate(nextCoordinate)).isEqualTo(pawn);
     }
 
-    private void assertThatPieceTypeAndCoordinateAreRight(Class pieceClass,
-                                                          Coordinate coordinate,
-                                                          PieceColor color) {
-        Piece piece = getPieceFromCoordinate(coordinate);
+    private void assertThatPieceTypeAndCoordinateAreRight(
+            Class pieceClass,
+            Coordinate coordinate,
+            PieceColor color) {
+
+        Piece piece = board.getPieceFromCoordinate(coordinate);
 
         assertThat(piece).isNotNull();
         assertThat(piece.getClass()).isEqualTo(pieceClass);
         assertThat(piece.getColor()).isEqualTo(color);
-    }
-
-    private Piece getPieceFromCoordinate(Coordinate coordinate) {
-        Board board = new Board();
-
-        return board.getSquareByCoordinate(coordinate).getPiece();
     }
 }

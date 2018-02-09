@@ -24,15 +24,11 @@ public class Board {
         return squares;
     }
 
-    public List<Piece> getPieces() {
-        return pieces;
-    }
-
     public PieceColor getNextMoveColor() {
         return nextMoveColor;
     }
 
-    public Square getSquareByCoordinate(Coordinate coordinate) {
+    private Square getSquareByCoordinate(Coordinate coordinate) {
         return squares
                 .stream()
                 .filter(s -> s.getCoordinate().equals(coordinate))
@@ -40,7 +36,7 @@ public class Board {
                 .orElse(null);
     }
 
-    public void movePiece() {
+    private void movePiece() {
         if(nextMoveColor.equals(PieceColor.WHITE)) {
             nextMoveColor = PieceColor.BLACK;
         } else {
@@ -48,12 +44,17 @@ public class Board {
         }
     }
 
-    public void fillSquare(Piece piece, Coordinate coordinate) {
-        Square oldSquare = getSquareFromPiece(piece);
-        oldSquare.fill(null);
+    public void fillSquare(Coordinate origin, Coordinate destination) {
+        Square originSquare = getSquareByCoordinate(origin);
+        Square destinationSquare = getSquareByCoordinate(destination);
 
-        Square square = getSquareByCoordinate(coordinate);
-        square.fill(piece);
+        Piece originPiece = originSquare.getPiece();
+        destinationSquare.fill(originPiece);
+
+        originSquare.fill(null);
+        destinationSquare.fill(originPiece);
+
+        movePiece();
     }
 
     private void initializeSquares() {
@@ -189,5 +190,9 @@ public class Board {
                 .filter(s -> s.getPiece().equals(piece))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public Piece getPieceFromCoordinate(Coordinate coordinate) {
+        return getSquareByCoordinate(coordinate).getPiece();
     }
 }
