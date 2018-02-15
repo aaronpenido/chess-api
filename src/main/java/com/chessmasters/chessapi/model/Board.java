@@ -189,15 +189,6 @@ public class Board {
         }
     }
 
-    private Square getSquareFromPiece(Piece piece) {
-        return squares
-                .stream()
-                .filter(s -> s.getPiece() != null)
-                .filter(s -> s.getPiece().equals(piece))
-                .findFirst()
-                .orElse(null);
-    }
-
     public Piece getPieceFromCoordinate(Coordinate coordinate) {
         return getSquareByCoordinate(coordinate).getPiece();
     }
