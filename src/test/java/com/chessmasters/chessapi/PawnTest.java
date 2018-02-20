@@ -14,11 +14,20 @@ public class PawnTest {
     private Pawn blackPawn;
     private char letter;
     private int number;
+    private int nextWhiteNumber;
+    private int nextBlackNumber;
+    private char previousLetter;
+    private char nextLetter;
 
     @Before
     public void setUp() {
         letter = (char)(new Random().nextInt(5) + 66);
         number = new Random().nextInt(5) + 2;
+        nextWhiteNumber = number + 1;
+        nextBlackNumber = number - 1;
+        previousLetter = (char)(letter - 1);
+        nextLetter = (char)(letter + 1);
+
         whitePawn = new Pawn(WHITE, new Square(letter, number));
         blackPawn = new Pawn(BLACK, new Square(letter, number));
     }
@@ -31,12 +40,12 @@ public class PawnTest {
 
     @Test
     public void whiteMovesOneSquareAhead() {
-        assertThat(whitePawn.getMoves()).contains(new Square(letter, number + 1));
+        assertThat(whitePawn.getMoves()).contains(new Square(letter, nextWhiteNumber));
     }
 
     @Test
     public void blackMovesOneSquareAhead() {
-        assertThat(blackPawn.getMoves()).contains(new Square(letter, number - 1));
+        assertThat(blackPawn.getMoves()).contains(new Square(letter, nextBlackNumber));
     }
 
     @Test
@@ -79,49 +88,45 @@ public class PawnTest {
 
     @Test
     public void whiteMovesOneSquareInRightDiagonal() {
-        final char nextLetter = (char)(letter + 1);
-        assertThat(whitePawn.getMoves()).contains(new Square(nextLetter, number + 1));
+        assertThat(whitePawn.getMoves()).contains(new Square(nextLetter, nextWhiteNumber));
     }
 
     @Test
     public void blackMovesOneSquareInRightDiagonal() {
-        final char nextLetter = (char)(letter + 1);
-        assertThat(blackPawn.getMoves()).contains(new Square(nextLetter, number - 1));
+        assertThat(blackPawn.getMoves()).contains(new Square(nextLetter, nextBlackNumber));
     }
 
     @Test
     public void whiteMovesOneSquareInLeftDiagonal() {
-        final char previousLetter = (char)(letter - 1);
-        assertThat(whitePawn.getMoves()).contains(new Square(previousLetter, number + 1));
+        assertThat(whitePawn.getMoves()).contains(new Square(previousLetter, nextWhiteNumber));
     }
 
     @Test
     public void blackMovesOneSquareInLeftDiagonal() {
-        final char previousLetter = (char)(letter - 1);
-        assertThat(blackPawn.getMoves()).contains(new Square(previousLetter, number - 1));
+        assertThat(blackPawn.getMoves()).contains(new Square(previousLetter, nextBlackNumber));
     }
 
     @Test
     public void whiteDoesNotMoveRightDiagonalWhenItsInRightBorder() {
         whitePawn = new Pawn(WHITE, new Square('H', number));
-        assertThat(whitePawn.getMoves()).doesNotContain(new Square('I', number + 1));
+        assertThat(whitePawn.getMoves()).doesNotContain(new Square('I', nextWhiteNumber));
     }
 
     @Test
     public void blackDoesNotMoveRightDiagonalWhenItsInRightBorder() {
         blackPawn = new Pawn(BLACK, new Square('H', number));
-        assertThat(blackPawn.getMoves()).doesNotContain(new Square('I', number - 1));
+        assertThat(blackPawn.getMoves()).doesNotContain(new Square('I', nextBlackNumber));
     }
 
     @Test
     public void whiteDoesNotMoveLeftDiagonalWhenItsInLeftBorder() {
         whitePawn = new Pawn(WHITE, new Square('A', number));
-        assertThat(whitePawn.getMoves()).doesNotContain(new Square('@', number + 1));
+        assertThat(whitePawn.getMoves()).doesNotContain(new Square('@', nextWhiteNumber));
     }
 
     @Test
     public void blackDoesNotMoveLeftDiagonalWhenItsInLeftBorder() {
         blackPawn = new Pawn(BLACK, new Square('A', number));
-        assertThat(blackPawn.getMoves()).doesNotContain(new Square('@', number - 1));
+        assertThat(blackPawn.getMoves()).doesNotContain(new Square('@', nextBlackNumber));
     }
 }
