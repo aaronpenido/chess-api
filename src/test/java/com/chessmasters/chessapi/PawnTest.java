@@ -78,25 +78,25 @@ public class PawnTest {
     }
 
     @Test
-    public void whiteMovesOneSquareInRightDiagonalSquare() {
+    public void whiteMovesOneSquareInRightDiagonal() {
         final char nextLetter = (char)(letter + 1);
         assertThat(whitePawn.getMoves()).contains(new Square(nextLetter, number + 1));
     }
 
     @Test
-    public void blackMovesOneSquareInRightDiagonalSquare() {
+    public void blackMovesOneSquareInRightDiagonal() {
         final char nextLetter = (char)(letter + 1);
         assertThat(blackPawn.getMoves()).contains(new Square(nextLetter, number - 1));
     }
 
     @Test
-    public void whiteMovesOneSquareInLeftDiagonalSquare() {
+    public void whiteMovesOneSquareInLeftDiagonal() {
         final char previousLetter = (char)(letter - 1);
         assertThat(whitePawn.getMoves()).contains(new Square(previousLetter, number + 1));
     }
 
     @Test
-    public void blackMovesOneSquareInLeftDiagonalSquare() {
+    public void blackMovesOneSquareInLeftDiagonal() {
         final char previousLetter = (char)(letter - 1);
         assertThat(blackPawn.getMoves()).contains(new Square(previousLetter, number - 1));
     }
