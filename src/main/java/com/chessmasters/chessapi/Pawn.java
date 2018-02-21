@@ -5,16 +5,13 @@ import java.util.List;
 
 import static com.chessmasters.chessapi.Color.*;
 
-public class Pawn {
+public class Pawn extends Piece{
 
-    private Color color;
-    private Square square;
     private PawnMove pawnMove;
     private List<Square> moves = new ArrayList<>();
 
     public Pawn(Color color, Square square) {
-        this.color = color;
-        this.square = square;
+        super(color, square);
 
         if(color.equals(WHITE)) {
             pawnMove = new WhitePawnMove(square);
