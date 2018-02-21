@@ -1,4 +1,6 @@
-package com.chessmasters.chessapi;
+package com.chessmasters.chessapi.piece.move;
+
+import com.chessmasters.chessapi.Square;
 
 public abstract class PawnMove {
 

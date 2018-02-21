@@ -1,5 +1,6 @@
 package com.chessmasters.chessapi;
 
+import com.chessmasters.chessapi.piece.Bishop;
 import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;

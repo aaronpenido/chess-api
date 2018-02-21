@@ -1,4 +1,7 @@
-package com.chessmasters.chessapi;
+package com.chessmasters.chessapi.piece;
+
+import com.chessmasters.chessapi.Color;
+import com.chessmasters.chessapi.Square;
 
 import java.util.ArrayList;
 import java.util.List;

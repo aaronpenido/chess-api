@@ -1,5 +1,6 @@
 package com.chessmasters.chessapi;
 
+import com.chessmasters.chessapi.piece.Pawn;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

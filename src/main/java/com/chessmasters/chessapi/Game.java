@@ -1,5 +1,8 @@
 package com.chessmasters.chessapi;
 
+import com.chessmasters.chessapi.piece.Pawn;
+import com.chessmasters.chessapi.piece.Piece;
+
 import java.util.ArrayList;
 import java.util.List;
 

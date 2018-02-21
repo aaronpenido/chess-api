@@ -1,14 +1,18 @@
-package com.chessmasters.chessapi;
+package com.chessmasters.chessapi.piece;
+
+import com.chessmasters.chessapi.*;
+import com.chessmasters.chessapi.piece.move.BlackPawnMove;
+import com.chessmasters.chessapi.piece.move.PawnMove;
+import com.chessmasters.chessapi.piece.move.WhitePawnMove;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.chessmasters.chessapi.Color.*;
 
-public class Pawn extends Piece{
+public class Pawn extends Piece {
 
     private PawnMove pawnMove;
-    private List<Square> moves = new ArrayList<>();
 
     public Pawn(Color color, Square square) {
         super(color, square);

@@ -1,35 +1,24 @@
-package com.chessmasters.chessapi;
+package com.chessmasters.chessapi.piece;
+
+import com.chessmasters.chessapi.Color;
+import com.chessmasters.chessapi.Square;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class King {
-
-    private Color color;
-    private Square square;
-    private int previousNumber;
-    private int nextNumber;
+public class King extends Piece{
 
     public King(Color color, Square square) {
-        this.color = color;
-        this.square = square;
-
-        previousNumber = square.getNumber() - 1;
-        nextNumber = square.getNumber() + 1;
+        super(color, square);
     }
 
-    public Color getColor() {
-        return color;
-    }
-
-    public Square getSquare() {
-        return square;
-    }
-
+    @Override
     public List<Square> moves() {
         List<Square> moves = new ArrayList<>();
         final int downBorderNumber = 1;
         final int topBorderNumber = 8;
+        final int previousNumber = square.getNumber() - 1;
+        final int nextNumber = square.getNumber() + 1;
 
         if(square.getNumber() != topBorderNumber) {
             Square ahead = new Square(square.getLetter(), nextNumber);
@@ -51,6 +40,8 @@ public class King {
         final List<Square> moves = new ArrayList<>();
         final char leftBorderLetter = 'A';
         final char previousLetter = (char)(square.getLetter() - 1);
+        final int previousNumber = square.getNumber() - 1;
+        final int nextNumber = square.getNumber() + 1;
 
         if(square.getLetter() != leftBorderLetter) {
             Square left = new Square(previousLetter, square.getNumber());
@@ -69,6 +60,8 @@ public class King {
         final List<Square> moves = new ArrayList<>();
         final char rightBorderLetter = 'H';
         final char nextLetter = (char) (square.getLetter() + 1);
+        final int previousNumber = square.getNumber() - 1;
+        final int nextNumber = square.getNumber() + 1;
 
         if(square.getLetter() != rightBorderLetter) {
             Square right = new Square(nextLetter, square.getNumber());

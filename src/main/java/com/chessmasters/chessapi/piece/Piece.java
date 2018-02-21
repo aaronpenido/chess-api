@@ -1,5 +1,9 @@
-package com.chessmasters.chessapi;
+package com.chessmasters.chessapi.piece;
 
+import com.chessmasters.chessapi.Color;
+import com.chessmasters.chessapi.Square;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -7,10 +11,12 @@ public abstract class Piece {
 
     protected Color color;
     protected Square square;
+    protected List<Square> moves;
 
     public Piece(Color color, Square square) {
         this.color = color;
         this.square = square;
+        this.moves = new ArrayList<>();
     }
 
     public Color getColor() {
