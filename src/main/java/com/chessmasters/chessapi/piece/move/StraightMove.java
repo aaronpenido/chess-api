@@ -21,53 +21,53 @@ public class StraightMove {
     }
 
     public List<Square> moves() {
-        List<Square> moves = new ArrayList<>();
-
         if(isOneMoveSquare) {
-            return oneMoveSquare();
+            return oneMoveSquare(square.getLetter(), square.getNumber());
         }
 
+        List<Square> moves = new ArrayList<>();
         for (int letter = 65; letter <= 72; letter++) {
-            moves.add(new Square((char)letter, square.getNumber()));
+            moves.addAll(oneMoveSquare((char)letter, square.getNumber()));
         }
 
-        for (int i = 1; i <= 8; i++) {
-            moves.add(new Square(square.getLetter(), i));
+        for (int number = 1; number <= 8; number++) {
+            moves.addAll(oneMoveSquare(square.getLetter(), number));
         }
+
         moves.removeAll(Arrays.asList(square));
 
         return moves;
     }
 
-    private List<Square> oneMoveSquare() {
+    private List<Square> oneMoveSquare(final char letter, final int number) {
 
         List<Square> moves = new ArrayList<>();
         final int downBorderNumber = 1;
         final int topBorderNumber = 8;
-        final int previousNumber = square.getNumber() - 1;
-        final int nextNumber = square.getNumber() + 1;
+        final int previousNumber = number - 1;
+        final int nextNumber = number + 1;
 
-        if(square.getNumber() != topBorderNumber) {
-            Square ahead = new Square(square.getLetter(), nextNumber);
+        if(number != topBorderNumber) {
+            Square ahead = new Square(letter, nextNumber);
             moves.add(ahead);
         }
 
-        if(square.getNumber() != downBorderNumber) {
-            Square behind = new Square(square.getLetter(), previousNumber);
+        if(number != downBorderNumber) {
+            Square behind = new Square(letter, previousNumber);
             moves.add(behind);
         }
 
-        if(square.getLetter() != 'A') {
-            final char previousLetter = (char)(square.getLetter() - 1);
+        if(letter != 'A') {
+            final char previousLetter = (char)(letter - 1);
 
-            Square left = new Square(previousLetter, square.getNumber());
+            Square left = new Square(previousLetter, number);
             moves.add(left);
         }
 
-        if(square.getLetter() != 'H') {
-            final char nextLetter = (char) (square.getLetter() + 1);
+        if(letter != 'H') {
+            final char nextLetter = (char)(letter + 1);
 
-            Square right = new Square(nextLetter, square.getNumber());
+            Square right = new Square(nextLetter, number);
             moves.add(right);
         }
 
