@@ -34,99 +34,99 @@ public class PawnTest {
 
     @Test
     public void pawnHasValidMoves() {
-        assertThat(whitePawn.getMoves()).isNotNull();
-        assertThat(whitePawn.getMoves()).isNotEmpty();
+        assertThat(whitePawn.moves()).isNotNull();
+        assertThat(whitePawn.moves()).isNotEmpty();
     }
 
     @Test
     public void whiteMovesOneSquareAhead() {
-        assertThat(whitePawn.getMoves()).contains(new Square(letter, nextWhiteNumber));
+        assertThat(whitePawn.moves()).contains(new Square(letter, nextWhiteNumber));
     }
 
     @Test
     public void blackMovesOneSquareAhead() {
-        assertThat(blackPawn.getMoves()).contains(new Square(letter, nextBlackNumber));
+        assertThat(blackPawn.moves()).contains(new Square(letter, nextBlackNumber));
     }
 
     @Test
     public void whiteDoesNotMoveWhenItsInTopBorder() {
         whitePawn = new Pawn(WHITE, new Square(letter, 8));
-        assertThat(whitePawn.getMoves()).doesNotContain(new Square(letter, 9));
+        assertThat(whitePawn.moves()).doesNotContain(new Square(letter, 9));
     }
 
     @Test
     public void blackDoesNotMoveWhenItsInTopBorder() {
         blackPawn = new Pawn(BLACK, new Square(letter, 1));
-        assertThat(blackPawn.getMoves()).doesNotContain(new Square(letter, 0));
+        assertThat(blackPawn.moves()).doesNotContain(new Square(letter, 0));
     }
 
     @Test
     public void whiteMovesTwoSquaresAheadOnlyWhenItsInSecondRow() {
         whitePawn = new Pawn(WHITE, new Square(letter, 2));
-        assertThat(whitePawn.getMoves()).contains(new Square(letter, 4));
+        assertThat(whitePawn.moves()).contains(new Square(letter, 4));
     }
 
     @Test
     public void blackMovesTwoSquaresAheadOnlyWhenItsInSeventhRow() {
         blackPawn = new Pawn(BLACK, new Square(letter, 7));
-        assertThat(blackPawn.getMoves()).contains(new Square(letter, 5));
+        assertThat(blackPawn.moves()).contains(new Square(letter, 5));
     }
 
     @Test
     public void whiteDoesNotMoveTwoSquaresAheadWhenItsNotInSecondRow() {
         number = new Random().nextInt(4) + 3;
         whitePawn = new Pawn(WHITE, new Square(letter, number));
-        assertThat(whitePawn.getMoves()).doesNotContain(new Square(letter, number + 2));
+        assertThat(whitePawn.moves()).doesNotContain(new Square(letter, number + 2));
     }
 
     @Test
     public void blackDoesNotMoveTwoSquaresAheadWhenItsNotInSeventhRow() {
         number = new Random().nextInt(4) + 2;
         blackPawn = new Pawn(BLACK, new Square(letter, number));
-        assertThat(blackPawn.getMoves()).doesNotContain(new Square(letter, number - 2));
+        assertThat(blackPawn.moves()).doesNotContain(new Square(letter, number - 2));
     }
 
     @Test
     public void whiteMovesOneSquareInRightDiagonal() {
-        assertThat(whitePawn.getMoves()).contains(new Square(nextLetter, nextWhiteNumber));
+        assertThat(whitePawn.moves()).contains(new Square(nextLetter, nextWhiteNumber));
     }
 
     @Test
     public void blackMovesOneSquareInRightDiagonal() {
-        assertThat(blackPawn.getMoves()).contains(new Square(nextLetter, nextBlackNumber));
+        assertThat(blackPawn.moves()).contains(new Square(nextLetter, nextBlackNumber));
     }
 
     @Test
     public void whiteMovesOneSquareInLeftDiagonal() {
-        assertThat(whitePawn.getMoves()).contains(new Square(previousLetter, nextWhiteNumber));
+        assertThat(whitePawn.moves()).contains(new Square(previousLetter, nextWhiteNumber));
     }
 
     @Test
     public void blackMovesOneSquareInLeftDiagonal() {
-        assertThat(blackPawn.getMoves()).contains(new Square(previousLetter, nextBlackNumber));
+        assertThat(blackPawn.moves()).contains(new Square(previousLetter, nextBlackNumber));
     }
 
     @Test
     public void whiteDoesNotMoveRightDiagonalWhenItsInRightBorder() {
         whitePawn = new Pawn(WHITE, new Square('H', number));
-        assertThat(whitePawn.getMoves()).doesNotContain(new Square('I', nextWhiteNumber));
+        assertThat(whitePawn.moves()).doesNotContain(new Square('I', nextWhiteNumber));
     }
 
     @Test
     public void blackDoesNotMoveRightDiagonalWhenItsInRightBorder() {
         blackPawn = new Pawn(BLACK, new Square('H', number));
-        assertThat(blackPawn.getMoves()).doesNotContain(new Square('I', nextBlackNumber));
+        assertThat(blackPawn.moves()).doesNotContain(new Square('I', nextBlackNumber));
     }
 
     @Test
     public void whiteDoesNotMoveLeftDiagonalWhenItsInLeftBorder() {
         whitePawn = new Pawn(WHITE, new Square('A', number));
-        assertThat(whitePawn.getMoves()).doesNotContain(new Square('@', nextWhiteNumber));
+        assertThat(whitePawn.moves()).doesNotContain(new Square('@', nextWhiteNumber));
     }
 
     @Test
     public void blackDoesNotMoveLeftDiagonalWhenItsInLeftBorder() {
         blackPawn = new Pawn(BLACK, new Square('A', number));
-        assertThat(blackPawn.getMoves()).doesNotContain(new Square('@', nextBlackNumber));
+        assertThat(blackPawn.moves()).doesNotContain(new Square('@', nextBlackNumber));
     }
 }

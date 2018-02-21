@@ -1,8 +1,9 @@
 package com.chessmasters.chessapi;
 
+import java.util.List;
 import java.util.Objects;
 
-public class Piece {
+public abstract class Piece {
 
     protected Color color;
     protected Square square;
@@ -19,6 +20,8 @@ public class Piece {
     public Square getSquare() {
         return square;
     }
+
+    public abstract List<Square> moves();
 
     @Override
     public boolean equals(Object o) {

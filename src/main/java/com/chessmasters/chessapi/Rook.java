@@ -4,24 +4,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Rook {
-
-    private Color color;
-    private Square square;
+public class Rook extends Piece{
 
     public Rook(Color color, Square square) {
-        this.color = color;
-        this.square = square;
+        super(color, square);
     }
 
-    public Color getColor() {
-        return color;
-    }
-
-    public Square getSquare() {
-        return square;
-    }
-
+    @Override
     public List<Square> moves() {
         List<Square> moves = new ArrayList<>();
 

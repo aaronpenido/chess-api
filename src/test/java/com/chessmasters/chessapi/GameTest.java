@@ -34,7 +34,7 @@ public class GameTest {
 
     @Test
     public void gameHasPieceInA1Square() {
-        assertThat(game.getPieces()).contains(new Piece(WHITE, new Square('A', 1)));
+        assertThat(game.getPieces()).contains(new Pawn(WHITE, new Square('A', 1)));
     }
 
     @Test
@@ -49,11 +49,11 @@ public class GameTest {
 
     @Test
     public void gameHasPieceInG8Square() {
-        assertThat(game.getPieces()).contains(new Piece(WHITE, new Square('G', 8)));
+        assertThat(game.getPieces()).contains(new Pawn(WHITE, new Square('G', 8)));
     }
 
     @Test
     public void gameDoesNotContainPieceInE5Square() {
-        assertThat(game.getPieces()).doesNotContain(new Piece(WHITE, new Square('E', 5)));
+        assertThat(game.getPieces()).doesNotContain(new Pawn(WHITE, new Square('E', 5)));
     }
 }
