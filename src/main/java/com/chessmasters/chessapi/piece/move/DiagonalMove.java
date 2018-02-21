@@ -23,9 +23,10 @@ public class DiagonalMove {
     }
 
     private List<Square> rightDiagonal() {
+        final char rightBorderLetter = 'H';
         List<Square> diagonals = new ArrayList<>();
 
-        if(square.getLetter() != 'H') {
+        if(square.getLetter() != rightBorderLetter) {
             int numberAhead = square.getNumber() + 1;
             int numberBehind = square.getNumber() - 1;
 
@@ -46,9 +47,10 @@ public class DiagonalMove {
     }
 
     private List<Square> leftDiagonal() {
+        final char leftBorderLetter = 'A';
         List<Square> diagonals = new ArrayList<>();
 
-        if(square.getLetter() != 'A') {
+        if(square.getLetter() != leftBorderLetter) {
             int numberAhead = square.getNumber() + 1;
             int numberBehind = square.getNumber() - 1;
 
