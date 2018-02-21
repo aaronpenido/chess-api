@@ -8,14 +8,14 @@ import java.util.List;
 
 public class Bishop extends Piece {
 
-    private List<Square> moves = new ArrayList<>();
-
     public Bishop(Color color, Square square) {
         super(color, square);
     }
 
     @Override
     public List<Square> moves() {
+        List<Square> moves = new ArrayList<>();
+
         moves.addAll(leftDiagonal());
         moves.addAll(rightDiagonal());
 

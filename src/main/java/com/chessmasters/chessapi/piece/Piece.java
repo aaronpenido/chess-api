@@ -9,14 +9,12 @@ import java.util.Objects;
 
 public abstract class Piece {
 
-    protected Color color;
-    protected Square square;
-    protected List<Square> moves;
+    Color color;
+    Square square;
 
     public Piece(Color color, Square square) {
         this.color = color;
         this.square = square;
-        this.moves = new ArrayList<>();
     }
 
     public Color getColor() {
@@ -39,7 +37,6 @@ public abstract class Piece {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(square);
     }
 }

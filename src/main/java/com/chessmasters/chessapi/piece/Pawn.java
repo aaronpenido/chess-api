@@ -26,6 +26,7 @@ public class Pawn extends Piece {
 
     @Override
     public List<Square> moves() {
+        List<Square> moves = new ArrayList<>();
         final char nextLetter = (char) (square.getLetter() + 1);
         final char previousLetter = (char)(square.getLetter() - 1);
 

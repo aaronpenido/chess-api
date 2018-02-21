@@ -1,5 +1,6 @@
-package com.chessmasters.chessapi;
+package com.chessmasters.chessapi.piece;
 
+import com.chessmasters.chessapi.Square;
 import com.chessmasters.chessapi.piece.Pawn;
 import org.junit.Before;
 import org.junit.Test;

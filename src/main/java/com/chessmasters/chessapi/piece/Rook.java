@@ -16,6 +16,8 @@ public class Rook extends Piece {
 
     @Override
     public List<Square> moves() {
+        List<Square> moves = new ArrayList<>();
+
         for (int letter = 65; letter <= 72; letter++) {
             moves.add(new Square((char)letter, square.getNumber()));
         }
