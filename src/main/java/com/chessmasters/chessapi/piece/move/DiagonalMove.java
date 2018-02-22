@@ -39,25 +39,13 @@ public class DiagonalMove {
             final char nextLetter = (char)(square.getLetter() + 1);
 
             if(isOneMoveSquare) {
-                Square rightDiagonalAhead = new Square(nextLetter, numberAhead);
-                Square rightDiagonalBehind = new Square(nextLetter, numberBehind);
-
-                diagonals.add(rightDiagonalAhead);
-                diagonals.add(rightDiagonalBehind);
-
-                return diagonals;
+                return oneDiagonalMove(nextLetter, numberAhead, numberBehind);
             }
 
             for (int letter = (int)nextLetter; letter <= 72; letter++) {
-                if(square.getNumber() < 8 && numberAhead <= 8) {
-                    diagonals.add(new Square((char)letter, numberAhead));
-                    numberAhead++;
-                }
-
-                if(square.getNumber() > 1 && numberBehind >= 1) {
-                    diagonals.add(new Square((char)letter, numberBehind));
-                    numberBehind--;
-                }
+                diagonals.addAll(oneDiagonalMove((char)letter, numberAhead, numberBehind));
+                numberAhead++;
+                numberBehind--;
             }
         }
 
@@ -74,26 +62,32 @@ public class DiagonalMove {
             final char previousLetter = (char)(square.getLetter() - 1);
 
             if(isOneMoveSquare) {
-                Square leftDiagonalAhead = new Square(previousLetter, numberAhead);
-                Square leftDiagonalBehind = new Square(previousLetter, numberBehind);
-
-                diagonals.add(leftDiagonalAhead);
-                diagonals.add(leftDiagonalBehind);
-
-                return diagonals;
+                return oneDiagonalMove(previousLetter, numberAhead, numberBehind);
             }
 
             for (int letter = (int)previousLetter; letter >= 65; letter--) {
-                if(square.getNumber() < 8 && numberAhead <= 8) {
-                    diagonals.add(new Square((char)letter, numberAhead));
-                    numberAhead++;
-                }
-
-                if(square.getNumber() > 1 && numberBehind >= 1) {
-                    diagonals.add(new Square((char)letter, numberBehind));
-                    numberBehind--;
-                }
+                diagonals.addAll(oneDiagonalMove((char)letter, numberAhead, numberBehind));
+                numberAhead++;
+                numberBehind--;
             }
+        }
+
+        return diagonals;
+    }
+
+    private List<Square> oneDiagonalMove(final char letter,
+                                         final Integer numberAhead,
+                                         final Integer numberBehind) {
+        List<Square> diagonals = new ArrayList<>();
+
+        if(numberAhead <= 8) {
+            Square rightDiagonalAhead = new Square(letter, numberAhead);
+            diagonals.add(rightDiagonalAhead);
+        }
+
+        if(numberBehind >= 1) {
+            Square rightDiagonalBehind = new Square(letter, numberBehind);
+            diagonals.add(rightDiagonalBehind);
         }
 
         return diagonals;
