@@ -1,5 +1,6 @@
 package com.chessmasters.chessapi.piece;
 
+import com.chessmasters.chessapi.Letter;
 import com.chessmasters.chessapi.Square;
 import com.chessmasters.chessapi.piece.King;
 import org.junit.Before;
@@ -15,107 +16,99 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 public class KingTest {
 
     private King king;
-    private char letter;
-    private int number;
-    private char previousLetter;
-    private char nextLetter;
-    private int nextNumber;
-    private int previousNumber;
-
-    @Before
-    public void setUp() {
-        letter = (char)(new Random().nextInt(5) + 66);
-        number = new Random().nextInt(5) + 2;
-        previousLetter = (char)(letter - 1);
-        nextLetter = (char)(letter + 1);
-        previousNumber = number - 1;
-        nextNumber = number + 1;
-
-        king = new King(WHITE, new Square(letter, number));
-    }
 
     @Test
     public void kingHasValidMoves() {
+        king = new King(WHITE, new Square(Letter.E, 1));
+
         assertThat(king.moves()).isNotNull();
         assertThat(king.moves()).isNotEmpty();
     }
 
     @Test
     public void kingMovesOneSquareAhead() {
-        assertThat(king.moves()).contains(new Square(letter, nextNumber));
+        king = new King(WHITE, new Square(Letter.E, 1));
+        assertThat(king.moves()).contains(new Square(Letter.E, 2));
     }
 
     @Test
     public void kingMovesOneSquareAheadInLeftDiagonal() {
-        assertThat(king.moves()).contains(new Square(previousLetter, nextNumber));
+        king = new King(WHITE, new Square(Letter.E, 1));
+        assertThat(king.moves()).contains(new Square(Letter.D, 2));
     }
 
     @Test
     public void kingMovesOneSquareAheadInRightDiagonal() {
-        assertThat(king.moves()).contains(new Square(nextLetter, nextNumber));
+        king = new King(WHITE, new Square(Letter.E, 1));
+        assertThat(king.moves()).contains(new Square(Letter.F, 2));
     }
 
     @Test
     public void kingMovesOneSquareBehind() {
-        assertThat(king.moves()).contains(new Square(letter, previousNumber));
+        king = new King(WHITE, new Square(Letter.E, 2));
+        assertThat(king.moves()).contains(new Square(Letter.E, 1));
     }
 
     @Test
     public void kingMovesOneSquareBehindInLeftDiagonal() {
-        assertThat(king.moves()).contains(new Square(previousLetter, previousNumber));
+        king = new King(WHITE, new Square(Letter.E, 2));
+        assertThat(king.moves()).contains(new Square(Letter.D, 1));
     }
 
     @Test
     public void kingMovesOneSquareBehindInRightDiagonal() {
-        assertThat(king.moves()).contains(new Square(nextLetter, previousNumber));
+        king = new King(WHITE, new Square(Letter.E, 2));
+        assertThat(king.moves()).contains(new Square(Letter.F, 1));
     }
 
     @Test
     public void kingMovesOneSquareLeft() {
-        assertThat(king.moves()).contains(new Square(previousLetter, number));
+        king = new King(WHITE, new Square(Letter.E, 1));
+        assertThat(king.moves()).contains(new Square(Letter.D, 1));
     }
 
     @Test
     public void kingMovesOneSquareRight() {
-        assertThat(king.moves()).contains(new Square(nextLetter, number));
+        king = new King(WHITE, new Square(Letter.E, 1));
+        assertThat(king.moves()).contains(new Square(Letter.F, 1));
     }
 
     @Test
     public void kingDoesNotMoveAheadWhenItsInTopBorder() {
-        king = new King(WHITE, new Square(letter, 8));
-        assertThat(king.moves()).doesNotContain(new Square(letter, 9));
+        king = new King(WHITE, new Square(Letter.E, 8));
+        assertThat(king.moves()).doesNotContain(new Square(Letter.E, 9));
     }
 
     @Test
     public void kingDoesNotMoveBehindWhenItsInDownBorder() {
-        king = new King(WHITE, new Square(letter, 1));
-        assertThat(king.moves()).doesNotContain(new Square(letter, 0));
+        king = new King(WHITE, new Square(Letter.E, 1));
+        assertThat(king.moves()).doesNotContain(new Square(Letter.E, 0));
     }
 
     @Test
     public void kingDoesNotMoveRightWhenItsInRightBorder() {
-        king = new King(WHITE, new Square('H', 4));
+        king = new King(WHITE, new Square(Letter.H, 4));
         List<Square> squares = new ArrayList<>();
 
-        squares.add(new Square('H', 3));
-        squares.add(new Square('H', 5));
-        squares.add(new Square('G', 3));
-        squares.add(new Square('G', 4));
-        squares.add(new Square('G', 5));
+        squares.add(new Square(Letter.H, 3));
+        squares.add(new Square(Letter.H, 5));
+        squares.add(new Square(Letter.G, 3));
+        squares.add(new Square(Letter.G, 4));
+        squares.add(new Square(Letter.G, 5));
 
         assertThat(king.moves()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
     }
 
     @Test
     public void kingDoesNotMoveLeftWhenItsInLeftBorder() {
-        king = new King(WHITE, new Square('A', 4));
+        king = new King(WHITE, new Square(Letter.A, 4));
         List<Square> squares = new ArrayList<>();
 
-        squares.add(new Square('A', 3));
-        squares.add(new Square('A', 5));
-        squares.add(new Square('B', 3));
-        squares.add(new Square('B', 4));
-        squares.add(new Square('B', 5));
+        squares.add(new Square(Letter.A, 3));
+        squares.add(new Square(Letter.A, 5));
+        squares.add(new Square(Letter.B, 3));
+        squares.add(new Square(Letter.B, 4));
+        squares.add(new Square(Letter.B, 5));
 
         assertThat(king.moves()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
     }

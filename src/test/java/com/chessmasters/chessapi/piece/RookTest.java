@@ -1,5 +1,6 @@
 package com.chessmasters.chessapi.piece;
 
+import com.chessmasters.chessapi.Letter;
 import com.chessmasters.chessapi.Square;
 import com.chessmasters.chessapi.piece.Rook;
 import org.junit.Before;
@@ -16,7 +17,7 @@ public class RookTest {
 
     @Test
     public void rookHasValidMoves() {
-        Rook rook = new Rook(WHITE, new Square('A', 1));
+        Rook rook = new Rook(WHITE, new Square(Letter.A, 1));
 
         assertThat(rook.moves()).isNotNull();
         assertThat(rook.moves()).isNotEmpty();
