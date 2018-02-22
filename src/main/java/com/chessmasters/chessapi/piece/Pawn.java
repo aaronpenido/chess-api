@@ -33,20 +33,20 @@ public class Pawn extends Piece {
         if(square.getNumber() != pawnMove.getPromotionNumber()) {
             Square oneSquareAhead = new Square(square.getLetter(), pawnMove.getNextNumber());
             moves.add(oneSquareAhead);
-        }
 
-        if(square.getNumber() == pawnMove.getInitialNumber()) {
-            Square twoSquaresAhead = new Square(square.getLetter(), pawnMove.getNextTwoNumber());
-            moves.add(twoSquaresAhead);
-        }
+            if(square.getNumber() == pawnMove.getInitialNumber()) {
+                Square twoSquaresAhead = new Square(square.getLetter(), pawnMove.getNextTwoNumber());
+                moves.add(twoSquaresAhead);
+            }
 
-        if(square.getLetter() != 'H') {
-            Square rightDiagonalSquare = new Square(nextLetter, pawnMove.getNextNumber());
-            moves.add(rightDiagonalSquare);
-        }
-        if(square.getLetter() != 'A') {
-            Square leftDiagonalSquare = new Square(previousLetter, pawnMove.getNextNumber());
-            moves.add(leftDiagonalSquare);
+            if(square.getLetter() != 'H') {
+                Square rightDiagonalSquare = new Square(nextLetter, pawnMove.getNextNumber());
+                moves.add(rightDiagonalSquare);
+            }
+            if(square.getLetter() != 'A') {
+                Square leftDiagonalSquare = new Square(previousLetter, pawnMove.getNextNumber());
+                moves.add(leftDiagonalSquare);
+            }
         }
 
         return moves;
