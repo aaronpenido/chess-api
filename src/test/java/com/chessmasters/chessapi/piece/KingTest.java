@@ -5,6 +5,8 @@ import com.chessmasters.chessapi.piece.King;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import static com.chessmasters.chessapi.Color.*;
@@ -92,13 +94,29 @@ public class KingTest {
 
     @Test
     public void kingDoesNotMoveRightWhenItsInRightBorder() {
-        king = new King(WHITE, new Square('H', number));
-        assertThat(king.moves()).doesNotContain(new Square('I', number));
+        king = new King(WHITE, new Square('H', 4));
+        List<Square> squares = new ArrayList<>();
+
+        squares.add(new Square('H', 3));
+        squares.add(new Square('H', 5));
+        squares.add(new Square('G', 3));
+        squares.add(new Square('G', 4));
+        squares.add(new Square('G', 5));
+
+        assertThat(king.moves()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
     }
 
     @Test
     public void kingDoesNotMoveLeftWhenItsInLeftBorder() {
-        king = new King(WHITE, new Square('A', number));
-        assertThat(king.moves()).doesNotContain(new Square('@', number));
+        king = new King(WHITE, new Square('A', 4));
+        List<Square> squares = new ArrayList<>();
+
+        squares.add(new Square('A', 3));
+        squares.add(new Square('A', 5));
+        squares.add(new Square('B', 3));
+        squares.add(new Square('B', 4));
+        squares.add(new Square('B', 5));
+
+        assertThat(king.moves()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
     }
 }

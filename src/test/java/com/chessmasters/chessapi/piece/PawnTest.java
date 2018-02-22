@@ -1,10 +1,13 @@
 package com.chessmasters.chessapi.piece;
 
+import com.chessmasters.chessapi.Letter;
 import com.chessmasters.chessapi.Square;
 import com.chessmasters.chessapi.piece.Pawn;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import static com.chessmasters.chessapi.Color.*;
@@ -110,25 +113,45 @@ public class PawnTest {
 
     @Test
     public void whiteDoesNotMoveRightDiagonalWhenItsInRightBorder() {
-        whitePawn = new Pawn(WHITE, new Square('H', number));
-        assertThat(whitePawn.moves()).doesNotContain(new Square('I', nextWhiteNumber));
+        whitePawn = new Pawn(WHITE, new Square('H', 4));
+        List<Square> squares = new ArrayList<>();
+
+        squares.add(new Square(Letter.H, 5));
+        squares.add(new Square(Letter.G, 5));
+
+        assertThat(whitePawn.moves()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
     }
 
     @Test
     public void blackDoesNotMoveRightDiagonalWhenItsInRightBorder() {
-        blackPawn = new Pawn(BLACK, new Square('H', number));
-        assertThat(blackPawn.moves()).doesNotContain(new Square('I', nextBlackNumber));
+        blackPawn = new Pawn(BLACK, new Square('A', 4));
+        List<Square> squares = new ArrayList<>();
+
+        squares.add(new Square(Letter.A, 3));
+        squares.add(new Square(Letter.B, 3));
+
+        assertThat(blackPawn.moves()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
     }
 
     @Test
     public void whiteDoesNotMoveLeftDiagonalWhenItsInLeftBorder() {
-        whitePawn = new Pawn(WHITE, new Square('A', number));
-        assertThat(whitePawn.moves()).doesNotContain(new Square('@', nextWhiteNumber));
+        whitePawn = new Pawn(WHITE, new Square('A', 4));
+        List<Square> squares = new ArrayList<>();
+
+        squares.add(new Square(Letter.A, 5));
+        squares.add(new Square(Letter.B, 5));
+
+        assertThat(whitePawn.moves()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
     }
 
     @Test
     public void blackDoesNotMoveLeftDiagonalWhenItsInLeftBorder() {
-        blackPawn = new Pawn(BLACK, new Square('A', number));
-        assertThat(blackPawn.moves()).doesNotContain(new Square('@', nextBlackNumber));
+        blackPawn = new Pawn(BLACK, new Square('H', 4));
+        List<Square> squares = new ArrayList<>();
+
+        squares.add(new Square(Letter.H, 3));
+        squares.add(new Square(Letter.G, 3));
+
+        assertThat(blackPawn.moves()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
     }
 }

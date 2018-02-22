@@ -1,5 +1,6 @@
 package com.chessmasters.chessapi.piece.move;
 
+import com.chessmasters.chessapi.Letter;
 import com.chessmasters.chessapi.Square;
 
 import java.util.ArrayList;
@@ -8,76 +9,71 @@ import java.util.List;
 public class DiagonalMove {
 
     private Square square;
-    private boolean isOneMoveSquare;
+    private boolean isOneSquarePerMove;
 
     public DiagonalMove(Square square) {
         this.square = square;
-        this.isOneMoveSquare = false;
+        this.isOneSquarePerMove = false;
     }
 
-    public DiagonalMove(Square square, boolean isOneMoveSquare) {
+    public DiagonalMove(Square square, boolean isOneSquarePerMove) {
         this.square = square;
-        this.isOneMoveSquare = isOneMoveSquare;
+        this.isOneSquarePerMove = isOneSquarePerMove;
     }
 
     public List<Square> moves() {
         List<Square> moves = new ArrayList<>();
+        final Letter leftBorderLetter = Letter.A;
+        final Letter rightBorderLetter = Letter.H;
 
-        moves.addAll(leftDiagonal());
-        moves.addAll(rightDiagonal());
+        if(!square.getLetter2().equals(leftBorderLetter)) {
+            moves.addAll(leftDiagonal());
+        }
+
+        if(!square.getLetter2().equals(rightBorderLetter)) {
+            moves.addAll(rightDiagonal());
+        }
 
         return moves;
     }
 
-    private List<Square> rightDiagonal() {
-        final char rightBorderLetter = 'H';
-        List<Square> diagonals = new ArrayList<>();
-
-        if(square.getLetter() != rightBorderLetter) {
-            int numberAhead = square.getNumber() + 1;
-            int numberBehind = square.getNumber() - 1;
-            final char nextLetter = (char)(square.getLetter() + 1);
-
-            if(isOneMoveSquare) {
-                return oneDiagonalMove(nextLetter, numberAhead, numberBehind);
-            }
-
-            for (int letter = (int)nextLetter; letter <= 72; letter++) {
-                diagonals.addAll(oneDiagonalMove((char)letter, numberAhead, numberBehind));
-                numberAhead++;
-                numberBehind--;
-            }
-        }
-
-        return diagonals;
-    }
-
     private List<Square> leftDiagonal() {
-        final char leftBorderLetter = 'A';
+        final Letter previousLetter = Letter.previousLetter(square.getLetter2());
+        final List<Letter> previousLetters = Letter.previousLetters(square.getLetter2());
+
+        return allDiagonalsFromStartingLetterInsideLetterList(previousLetter, previousLetters);
+    }
+
+    private List<Square> rightDiagonal() {
+        final Letter nextLetter = Letter.nextLetter(square.getLetter2());
+        final List<Letter> nextLetters = Letter.nextLetters(square.getLetter2());
+
+        return allDiagonalsFromStartingLetterInsideLetterList(nextLetter, nextLetters);
+    }
+
+    private List<Square> allDiagonalsFromStartingLetterInsideLetterList(final Letter startingLetter,
+                                                                        final List<Letter> letterList) {
+        int numberAhead = square.getNumber() + 1;
+        int numberBehind = square.getNumber() - 1;
+
+        if(isOneSquarePerMove) {
+            return oneSquarePerDiagonal(startingLetter, numberAhead, numberBehind);
+        }
+
         List<Square> diagonals = new ArrayList<>();
 
-        if(square.getLetter() != leftBorderLetter) {
-            int numberAhead = square.getNumber() + 1;
-            int numberBehind = square.getNumber() - 1;
-            final char previousLetter = (char)(square.getLetter() - 1);
-
-            if(isOneMoveSquare) {
-                return oneDiagonalMove(previousLetter, numberAhead, numberBehind);
-            }
-
-            for (int letter = (int)previousLetter; letter >= 65; letter--) {
-                diagonals.addAll(oneDiagonalMove((char)letter, numberAhead, numberBehind));
-                numberAhead++;
-                numberBehind--;
-            }
+        for (Letter l : letterList) {
+            diagonals.addAll(oneSquarePerDiagonal(l, numberAhead, numberBehind));
+            numberAhead++;
+            numberBehind--;
         }
 
         return diagonals;
     }
 
-    private List<Square> oneDiagonalMove(final char letter,
-                                         final Integer numberAhead,
-                                         final Integer numberBehind) {
+    private List<Square> oneSquarePerDiagonal(final Letter letter,
+                                              final Integer numberAhead,
+                                              final Integer numberBehind) {
         List<Square> diagonals = new ArrayList<>();
 
         if(numberAhead <= 8) {
