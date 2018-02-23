@@ -1,11 +1,15 @@
 package com.chessmasters.chessapi;
 
-import com.chessmasters.chessapi.piece.Pawn;
+import com.chessmasters.chessapi.piece.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.chessmasters.chessapi.Color.*;
 import static org.assertj.core.api.Java6Assertions.assertThat;
@@ -34,27 +38,58 @@ public class GameTest {
     }
 
     @Test
-    public void gameHasPieceInA1Square() {
-        assertThat(game.getPieces()).contains(new Pawn(WHITE, new Square('A', 1)));
+    public void rooksAreOnA1H1A8AndH8Squares() {
+        assertThat(game.getPieces()).contains(new Rook(WHITE, new Square(Letter.A, 1)));
+        assertThat(game.getPieces()).contains(new Rook(WHITE, new Square(Letter.H, 1)));
+        assertThat(game.getPieces()).contains(new Rook(BLACK, new Square(Letter.A, 8)));
+        assertThat(game.getPieces()).contains(new Rook(BLACK, new Square(Letter.H, 8)));
     }
 
     @Test
-    public void gameHasWhitePawnInA2Square() {
-        assertThat(game.getPieces()).contains(new Pawn(WHITE, new Square('A', 2)));
+    public void knightsAreOnB1G1B8AndG8Squares() {
+        assertThat(game.getPieces()).contains(new Knight(WHITE, new Square(Letter.B, 1)));
+        assertThat(game.getPieces()).contains(new Knight(WHITE, new Square(Letter.G, 1)));
+        assertThat(game.getPieces()).contains(new Knight(BLACK, new Square(Letter.B, 8)));
+        assertThat(game.getPieces()).contains(new Knight(BLACK, new Square(Letter.G, 8)));
     }
 
     @Test
-    public void gameHasBlackPawnInF7Square() {
-        assertThat(game.getPieces()).contains(new Pawn(BLACK, new Square('F', 7)));
+    public void bishopsAreOnC1F1C8AndF8Squares() {
+        assertThat(game.getPieces()).contains(new Bishop(WHITE, new Square(Letter.C, 1)));
+        assertThat(game.getPieces()).contains(new Bishop(WHITE, new Square(Letter.F, 1)));
+        assertThat(game.getPieces()).contains(new Bishop(BLACK, new Square(Letter.C, 8)));
+        assertThat(game.getPieces()).contains(new Bishop(BLACK, new Square(Letter.F, 8)));
     }
 
     @Test
-    public void gameHasPieceInG8Square() {
-        assertThat(game.getPieces()).contains(new Pawn(WHITE, new Square('G', 8)));
+    public void queensAreOnD1AndD8Squares() {
+        assertThat(game.getPieces()).contains(new Queen(WHITE, new Square(Letter.D, 1)));
+        assertThat(game.getPieces()).contains(new Queen(BLACK, new Square(Letter.D, 8)));
     }
 
     @Test
-    public void gameDoesNotContainPieceInE5Square() {
-        assertThat(game.getPieces()).doesNotContain(new Pawn(WHITE, new Square('E', 5)));
+    public void kingsAreOnE1AndE8Squares() {
+        assertThat(game.getPieces()).contains(new King(WHITE, new Square(Letter.E, 8)));
+        assertThat(game.getPieces()).contains(new King(BLACK, new Square(Letter.E, 8)));
+    }
+
+    @Test
+    public void gameHasWhitePawnsInAllNumberTwoSquares() {
+        List<Pawn> pawns = Arrays.stream(Letter.values())
+                .map(letter -> new Square(letter, 2))
+                .map(square -> new Pawn(WHITE, square))
+                .collect(Collectors.toList());
+
+        assertThat(game.getPieces()).contains(pawns.toArray(new Pawn[pawns.size()]));
+    }
+
+    @Test
+    public void gameHasBlackPawnsInAllNumberSevenSquares() {
+        List<Pawn> pawns = Arrays.stream(Letter.values())
+                .map(letter -> new Square(letter, 7))
+                .map(square -> new Pawn(BLACK, square))
+                .collect(Collectors.toList());
+
+        assertThat(game.getPieces()).contains(pawns.toArray(new Pawn[pawns.size()]));
     }
 }

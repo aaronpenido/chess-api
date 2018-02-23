@@ -1,9 +1,9 @@
 package com.chessmasters.chessapi;
 
-import com.chessmasters.chessapi.piece.Pawn;
-import com.chessmasters.chessapi.piece.Piece;
+import com.chessmasters.chessapi.piece.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.chessmasters.chessapi.Color.*;
@@ -15,16 +15,61 @@ public class Game {
 
     public Game(Board board) {
         this.board = board;
+        initializePieces();
+    }
 
+    private void initializePieces() {
         pieces = new ArrayList<>();
 
-        for (int i = 65; i <= 72; i++) {
-            char letter = (char)i;
-            pieces.add(new Pawn(WHITE, new Square(letter, 1)));
-            pieces.add(new Pawn(WHITE, new Square(letter, 2)));
-            pieces.add(new Pawn(BLACK, new Square(letter, 7)));
-            pieces.add(new Pawn(BLACK, new Square(letter, 8)));
-        }
+        initializeKings();
+        initializeQueens();
+        initializeRooks();
+        initializeKnights();
+        initializeBishops();
+        initializePawns();
+    }
+
+    private void initializeKings() {
+        pieces.add(new King(WHITE, new Square(Letter.E, 1)));
+        pieces.add(new King(BLACK, new Square(Letter.E, 8)));
+    }
+
+    private void initializeQueens() {
+        pieces.add(new Queen(WHITE, new Square(Letter.D, 1)));
+        pieces.add(new Queen(BLACK, new Square(Letter.D, 8)));
+    }
+
+    private void initializeRooks() {
+        pieces.add(new Rook(WHITE, new Square(Letter.A, 1)));
+        pieces.add(new Rook(WHITE, new Square(Letter.H, 1)));
+        pieces.add(new Rook(BLACK, new Square(Letter.A, 8)));
+        pieces.add(new Rook(BLACK, new Square(Letter.H, 8)));
+    }
+
+    private void initializeKnights() {
+        pieces.add(new Knight(WHITE, new Square(Letter.B, 1)));
+        pieces.add(new Knight(WHITE, new Square(Letter.G, 1)));
+        pieces.add(new Knight(BLACK, new Square(Letter.B, 8)));
+        pieces.add(new Knight(BLACK, new Square(Letter.G, 8)));
+    }
+
+    private void initializeBishops() {
+        pieces.add(new Bishop(WHITE, new Square(Letter.C, 1)));
+        pieces.add(new Bishop(WHITE, new Square(Letter.F, 1)));
+        pieces.add(new Bishop(BLACK, new Square(Letter.C, 8)));
+        pieces.add(new Bishop(BLACK, new Square(Letter.F, 8)));
+    }
+
+    private void initializePawns() {
+        Arrays.stream(Letter.values())
+                .map(letter -> new Square(letter, 2))
+                .map(square -> new Pawn(WHITE, square))
+                .forEach(pieces::add);
+
+        Arrays.stream(Letter.values())
+                .map(letter -> new Square(letter, 7))
+                .map(square -> new Pawn(BLACK, square))
+                .forEach(pieces::add);
     }
 
     public Board getBoard() {
