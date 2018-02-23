@@ -3,10 +3,7 @@ package com.chessmasters.chessapi.piece.move;
 import com.chessmasters.chessapi.Letter;
 import com.chessmasters.chessapi.Square;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.IntStream;
 
 public class StraightMove {
@@ -25,14 +22,14 @@ public class StraightMove {
 
     public List<Square> moves() {
         if(isOneSquarePerMove) {
-            return oneSquarePerMove(square.getLetter2(), square.getNumber());
+            return oneSquarePerMove(square);
         }
 
         List<Square> moves = new ArrayList<>();
 
         moves.addAll(horizontalMoves(moves));
         moves.addAll(verticalMoves(moves));
-        moves.removeAll(Arrays.asList(square));
+        moves.removeAll(Collections.singleton(square));
 
         return moves;
     }
@@ -42,7 +39,7 @@ public class StraightMove {
 
         Arrays.stream(Letter.values())
                 .forEachOrdered(letter -> squares.addAll(
-                        oneSquarePerMove(letter, square.getNumber()))
+                        oneSquarePerMove(new Square(letter, square.getNumber())))
                 );
 
         return squares;
@@ -53,70 +50,64 @@ public class StraightMove {
 
         IntStream.range(1, 8)
                 .forEach(number -> squares.addAll(
-                        oneSquarePerMove(square.getLetter2(), number))
+                        oneSquarePerMove(new Square(square.getLetter2(), number)))
                 );
 
         return squares;
     }
 
-    private List<Square> oneSquarePerMove(final Letter letter, final int number) {
+    private List<Square> oneSquarePerMove(final Square square) {
         List<Square> moves = new ArrayList<>();
 
-        moves.addAll(oneSquareAhead(letter, number));
-        moves.addAll(oneSquareBehind(letter, number));
-        moves.addAll(oneSquareLeft(letter, number));
-        moves.addAll(oneSquareRight(letter, number));
+        moves.addAll(oneSquareAhead(square));
+        moves.addAll(oneSquareBehind(square));
+        moves.addAll(oneSquareLeft(square));
+        moves.addAll(oneSquareRight(square));
 
         return moves;
     }
 
-    private List<Square> oneSquareAhead(final Letter letter, final int number) {
-        List<Square> moves = new ArrayList<>();
+    private List<Square> oneSquareAhead(final Square square) {
         final int topBorderNumber = 8;
 
-        if(number != topBorderNumber) {
-            final int nextNumber = number + 1;
-            Square ahead = new Square(letter, nextNumber);
-            moves.add(ahead);
+        if(square.getNumber() != topBorderNumber) {
+            final int nextNumber = square.getNumber() + 1;
+            return Collections.singletonList(new Square(square.getLetter2(), nextNumber));
         }
 
-        return moves;
+        return Collections.emptyList();
     }
 
-    private List<Square> oneSquareBehind(final Letter letter, final int number) {
-        List<Square> moves = new ArrayList<>();
+    private List<Square> oneSquareBehind(final Square square) {
         final int downBorderNumber = 1;
 
-        if(number != downBorderNumber) {
-            final int previousNumber = number - 1;
-            Square behind = new Square(letter, previousNumber);
-            moves.add(behind);
+        if(square.getNumber() != downBorderNumber) {
+            final int previousNumber = square.getNumber() - 1;
+            return Collections.singletonList(new Square(square.getLetter2(), previousNumber));
         }
 
-        return moves;
+        return Collections.emptyList();
     }
 
-    private List<Square> oneSquareLeft(final Letter letter, final int number) {
-        List<Square> moves = new ArrayList<>();
+    private List<Square> oneSquareLeft(final Square square) {
         final Letter leftBorderLetter = Letter.A;
 
-        if(!letter.equals(leftBorderLetter)) {
-            Square left = new Square(Letter.previousLetter(letter), number);
-            moves.add(left);
+        if(!square.getLetter2().equals(leftBorderLetter)) {
+            final Letter previousLetter = Letter.previousLetter(square.getLetter2());
+            return Collections.singletonList(new Square(previousLetter, square.getNumber()));
         }
 
-        return moves;
+        return Collections.emptyList();
     }
 
-    private List<Square> oneSquareRight(final Letter letter, final int number) {
-        List<Square> moves = new ArrayList<>();
+    private List<Square> oneSquareRight(final Square square) {
         final Letter rightBorderLetter = Letter.H;
 
-        if(!letter.equals(rightBorderLetter)) {
-            Square right = new Square(Letter.nextLetter(letter), number);
-            moves.add(right);
+        if(!square.getLetter2().equals(rightBorderLetter)) {
+            final Letter nextLetter = Letter.nextLetter(square.getLetter2());
+            return Collections.singletonList(new Square(nextLetter, square.getNumber()));
         }
 
-        return moves;
+        return Collections.emptyList();
     }
 }
