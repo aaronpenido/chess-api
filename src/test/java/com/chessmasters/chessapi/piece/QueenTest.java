@@ -5,7 +5,7 @@ import com.chessmasters.chessapi.Square;
 import org.junit.Test;
 
 import static com.chessmasters.chessapi.Color.*;
-import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class QueenTest {
 

@@ -6,13 +6,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.chessmasters.chessapi.Color.*;
-import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GameTest {
