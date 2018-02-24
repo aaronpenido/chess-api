@@ -25,6 +25,10 @@ public abstract class Piece {
         return square;
     }
 
+    public void setSquare(Square square) {
+        this.square = square;
+    }
+
     public abstract List<Square> moves();
 
     @Override
