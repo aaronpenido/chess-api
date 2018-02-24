@@ -54,9 +54,9 @@ public class DiagonalMove {
         Predicate<Square> predicate;
 
         if(isDestinationNumberGreaterThanSquareNumber) {
-            predicate = filterAllSquaresAheadBeforeDestination(destination);
+            predicate = filterAllSquaresFromAheadSquareToDestination(destination);
         } else {
-            predicate = filterAllSquaresBehindBeforeDestination(destination);
+            predicate = filterAllSquaresFromBehindASquareToDestination(destination);
         }
 
         if(isDestinationLetterPreviousThanSquareLetter) {
@@ -94,7 +94,6 @@ public class DiagonalMove {
         }
 
         List<Square> diagonals = new ArrayList<>();
-
         for (Letter l : letterList) {
             diagonals.addAll(oneSquarePerDiagonal(l, numberAhead, numberBehind));
             numberAhead++;
@@ -122,12 +121,12 @@ public class DiagonalMove {
         return diagonals;
     }
 
-    private Predicate<Square> filterAllSquaresBehindBeforeDestination(Square destination) {
+    private Predicate<Square> filterAllSquaresFromBehindASquareToDestination(Square destination) {
         return s -> s.getNumber() < square.getNumber() &&
                 s.getNumber() > destination.getNumber();
     }
 
-    private Predicate<Square> filterAllSquaresAheadBeforeDestination(Square destination) {
+    private Predicate<Square> filterAllSquaresFromAheadSquareToDestination(Square destination) {
         return s -> s.getNumber() > square.getNumber() &&
                 s.getNumber() < destination.getNumber();
     }

@@ -4,6 +4,8 @@ import com.chessmasters.chessapi.Letter;
 import com.chessmasters.chessapi.Square;
 
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class StraightMove {
@@ -27,30 +29,30 @@ public class StraightMove {
 
         List<Square> moves = new ArrayList<>();
 
-        moves.addAll(horizontalMoves(moves));
-        moves.addAll(verticalMoves(moves));
+        moves.addAll(horizontalMoves());
+        moves.addAll(verticalMoves());
         moves.removeAll(Collections.singleton(square));
 
         return moves;
     }
 
-    private List<Square> horizontalMoves(List<Square> moves) {
+    private List<Square> horizontalMoves() {
         List<Square> squares = new ArrayList<>();
 
         Arrays.stream(Letter.values())
-                .forEachOrdered(letter -> squares.addAll(
-                        oneSquarePerMove(new Square(letter, square.getNumber())))
+                .forEachOrdered(letter -> squares.add(
+                        new Square(letter, square.getNumber()))
                 );
 
         return squares;
     }
 
-    private List<Square> verticalMoves(List<Square> moves) {
+    private List<Square> verticalMoves() {
         List<Square> squares = new ArrayList<>();
 
-        IntStream.range(1, 8)
-                .forEach(number -> squares.addAll(
-                        oneSquarePerMove(new Square(square.getLetter(), number)))
+        IntStream.range(1, 9)
+                .forEach(number -> squares.add(
+                        new Square(square.getLetter(), number))
                 );
 
         return squares;
@@ -109,5 +111,73 @@ public class StraightMove {
         }
 
         return Collections.emptyList();
+    }
+
+    public List<Square> path(Square destination) {
+        if(!moves().contains(destination)) {
+            return new ArrayList<>();
+        }
+
+        final boolean isMoveVertical = destination.getNumber() != square.getNumber();
+
+        if(isMoveVertical) {
+            return verticalPath(destination);
+        }
+
+        return horizontalPath(destination);
+    }
+
+    private List<Square> verticalPath(Square destination) {
+        Predicate<Square> predicate;
+        final boolean isMoveAhead =
+                destination.getNumber() > square.getNumber();
+
+        if(isMoveAhead) {
+            predicate = filterAllSquaresAheadFromSquareToDestination(destination);
+        } else {
+            predicate = filterAllSquaresBehindFromSquareToDestination(destination);
+        }
+
+        return verticalMoves()
+                .stream()
+                .filter(predicate)
+                .collect(Collectors.toList());
+    }
+
+    private List<Square> horizontalPath(Square destination) {
+        final boolean isMoveLeft =
+                destination.getLetter().ordinal() < square.getLetter().ordinal();
+        Predicate<Square> predicate;
+
+        if(isMoveLeft) {
+            predicate = filterAllSquaresLeftFromSquareToDestination(destination);
+        } else {
+            predicate = filterAllSquaresRightFromSquareToDestination(destination);
+        }
+
+        return horizontalMoves()
+                .stream()
+                .filter(predicate)
+                .collect(Collectors.toList());
+    }
+
+    private Predicate<Square> filterAllSquaresLeftFromSquareToDestination(Square destination) {
+        return s -> s.getLetter().ordinal() < square.getLetter().ordinal() &&
+                s.getLetter().ordinal() > destination.getLetter().ordinal();
+    }
+
+    private Predicate<Square> filterAllSquaresRightFromSquareToDestination(Square destination) {
+        return s -> s.getLetter().ordinal() > square.getLetter().ordinal() &&
+                s.getLetter().ordinal() < destination.getLetter().ordinal();
+    }
+
+    private Predicate<Square> filterAllSquaresBehindFromSquareToDestination(Square destination) {
+        return s -> s.getNumber() < square.getNumber() &&
+                s.getNumber() > destination.getNumber();
+    }
+
+    private Predicate<Square> filterAllSquaresAheadFromSquareToDestination(Square destination) {
+        return s -> s.getNumber() > square.getNumber() &&
+                s.getNumber() < destination.getNumber();
     }
 }
