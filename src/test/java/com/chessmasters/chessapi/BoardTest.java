@@ -1,8 +1,10 @@
 package com.chessmasters.chessapi;
 
-import com.chessmasters.chessapi.exception.InvalidMoveExcpetion;
+import com.chessmasters.chessapi.exception.InvalidMoveException;
+import com.chessmasters.chessapi.piece.Bishop;
 import com.chessmasters.chessapi.piece.Pawn;
 import com.chessmasters.chessapi.piece.Piece;
+import com.chessmasters.chessapi.piece.Rook;
 import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +27,7 @@ public class BoardTest {
         board = new Board(pieces);
 
         assertThatThrownBy(() -> board.movePiece(from, to))
-                .isInstanceOf(InvalidMoveExcpetion.class);
+                .isInstanceOf(InvalidMoveException.class);
     }
 
     @Test
@@ -41,6 +43,74 @@ public class BoardTest {
         Piece piece = getPieceFromSquare(from);
 
         assertThat(piece).isNull();
+    }
+
+    @Test
+    public void pieceIsRemovedFromBoardWhenCaptured() {
+        Square from = new Square(Letter.A, 2);
+        Square to = new Square(Letter.A, 3);
+        pieces = new ArrayList<>();
+        pieces.add(new Rook(WHITE, from));
+        pieces.add(new Rook(BLACK, to));
+        board = new Board(pieces);
+
+        board.movePiece(from, to);
+
+        assertThat(board.getPieces().size()).isEqualTo(1);
+    }
+
+    @Test
+    public void throwInvalidMoveExceptionWhenPawnTriesToMoveAheadToFilledSquare() {
+        Square from = new Square(Letter.A, 2);
+        Square to = new Square(Letter.A, 3);
+        pieces = new ArrayList<>();
+        pieces.add(new Pawn(WHITE, from));
+        pieces.add(new Pawn(BLACK, to));
+        board = new Board(pieces);
+
+        assertThatThrownBy(() -> board.movePiece(from, to))
+                .isInstanceOf(InvalidMoveException.class);
+    }
+
+    @Test
+    public void throwInvalidMoveExceptionWhenPieceTriesToMoveToFilledSquareWithSamePieceColor() {
+        Square from = new Square(Letter.A, 2);
+        Square to = new Square(Letter.A, 3);
+        pieces = new ArrayList<>();
+        pieces.add(new Rook(WHITE, from));
+        pieces.add(new Rook(WHITE, to));
+        board = new Board(pieces);
+
+        assertThatThrownBy(() -> board.movePiece(from, to))
+                .isInstanceOf(InvalidMoveException.class);
+    }
+
+    @Test
+    public void throwInvalidMoveExceptionWhenThereIsAPieceOnTheWayToDiagonalDestinationSquare() {
+        Square from = new Square(Letter.E, 4);
+        Square to = new Square(Letter.A, 8);
+        Square between = new Square(Letter.C, 6);
+        pieces = new ArrayList<>();
+        pieces.add(new Bishop(WHITE, from));
+        pieces.add(new Pawn(WHITE, between));
+        board = new Board(pieces);
+
+        assertThatThrownBy(() -> board.movePiece(from, to))
+                .isInstanceOf(InvalidMoveException.class);
+    }
+
+    @Test
+    public void throwInvalidMoveExceptionWhenThereIsAPieceOnTheWayToStraightDestinationSquare() {
+        Square from = new Square(Letter.E, 4);
+        Square to = new Square(Letter.E, 8);
+        Square between = new Square(Letter.E, 6);
+        pieces = new ArrayList<>();
+        pieces.add(new Rook(WHITE, from));
+        pieces.add(new Pawn(WHITE, between));
+        board = new Board(pieces);
+
+        assertThatThrownBy(() -> board.movePiece(from, to))
+                .isInstanceOf(InvalidMoveException.class);
     }
 
     private Piece getPieceFromSquare(Square square) {

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class DiagonalMove {
+public class DiagonalMove extends Move {
 
     private Square square;
     private boolean isOneSquarePerMove;
@@ -23,6 +23,7 @@ public class DiagonalMove {
         this.isOneSquarePerMove = isOneSquarePerMove;
     }
 
+    @Override
     public List<Square> moves() {
         List<Square> moves = new ArrayList<>();
         final Letter leftBorderLetter = Letter.A;
@@ -39,6 +40,7 @@ public class DiagonalMove {
         return moves;
     }
 
+    @Override
     public List<Square> path(Square destination) {
         List<Square> path = new ArrayList<>();
 

@@ -8,7 +8,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class StraightMove {
+public class StraightMove extends Move {
 
     private Square square;
     private boolean isOneSquarePerMove;
@@ -22,6 +22,7 @@ public class StraightMove {
         this.isOneSquarePerMove = isOneSquarePerMove;
     }
 
+    @Override
     public List<Square> moves() {
         if(isOneSquarePerMove) {
             return oneSquarePerMove(square);
@@ -113,6 +114,7 @@ public class StraightMove {
         return Collections.emptyList();
     }
 
+    @Override
     public List<Square> path(Square destination) {
         if(!moves().contains(destination)) {
             return new ArrayList<>();
