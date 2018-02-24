@@ -50,7 +50,7 @@ public class StraightMove {
 
         IntStream.range(1, 8)
                 .forEach(number -> squares.addAll(
-                        oneSquarePerMove(new Square(square.getLetter2(), number)))
+                        oneSquarePerMove(new Square(square.getLetter(), number)))
                 );
 
         return squares;
@@ -72,7 +72,7 @@ public class StraightMove {
 
         if(square.getNumber() != topBorderNumber) {
             final int nextNumber = square.getNumber() + 1;
-            return Collections.singletonList(new Square(square.getLetter2(), nextNumber));
+            return Collections.singletonList(new Square(square.getLetter(), nextNumber));
         }
 
         return Collections.emptyList();
@@ -83,7 +83,7 @@ public class StraightMove {
 
         if(square.getNumber() != downBorderNumber) {
             final int previousNumber = square.getNumber() - 1;
-            return Collections.singletonList(new Square(square.getLetter2(), previousNumber));
+            return Collections.singletonList(new Square(square.getLetter(), previousNumber));
         }
 
         return Collections.emptyList();
@@ -92,8 +92,8 @@ public class StraightMove {
     private List<Square> oneSquareLeft(final Square square) {
         final Letter leftBorderLetter = Letter.A;
 
-        if(!square.getLetter2().equals(leftBorderLetter)) {
-            final Letter previousLetter = Letter.previousLetter(square.getLetter2());
+        if(!square.getLetter().equals(leftBorderLetter)) {
+            final Letter previousLetter = Letter.previousLetter(square.getLetter());
             return Collections.singletonList(new Square(previousLetter, square.getNumber()));
         }
 
@@ -103,8 +103,8 @@ public class StraightMove {
     private List<Square> oneSquareRight(final Square square) {
         final Letter rightBorderLetter = Letter.H;
 
-        if(!square.getLetter2().equals(rightBorderLetter)) {
-            final Letter nextLetter = Letter.nextLetter(square.getLetter2());
+        if(!square.getLetter().equals(rightBorderLetter)) {
+            final Letter nextLetter = Letter.nextLetter(square.getLetter());
             return Collections.singletonList(new Square(nextLetter, square.getNumber()));
         }
 

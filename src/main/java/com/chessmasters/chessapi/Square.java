@@ -3,32 +3,20 @@ package com.chessmasters.chessapi;
 import java.util.Objects;
 
 public class Square {
-    private char letter;
     private int number;
-    private Letter letter2;
+    private Letter letter;
 
-    public Square(char letter, int number) {
+    public Square(Letter letter, int number) {
         this.letter = letter;
         this.number = number;
-        this.letter2 = Letter.valueOf(String.valueOf(letter));
-    }
-
-    public Square(Letter letter2, int number) {
-        this.letter2 = letter2;
-        this.number = number;
-        this.letter = letter2.name().charAt(0);
-    }
-
-    public char getLetter() {
-        return letter;
     }
 
     public int getNumber() {
         return number;
     }
 
-    public Letter getLetter2() {
-        return letter2;
+    public Letter getLetter() {
+        return letter;
     }
 
     @Override
@@ -42,7 +30,6 @@ public class Square {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(letter, number);
     }
 

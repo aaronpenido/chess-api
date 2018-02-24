@@ -1,17 +1,13 @@
 package com.chessmasters.chessapi.piece.move;
 
-import com.chessmasters.chessapi.Square;
-
 public abstract class PawnMove {
 
-    private Square square;
     private int initialNumber;
     private int promotionNumber;
     private int nextNumber;
     private int nextTwoNumber;
 
-    public PawnMove(Square square, int initialNumber, int promotionNumber, int nextNumber, int nextTwoNumber) {
-        this.square = square;
+    public PawnMove(int initialNumber, int promotionNumber, int nextNumber, int nextTwoNumber) {
         this.initialNumber = initialNumber;
         this.promotionNumber = promotionNumber;
         this.nextNumber = nextNumber;

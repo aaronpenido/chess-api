@@ -30,8 +30,8 @@ public class Knight extends Piece {
         final Letter leftBorderLetter = Letter.A;
         final int topBorderNumber = 8;
 
-        if(!square.getLetter2().equals(leftBorderLetter) && square.getNumber() != topBorderNumber) {
-            final Letter previousLetter = Letter.previousLetter(square.getLetter2());
+        if(!square.getLetter().equals(leftBorderLetter) && square.getNumber() != topBorderNumber) {
+            final Letter previousLetter = Letter.previousLetter(square.getLetter());
             final int nextNumber = square.getNumber() + 1;
             final int twoNextNumbers = nextNumber + 1;
 
@@ -53,8 +53,8 @@ public class Knight extends Piece {
         final Letter leftBorderLetter = Letter.A;
         final int bottomBorderNumber = 1;
 
-        if(!square.getLetter2().equals(leftBorderLetter) && square.getNumber() != bottomBorderNumber) {
-            final Letter previousLetter = Letter.previousLetter(square.getLetter2());
+        if(!square.getLetter().equals(leftBorderLetter) && square.getNumber() != bottomBorderNumber) {
+            final Letter previousLetter = Letter.previousLetter(square.getLetter());
             final int previousNumber = square.getNumber() - 1;
             final int twoPreviousNumbers = previousNumber - 1;
 
@@ -76,8 +76,8 @@ public class Knight extends Piece {
         final Letter rightBorderLetter = Letter.H;
         final int topBorderNumber = 8;
 
-        if(!square.getLetter2().equals(rightBorderLetter) && square.getNumber() != topBorderNumber) {
-            final Letter nextLetter = Letter.nextLetter(square.getLetter2());
+        if(!square.getLetter().equals(rightBorderLetter) && square.getNumber() != topBorderNumber) {
+            final Letter nextLetter = Letter.nextLetter(square.getLetter());
             final int nextNumber = square.getNumber() + 1;
             final int twoNextNumbers = nextNumber + 1;
 
@@ -99,8 +99,8 @@ public class Knight extends Piece {
         final Letter rightBorderLetter = Letter.H;
         final int bottomBorderNumber = 1;
 
-        if(!square.getLetter2().equals(rightBorderLetter) && square.getNumber() != bottomBorderNumber) {
-            final Letter nextLetter = Letter.nextLetter(square.getLetter2());
+        if(!square.getLetter().equals(rightBorderLetter) && square.getNumber() != bottomBorderNumber) {
+            final Letter nextLetter = Letter.nextLetter(square.getLetter());
             final int previousNumber = square.getNumber() - 1;
             final int twoPreviousNumbers = previousNumber - 1;
 

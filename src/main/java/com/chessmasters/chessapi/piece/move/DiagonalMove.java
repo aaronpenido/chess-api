@@ -26,11 +26,11 @@ public class DiagonalMove {
         final Letter leftBorderLetter = Letter.A;
         final Letter rightBorderLetter = Letter.H;
 
-        if(!square.getLetter2().equals(leftBorderLetter)) {
+        if(!square.getLetter().equals(leftBorderLetter)) {
             moves.addAll(leftDiagonal());
         }
 
-        if(!square.getLetter2().equals(rightBorderLetter)) {
+        if(!square.getLetter().equals(rightBorderLetter)) {
             moves.addAll(rightDiagonal());
         }
 
@@ -38,15 +38,15 @@ public class DiagonalMove {
     }
 
     private List<Square> leftDiagonal() {
-        final Letter previousLetter = Letter.previousLetter(square.getLetter2());
-        final List<Letter> previousLetters = Letter.previousLetters(square.getLetter2());
+        final Letter previousLetter = Letter.previousLetter(square.getLetter());
+        final List<Letter> previousLetters = Letter.previousLetters(square.getLetter());
 
         return allDiagonalsFromStartingLetterInsideLetterList(previousLetter, previousLetters);
     }
 
     private List<Square> rightDiagonal() {
-        final Letter nextLetter = Letter.nextLetter(square.getLetter2());
-        final List<Letter> nextLetters = Letter.nextLetters(square.getLetter2());
+        final Letter nextLetter = Letter.nextLetter(square.getLetter());
+        final List<Letter> nextLetters = Letter.nextLetters(square.getLetter());
 
         return allDiagonalsFromStartingLetterInsideLetterList(nextLetter, nextLetters);
     }

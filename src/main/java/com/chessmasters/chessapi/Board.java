@@ -36,7 +36,7 @@ public class Board {
         }
 
         if(pieceFrom instanceof Pawn) {
-            boolean isDiagonal = !from.getLetter2().equals(to.getLetter2());
+            boolean isDiagonal = !from.getLetter().equals(to.getLetter());
 
             if(isDiagonal && pieceTo == null) {
                 throw new InvalidMoveExcpetion();

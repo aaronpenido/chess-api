@@ -27,10 +27,11 @@ public class Pawn extends Piece {
     @Override
     public List<Square> moves() {
         List<Square> moves = new ArrayList<>();
-        final char nextLetter = (char) (square.getLetter() + 1);
-        final char previousLetter = (char)(square.getLetter() - 1);
 
         if(square.getNumber() != pawnMove.getPromotionNumber()) {
+            final Letter leftBorderLetter = Letter.A;
+            final Letter rightBorderLetter = Letter.H;
+
             Square oneSquareAhead = new Square(square.getLetter(), pawnMove.getNextNumber());
             moves.add(oneSquareAhead);
 
@@ -39,11 +40,13 @@ public class Pawn extends Piece {
                 moves.add(twoSquaresAhead);
             }
 
-            if(square.getLetter() != 'H') {
+            if(!square.getLetter().equals(rightBorderLetter)) {
+                final Letter nextLetter = Letter.nextLetter(square.getLetter());
                 Square rightDiagonalSquare = new Square(nextLetter, pawnMove.getNextNumber());
                 moves.add(rightDiagonalSquare);
             }
-            if(square.getLetter() != 'A') {
+            if(!square.getLetter().equals(leftBorderLetter)) {
+                final Letter previousLetter = Letter.previousLetter(square.getLetter());
                 Square leftDiagonalSquare = new Square(previousLetter, pawnMove.getNextNumber());
                 moves.add(leftDiagonalSquare);
             }
