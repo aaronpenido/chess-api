@@ -5,6 +5,8 @@ import com.chessmasters.chessapi.Square;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class DiagonalMove {
 
@@ -35,6 +37,37 @@ public class DiagonalMove {
         }
 
         return moves;
+    }
+
+    public List<Square> path(Square destination) {
+        List<Square> path = new ArrayList<>();
+
+        if(!moves().contains(destination)) {
+            return path;
+        }
+
+        final boolean isDestinationLetterPreviousThanSquareLetter =
+                destination.getLetter().ordinal() < square.getLetter().ordinal();
+        final boolean isDestinationNumberGreaterThanSquareNumber =
+                destination.getNumber() > square.getNumber();
+
+        Predicate<Square> predicate;
+
+        if(isDestinationNumberGreaterThanSquareNumber) {
+            predicate = filterAllSquaresAheadBeforeDestination(destination);
+        } else {
+            predicate = filterAllSquaresBehindBeforeDestination(destination);
+        }
+
+        if(isDestinationLetterPreviousThanSquareLetter) {
+            path = leftDiagonal();
+        } else {
+            path = rightDiagonal();
+        }
+
+        return path.stream()
+                .filter(predicate)
+                .collect(Collectors.toList());
     }
 
     private List<Square> leftDiagonal() {
@@ -87,5 +120,15 @@ public class DiagonalMove {
         }
 
         return diagonals;
+    }
+
+    private Predicate<Square> filterAllSquaresBehindBeforeDestination(Square destination) {
+        return s -> s.getNumber() < square.getNumber() &&
+                s.getNumber() > destination.getNumber();
+    }
+
+    private Predicate<Square> filterAllSquaresAheadBeforeDestination(Square destination) {
+        return s -> s.getNumber() > square.getNumber() &&
+                s.getNumber() < destination.getNumber();
     }
 }

@@ -181,4 +181,70 @@ public class DiagonalMoveTest {
 
         assertThat(move.moves()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
     }
+
+    @Test
+    public void squarePathIsInValid() {
+        Square from = new Square(Letter.E, 4);
+        Square destination = new Square(Letter.B, 8);
+        move = new DiagonalMove(from);
+
+        assertThat(move.path(destination)).isEmpty();
+    }
+
+    @Test
+    public void leftAheadSquarePathIsValid() {
+        Square from = new Square(Letter.E, 4);
+        Square destination = new Square(Letter.A, 8);
+        move = new DiagonalMove(from);
+
+        List<Square> squares = new ArrayList<>();
+
+        squares.add(new Square(Letter.B, 7));
+        squares.add(new Square(Letter.C, 6));
+        squares.add(new Square(Letter.D, 5));
+
+        assertThat(move.path(destination)).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
+    }
+
+    @Test
+    public void leftBehindSquarePathIsValid() {
+        Square from = new Square(Letter.E, 4);
+        Square destination = new Square(Letter.B, 1);
+        move = new DiagonalMove(from);
+
+        List<Square> squares = new ArrayList<>();
+
+        squares.add(new Square(Letter.C, 2));
+        squares.add(new Square(Letter.D, 3));
+
+        assertThat(move.path(destination)).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
+    }
+
+    @Test
+    public void rightAheadSquarePathIsValid() {
+        Square from = new Square(Letter.E, 4);
+        Square destination = new Square(Letter.H, 7);
+        move = new DiagonalMove(from);
+
+        List<Square> squares = new ArrayList<>();
+
+        squares.add(new Square(Letter.F, 5));
+        squares.add(new Square(Letter.G, 6));
+
+        assertThat(move.path(destination)).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
+    }
+
+    @Test
+    public void rightBehindSquarePathIsValid() {
+        Square from = new Square(Letter.E, 4);
+        Square destination = new Square(Letter.H, 1);
+        move = new DiagonalMove(from);
+
+        List<Square> squares = new ArrayList<>();
+
+        squares.add(new Square(Letter.F, 3));
+        squares.add(new Square(Letter.G, 2));
+
+        assertThat(move.path(destination)).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
+    }
 }
