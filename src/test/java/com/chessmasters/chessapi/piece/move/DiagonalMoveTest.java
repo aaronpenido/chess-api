@@ -1,72 +1,103 @@
 package com.chessmasters.chessapi.piece.move;
 
+import com.chessmasters.chessapi.Board;
 import com.chessmasters.chessapi.Letter;
 import com.chessmasters.chessapi.Square;
+import com.chessmasters.chessapi.piece.Bishop;
+import com.chessmasters.chessapi.piece.Rook;
 import org.junit.Test;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
+import static com.chessmasters.chessapi.Color.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DiagonalMoveTest {
 
     private DiagonalMove move;
+    private Board board;
 
     @Test
     public void movesAheadToLeftDiagonal() {
-        move = new DiagonalMove(new Square(Letter.D, 5));
+        Square square = new Square(Letter.D, 5);
+        board = new Board(Collections.singletonList(new Bishop(WHITE, square)));
+        move = new DiagonalMove(board, square);
+
         List<Square> squares = new ArrayList<>();
-
-        squares.add(new Square(Letter.C, 6));
-        squares.add(new Square(Letter.B, 7));
         squares.add(new Square(Letter.A, 8));
+        squares.add(new Square(Letter.B, 7));
+        squares.add(new Square(Letter.C, 6));
 
-
-        assertThat(move.moves()).contains(squares.toArray(new Square[squares.size()]));
+        assertThat(move.path()).contains(squares.toArray(new Square[squares.size()]));
     }
 
     @Test
     public void movesAheadToRightDiagonal() {
-        move = new DiagonalMove(new Square(Letter.D, 5));
-        List<Square> squares = new ArrayList<>();
+        Square square = new Square(Letter.D, 5);
+        board = new Board(Collections.singletonList(new Bishop(WHITE, square)));
+        move = new DiagonalMove(board, square);
 
+        List<Square> squares = new ArrayList<>();
         squares.add(new Square(Letter.E, 6));
         squares.add(new Square(Letter.F, 7));
         squares.add(new Square(Letter.G, 8));
 
-        assertThat(move.moves()).contains(squares.toArray(new Square[squares.size()]));
+        assertThat(move.path()).contains(squares.toArray(new Square[squares.size()]));
     }
 
     @Test
     public void movesBehindToLeftDiagonal() {
-        move = new DiagonalMove(new Square(Letter.D, 5));
-        List<Square> squares = new ArrayList<>();
+        Square square = new Square(Letter.D, 5);
+        board = new Board(Collections.singletonList(new Bishop(WHITE, square)));
+        move = new DiagonalMove(board, square);
 
+        List<Square> squares = new ArrayList<>();
         squares.add(new Square(Letter.A, 2));
         squares.add(new Square(Letter.B, 3));
         squares.add(new Square(Letter.C, 4));
 
-        assertThat(move.moves()).contains(squares.toArray(new Square[squares.size()]));
+        assertThat(move.path()).contains(squares.toArray(new Square[squares.size()]));
     }
 
     @Test
     public void movesBehindToRightDiagonal() {
-        move = new DiagonalMove(new Square(Letter.D, 5));
-        List<Square> squares = new ArrayList<>();
+        Square square = new Square(Letter.D, 5);
+        board = new Board(Collections.singletonList(new Bishop(WHITE, square)));
+        move = new DiagonalMove(board, square);
 
+        List<Square> squares = new ArrayList<>();
         squares.add(new Square(Letter.E, 4));
         squares.add(new Square(Letter.F, 3));
         squares.add(new Square(Letter.G, 2));
         squares.add(new Square(Letter.H, 1));
 
-        assertThat(move.moves()).contains(squares.toArray(new Square[squares.size()]));
+        assertThat(move.path()).contains(squares.toArray(new Square[squares.size()]));
+    }
+
+    @Test
+    public void oneSquarePath() {
+        Square square = new Square(Letter.E, 4);
+        board = new Board(Collections.singletonList(new Bishop(WHITE, square)));
+        move = new DiagonalMove(board, square, true);
+
+        List<Square> squares = new ArrayList<>();
+        squares.add(new Square(Letter.D, 5));
+        squares.add(new Square(Letter.F, 5));
+        squares.add(new Square(Letter.D, 3));
+        squares.add(new Square(Letter.F, 3));
+
+        assertThat(move.path()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
     }
 
     @Test
     public void movesAheadOnlyToRightDiagonalWhenItsInLeftBottomBorder() {
-        move = new DiagonalMove(new Square(Letter.A, 1));
-        List<Square> squares = new ArrayList<>();
+        Square square = new Square(Letter.A, 1);
+        board = new Board(Collections.singletonList(new Bishop(WHITE, square)));
+        move = new DiagonalMove(board, square);
 
+        List<Square> squares = new ArrayList<>();
         squares.add(new Square(Letter.B, 2));
         squares.add(new Square(Letter.C, 3));
         squares.add(new Square(Letter.D, 4));
@@ -75,14 +106,16 @@ public class DiagonalMoveTest {
         squares.add(new Square(Letter.G, 7));
         squares.add(new Square(Letter.H, 8));
 
-        assertThat(move.moves()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
+        assertThat(move.path()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
     }
 
     @Test
     public void movesAheadOnlyToLeftDiagonalWhenItsInRightBottomBorder() {
-        move = new DiagonalMove(new Square(Letter.H, 1));
-        List<Square> squares = new ArrayList<>();
+        Square square = new Square(Letter.H, 1);
+        board = new Board(Collections.singletonList(new Bishop(WHITE, square)));
+        move = new DiagonalMove(board, square);
 
+        List<Square> squares = new ArrayList<>();
         squares.add(new Square(Letter.A, 8));
         squares.add(new Square(Letter.B, 7));
         squares.add(new Square(Letter.C, 6));
@@ -91,14 +124,16 @@ public class DiagonalMoveTest {
         squares.add(new Square(Letter.F, 3));
         squares.add(new Square(Letter.G, 2));
 
-        assertThat(move.moves()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
+        assertThat(move.path()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
     }
 
     @Test
     public void movesBehindOnlyToRightDiagonalWhenItsInLeftTopBorder() {
-        move = new DiagonalMove(new Square(Letter.A, 8));
-        List<Square> squares = new ArrayList<>();
+        Square square = new Square(Letter.A, 8);
+        board = new Board(Collections.singletonList(new Bishop(WHITE, square)));
+        move = new DiagonalMove(board, square);
 
+        List<Square> squares = new ArrayList<>();
         squares.add(new Square(Letter.B, 7));
         squares.add(new Square(Letter.C, 6));
         squares.add(new Square(Letter.D, 5));
@@ -107,14 +142,16 @@ public class DiagonalMoveTest {
         squares.add(new Square(Letter.G, 2));
         squares.add(new Square(Letter.H, 1));
 
-        assertThat(move.moves()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
+        assertThat(move.path()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
     }
 
     @Test
     public void movesBehindOnlyToLeftDiagonalWhenItsInRightTopBorder() {
-        move = new DiagonalMove(new Square(Letter.H, 8));
-        List<Square> squares = new ArrayList<>();
+        Square square = new Square(Letter.H, 8);
+        board = new Board(Collections.singletonList(new Bishop(WHITE, square)));
+        move = new DiagonalMove(board, square);
 
+        List<Square> squares = new ArrayList<>();
         squares.add(new Square(Letter.A, 1));
         squares.add(new Square(Letter.B, 2));
         squares.add(new Square(Letter.C, 3));
@@ -123,14 +160,16 @@ public class DiagonalMoveTest {
         squares.add(new Square(Letter.F, 6));
         squares.add(new Square(Letter.G, 7));
 
-        assertThat(move.moves()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
+        assertThat(move.path()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
     }
 
     @Test
     public void movesOnlyAheadWhenItsInBottomBorder() {
-        move = new DiagonalMove(new Square(Letter.E, 1));
-        List<Square> squares = new ArrayList<>();
+        Square square = new Square(Letter.E, 1);
+        board = new Board(Collections.singletonList(new Bishop(WHITE, square)));
+        move = new DiagonalMove(board, square);
 
+        List<Square> squares = new ArrayList<>();
         squares.add(new Square(Letter.A, 5));
         squares.add(new Square(Letter.B, 4));
         squares.add(new Square(Letter.C, 3));
@@ -139,14 +178,16 @@ public class DiagonalMoveTest {
         squares.add(new Square(Letter.G, 3));
         squares.add(new Square(Letter.H, 4));
 
-        assertThat(move.moves()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
+        assertThat(move.path()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
     }
 
     @Test
     public void movesOnlyBehindWhenItsInTopBorder() {
-        move = new DiagonalMove(new Square(Letter.E, 8));
-        List<Square> squares = new ArrayList<>();
+        Square square = new Square(Letter.E, 8);
+        board = new Board(Collections.singletonList(new Bishop(WHITE, square)));
+        move = new DiagonalMove(board, square);
 
+        List<Square> squares = new ArrayList<>();
         squares.add(new Square(Letter.A, 4));
         squares.add(new Square(Letter.B, 5));
         squares.add(new Square(Letter.C, 6));
@@ -155,14 +196,16 @@ public class DiagonalMoveTest {
         squares.add(new Square(Letter.G, 6));
         squares.add(new Square(Letter.H, 5));
 
-        assertThat(move.moves()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
+        assertThat(move.path()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
     }
 
     @Test
     public void movesToAllDirectionsWhenItsInCenter() {
-        move = new DiagonalMove(new Square(Letter.E, 4));
-        List<Square> squares = new ArrayList<>();
+        Square square = new Square(Letter.E, 4);
+        board = new Board(Collections.singletonList(new Bishop(WHITE, square)));
+        move = new DiagonalMove(board, square);
 
+        List<Square> squares = new ArrayList<>();
         squares.add(new Square(Letter.B, 1));
         squares.add(new Square(Letter.C, 2));
         squares.add(new Square(Letter.D, 3));
@@ -179,72 +222,146 @@ public class DiagonalMoveTest {
         squares.add(new Square(Letter.G, 2));
         squares.add(new Square(Letter.H, 1));
 
-        assertThat(move.moves()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
+        assertThat(move.path()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
     }
 
     @Test
-    public void squarePathIsInValid() {
-        Square from = new Square(Letter.E, 4);
-        Square destination = new Square(Letter.B, 8);
-        move = new DiagonalMove(from);
+    public void leftPathAheadEndsWhereThereIsAFriendlyPieceOnTheWay() {
+        Square square = new Square(Letter.H, 4);
+        Square friendlyPieceSquare = new Square(Letter.E, 7);
+        Square nextSquareAfterFriendlyPiece = new Square(Letter.D, 8);
 
-        assertThat(move.path(destination)).isEmpty();
+        board = new Board(Arrays.asList(
+                new Bishop(WHITE, square),
+                new Bishop(WHITE, friendlyPieceSquare)));
+
+        move = new DiagonalMove(board, square);
+
+        assertThat(move.path()).doesNotContain(friendlyPieceSquare);
+        assertThat(move.path()).doesNotContain(nextSquareAfterFriendlyPiece);
     }
 
     @Test
-    public void leftAheadSquarePathIsValid() {
-        Square from = new Square(Letter.E, 4);
-        Square destination = new Square(Letter.A, 8);
-        move = new DiagonalMove(from);
+    public void leftPathAheadEndsOnSquareFilledWithEnemyPiece() {
+        Square square = new Square(Letter.H, 4);
+        Square enemyPieceSquare = new Square(Letter.E, 7);
+        Square nextSquareAfterEnemyPiece = new Square(Letter.D, 8);
 
         List<Square> squares = new ArrayList<>();
+        squares.add(enemyPieceSquare);
 
-        squares.add(new Square(Letter.B, 7));
-        squares.add(new Square(Letter.C, 6));
-        squares.add(new Square(Letter.D, 5));
+        board = new Board(Arrays.asList(
+                new Rook(WHITE, square),
+                new Rook(BLACK, enemyPieceSquare)));
 
-        assertThat(move.path(destination)).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
+        move = new DiagonalMove(board, square);
+
+        assertThat(move.path()).contains(squares.toArray(new Square[squares.size()]));
+        assertThat(move.path()).doesNotContain(nextSquareAfterEnemyPiece);
     }
 
     @Test
-    public void leftBehindSquarePathIsValid() {
-        Square from = new Square(Letter.E, 4);
-        Square destination = new Square(Letter.B, 1);
-        move = new DiagonalMove(from);
+    public void leftPathBehindEndsWhereThereIsAFriendlyPieceOnTheWay() {
+        Square square = new Square(Letter.H, 7);
+        Square friendlyPieceSquare = new Square(Letter.D, 3);
+        Square nextSquareAfterFriendlyPiece = new Square(Letter.C, 2);
 
-        List<Square> squares = new ArrayList<>();
+        board = new Board(Arrays.asList(
+                new Bishop(WHITE, square),
+                new Bishop(WHITE, friendlyPieceSquare)));
 
-        squares.add(new Square(Letter.C, 2));
-        squares.add(new Square(Letter.D, 3));
+        move = new DiagonalMove(board, square);
 
-        assertThat(move.path(destination)).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
+        assertThat(move.path()).doesNotContain(friendlyPieceSquare);
+        assertThat(move.path()).doesNotContain(nextSquareAfterFriendlyPiece);
     }
 
     @Test
-    public void rightAheadSquarePathIsValid() {
-        Square from = new Square(Letter.E, 4);
-        Square destination = new Square(Letter.H, 7);
-        move = new DiagonalMove(from);
+    public void leftPathBehindEndsOnSquareFilledWithEnemyPiece() {
+        Square square = new Square(Letter.H, 7);
+        Square enemyPieceSquare = new Square(Letter.D, 3);
+        Square nextSquareAfterEnemyPiece = new Square(Letter.C, 2);
 
         List<Square> squares = new ArrayList<>();
+        squares.add(enemyPieceSquare);
 
-        squares.add(new Square(Letter.F, 5));
-        squares.add(new Square(Letter.G, 6));
+        board = new Board(Arrays.asList(
+                new Rook(WHITE, square),
+                new Rook(BLACK, enemyPieceSquare)));
 
-        assertThat(move.path(destination)).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
+        move = new DiagonalMove(board, square);
+
+        assertThat(move.path()).contains(squares.toArray(new Square[squares.size()]));
+        assertThat(move.path()).doesNotContain(nextSquareAfterEnemyPiece);
     }
 
     @Test
-    public void rightBehindSquarePathIsValid() {
-        Square from = new Square(Letter.E, 4);
-        Square destination = new Square(Letter.H, 1);
-        move = new DiagonalMove(from);
+    public void rightPathAheadEndsWhereThereIsAFriendlyPieceOnTheWay() {
+        Square square = new Square(Letter.A, 4);
+        Square friendlyPieceSquare = new Square(Letter.D, 7);
+        Square nextSquareAfterFriendlyPiece = new Square(Letter.E, 8);
+
+        board = new Board(Arrays.asList(
+                new Rook(WHITE, square),
+                new Rook(WHITE, friendlyPieceSquare)));
+
+        move = new DiagonalMove(board, square);
+
+        assertThat(move.path()).doesNotContain(friendlyPieceSquare);
+        assertThat(move.path()).doesNotContain(nextSquareAfterFriendlyPiece);
+    }
+
+    @Test
+    public void rightPathAheadEndsOnSquareFilledWithEnemyPiece() {
+        Square square = new Square(Letter.A, 4);
+        Square enemyPieceSquare = new Square(Letter.D, 7);
+        Square nextSquareAfterEnemyPiece = new Square(Letter.E, 8);
 
         List<Square> squares = new ArrayList<>();
+        squares.add(enemyPieceSquare);
 
-        squares.add(new Square(Letter.F, 3));
-        squares.add(new Square(Letter.G, 2));
+        board = new Board(Arrays.asList(
+                new Rook(WHITE, square),
+                new Rook(BLACK, enemyPieceSquare)));
 
-        assertThat(move.path(destination)).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
+        move = new DiagonalMove(board, square);
+
+        assertThat(move.path()).contains(squares.toArray(new Square[squares.size()]));
+        assertThat(move.path()).doesNotContain(nextSquareAfterEnemyPiece);
+    }
+
+    @Test
+    public void rightPathBehindEndsWhereThereIsAFriendlyPieceOnTheWay() {
+        Square square = new Square(Letter.B, 6);
+        Square friendlyPieceSquare = new Square(Letter.E, 3);
+        Square nextSquareAfterFriendlyPiece = new Square(Letter.F, 2);
+
+        board = new Board(Arrays.asList(
+                new Rook(WHITE, square),
+                new Rook(WHITE, friendlyPieceSquare)));
+
+        move = new DiagonalMove(board, square);
+
+        assertThat(move.path()).doesNotContain(friendlyPieceSquare);
+        assertThat(move.path()).doesNotContain(nextSquareAfterFriendlyPiece);
+    }
+
+    @Test
+    public void rightPathBehindEndsOnSquareFilledWithEnemyPiece() {
+        Square square = new Square(Letter.F, 5);
+        Square enemyPieceSquare = new Square(Letter.D, 3);
+        Square nextSquareAfterEnemyPiece = new Square(Letter.C, 2);
+
+        List<Square> squares = new ArrayList<>();
+        squares.add(enemyPieceSquare);
+
+        board = new Board(Arrays.asList(
+                new Rook(WHITE, square),
+                new Rook(BLACK, enemyPieceSquare)));
+
+        move = new DiagonalMove(board, square);
+
+        assertThat(move.path()).contains(squares.toArray(new Square[squares.size()]));
+        assertThat(move.path()).doesNotContain(nextSquareAfterEnemyPiece);
     }
 }

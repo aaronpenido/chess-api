@@ -1,5 +1,6 @@
 package com.chessmasters.chessapi.piece;
 
+import com.chessmasters.chessapi.Board;
 import com.chessmasters.chessapi.Color;
 import com.chessmasters.chessapi.Square;
 import com.chessmasters.chessapi.piece.move.DiagonalMove;
@@ -18,8 +19,15 @@ public class King extends Piece{
     public List<Square> moves() {
         List<Square> moves = new ArrayList<>();
 
-        moves.addAll(new StraightMove(square, true).moves());
-        moves.addAll(new DiagonalMove(square, true).moves());
+        return moves;
+    }
+
+    @Override
+    public List<Square> moves(Board board) {
+        List<Square> moves = new ArrayList<>();
+
+        moves.addAll(new StraightMove(board, square, true).path());
+        moves.addAll(new DiagonalMove(board, square, true).path());
 
         return moves;
     }

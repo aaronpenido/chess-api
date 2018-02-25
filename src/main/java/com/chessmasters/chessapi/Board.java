@@ -4,9 +4,6 @@ import com.chessmasters.chessapi.exception.InvalidMoveException;
 import com.chessmasters.chessapi.exception.PieceNotFoundException;
 import com.chessmasters.chessapi.piece.Pawn;
 import com.chessmasters.chessapi.piece.Piece;
-import com.chessmasters.chessapi.piece.move.DiagonalMove;
-import com.chessmasters.chessapi.piece.move.Move;
-import com.chessmasters.chessapi.piece.move.StraightMove;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -33,10 +30,6 @@ public class Board {
             throw new InvalidMoveException();
         }
 
-        if(pathContainsPiece(from, destination)) {
-            throw new InvalidMoveException();
-        }
-
         if(isDestinationSquareFilledWithSameColorPiece(pieceFrom, pieceTo)) {
             throw new InvalidMoveException();
         }
@@ -56,36 +49,7 @@ public class Board {
         }
     }
 
-    private boolean isDestinationSquareFilledWithSameColorPiece(Piece pieceFrom, Piece pieceTo) {
-        return pieceTo != null &&
-                pieceTo.getColor().equals(pieceFrom.getColor());
-    }
-
-    private boolean isMoveValid(@NotNull final Piece piece, @NotNull Square destination) {
-        return piece.moves()
-                .stream()
-                .anyMatch(square -> square.equals(destination));
-    }
-
-    private boolean pathContainsPiece(@NotNull final Square from, @NotNull final Square destination) {
-        Move move;
-        boolean isDiagonal = !from.getLetter().equals(destination.getLetter());
-
-        if(isDiagonal) {
-            move = new DiagonalMove(from);
-        } else {
-            move = new StraightMove(from);
-        }
-
-        final List<Square> path = move.path(destination);
-
-        return pieces
-                .stream()
-                .filter(piece -> piece.getSquare() != null)
-                .anyMatch(piece -> path.contains(piece.getSquare()));
-    }
-
-    private Piece getPieceFromSquare(Square square) {
+    public Piece getPieceFromSquare(Square square) {
 
         Piece piece = pieces
                 .stream()
@@ -95,5 +59,16 @@ public class Board {
                 .orElse(null);
 
         return piece;
+    }
+
+    private boolean isDestinationSquareFilledWithSameColorPiece(Piece pieceFrom, Piece pieceTo) {
+        return pieceTo != null &&
+                pieceTo.getColor().equals(pieceFrom.getColor());
+    }
+
+    private boolean isMoveValid(@NotNull final Piece piece, @NotNull Square destination) {
+        return piece.moves(this)
+                .stream()
+                .anyMatch(square -> square.equals(destination));
     }
 }

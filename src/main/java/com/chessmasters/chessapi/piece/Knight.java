@@ -1,5 +1,6 @@
 package com.chessmasters.chessapi.piece;
 
+import com.chessmasters.chessapi.Board;
 import com.chessmasters.chessapi.Color;
 import com.chessmasters.chessapi.Letter;
 import com.chessmasters.chessapi.Square;
@@ -23,6 +24,11 @@ public class Knight extends Piece {
         moves.addAll(rightBehind());
 
         return moves;
+    }
+
+    @Override
+    public List<Square> moves(Board board) {
+        return moves();
     }
 
     private List<Square> leftAhead() {

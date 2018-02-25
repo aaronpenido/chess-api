@@ -1,11 +1,26 @@
 package com.chessmasters.chessapi.piece.move;
 
+import com.chessmasters.chessapi.Board;
 import com.chessmasters.chessapi.Square;
 
 import java.util.List;
 
 public abstract class Move {
 
-    public abstract List<Square> moves();
-    public abstract List<Square> path(Square destination);
+    Board board;
+    Square square;
+    boolean isOneSquarePerMove;
+
+    public Move(Board board, Square square) {
+        this.board = board;
+        this.square = square;
+    }
+
+    public Move(Board board, Square square, boolean isOneSquarePerMove) {
+        this.board = board;
+        this.square = square;
+        this.isOneSquarePerMove = isOneSquarePerMove;
+    }
+
+    public abstract List<Square> path();
 }

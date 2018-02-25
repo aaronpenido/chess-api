@@ -1,5 +1,6 @@
 package com.chessmasters.chessapi.piece;
 
+import com.chessmasters.chessapi.Board;
 import com.chessmasters.chessapi.Color;
 import com.chessmasters.chessapi.Square;
 
@@ -30,6 +31,7 @@ public abstract class Piece {
     }
 
     public abstract List<Square> moves();
+    public abstract List<Square> moves(Board board);
 
     @Override
     public boolean equals(Object o) {

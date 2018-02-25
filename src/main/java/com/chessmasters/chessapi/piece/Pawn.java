@@ -54,4 +54,9 @@ public class Pawn extends Piece {
 
         return moves;
     }
+
+    @Override
+    public List<Square> moves(Board board) {
+        return moves();
+    }
 }

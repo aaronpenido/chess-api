@@ -1,62 +1,19 @@
 package com.chessmasters.chessapi.piece.move;
 
+import com.chessmasters.chessapi.Board;
 import com.chessmasters.chessapi.Letter;
 import com.chessmasters.chessapi.Square;
-
+import com.chessmasters.chessapi.piece.Piece;
 import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class StraightMove extends Move {
 
-    private Square square;
-    private boolean isOneSquarePerMove;
-
-    public StraightMove(Square square) {
-        this.square = square;
+    public StraightMove(Board board, Square square) {
+        super(board, square);
     }
 
-    public StraightMove(Square square, boolean isOneSquarePerMove) {
-        this.square = square;
-        this.isOneSquarePerMove = isOneSquarePerMove;
-    }
-
-    @Override
-    public List<Square> moves() {
-        if(isOneSquarePerMove) {
-            return oneSquarePerMove(square);
-        }
-
-        List<Square> moves = new ArrayList<>();
-
-        moves.addAll(horizontalMoves());
-        moves.addAll(verticalMoves());
-        moves.removeAll(Collections.singleton(square));
-
-        return moves;
-    }
-
-    private List<Square> horizontalMoves() {
-        List<Square> squares = new ArrayList<>();
-
-        Arrays.stream(Letter.values())
-                .forEachOrdered(letter -> squares.add(
-                        new Square(letter, square.getNumber()))
-                );
-
-        return squares;
-    }
-
-    private List<Square> verticalMoves() {
-        List<Square> squares = new ArrayList<>();
-
-        IntStream.range(1, 9)
-                .forEach(number -> squares.add(
-                        new Square(square.getLetter(), number))
-                );
-
-        return squares;
+    public StraightMove(Board board, Square square, boolean isOneSquarePerMove) {
+        super(board, square, isOneSquarePerMove);
     }
 
     private List<Square> oneSquarePerMove(final Square square) {
@@ -115,71 +72,102 @@ public class StraightMove extends Move {
     }
 
     @Override
-    public List<Square> path(Square destination) {
-        if(!moves().contains(destination)) {
-            return new ArrayList<>();
+    public List<Square> path() {
+        List<Square> path = new ArrayList<>();
+
+        if(isOneSquarePerMove) {
+            return oneSquarePerMove(square);
         }
 
-        final boolean isMoveVertical = destination.getNumber() != square.getNumber();
+        path.addAll(leftPath());
+        path.addAll(rightPath());
+        path.addAll(aheadPath());
+        path.addAll(behindPath());
 
-        if(isMoveVertical) {
-            return verticalPath(destination);
+        return path;
+    }
+
+    private List<Square> leftPath() {
+        List<Square> path = new ArrayList<>();
+        Piece piece = board.getPieceFromSquare(square);
+
+        for (Letter letter : Letter.previousLetters(square.getLetter())) {
+            Square leftSquare = new Square(letter, square.getNumber());
+            Piece leftPiece = board.getPieceFromSquare(leftSquare);
+
+            if(leftPiece == null) {
+                path.add(leftSquare);
+            } else {
+                if(!leftPiece.getColor().equals(piece.getColor())) {
+                    path.add(leftSquare);
+                }
+                break;
+            }
         }
 
-        return horizontalPath(destination);
+        return path;
     }
 
-    private List<Square> verticalPath(Square destination) {
-        Predicate<Square> predicate;
-        final boolean isMoveAhead =
-                destination.getNumber() > square.getNumber();
+    private List<Square> rightPath() {
+        List<Square> path = new ArrayList<>();
+        Piece piece = board.getPieceFromSquare(square);
 
-        if(isMoveAhead) {
-            predicate = filterAllSquaresAheadFromSquareToDestination(destination);
-        } else {
-            predicate = filterAllSquaresBehindFromSquareToDestination(destination);
+        for (Letter letter : Letter.nextLetters(square.getLetter())) {
+            Square rightSquare = new Square(letter, square.getNumber());
+            Piece rightPiece = board.getPieceFromSquare(rightSquare);
+
+            if(rightPiece == null) {
+                path.add(rightSquare);
+            } else {
+                if(!rightPiece.getColor().equals(piece.getColor())) {
+                    path.add(rightSquare);
+                }
+                break;
+            }
         }
 
-        return verticalMoves()
-                .stream()
-                .filter(predicate)
-                .collect(Collectors.toList());
+        return path;
     }
 
-    private List<Square> horizontalPath(Square destination) {
-        final boolean isMoveLeft =
-                destination.getLetter().ordinal() < square.getLetter().ordinal();
-        Predicate<Square> predicate;
+    private List<Square> aheadPath() {
+        List<Square> path = new ArrayList<>();
+        Piece piece = board.getPieceFromSquare(square);
 
-        if(isMoveLeft) {
-            predicate = filterAllSquaresLeftFromSquareToDestination(destination);
-        } else {
-            predicate = filterAllSquaresRightFromSquareToDestination(destination);
+        for (int number = square.getNumber() + 1; number <= 8; number++) {
+            Square squareAhead = new Square(square.getLetter(), number);
+            Piece pieceAhead = board.getPieceFromSquare(squareAhead);
+
+            if(pieceAhead == null) {
+                path.add(squareAhead);
+            } else {
+                if(!pieceAhead.getColor().equals(piece.getColor())) {
+                    path.add(squareAhead);
+                }
+                break;
+            }
         }
 
-        return horizontalMoves()
-                .stream()
-                .filter(predicate)
-                .collect(Collectors.toList());
+        return path;
     }
 
-    private Predicate<Square> filterAllSquaresLeftFromSquareToDestination(Square destination) {
-        return s -> s.getLetter().ordinal() < square.getLetter().ordinal() &&
-                s.getLetter().ordinal() > destination.getLetter().ordinal();
-    }
+    private List<Square> behindPath() {
+        List<Square> path = new ArrayList<>();
+        Piece piece = board.getPieceFromSquare(square);
 
-    private Predicate<Square> filterAllSquaresRightFromSquareToDestination(Square destination) {
-        return s -> s.getLetter().ordinal() > square.getLetter().ordinal() &&
-                s.getLetter().ordinal() < destination.getLetter().ordinal();
-    }
+        for (int number = square.getNumber() - 1; number >= 1; number--) {
+            Square squareBehind = new Square(square.getLetter(), number);
+            Piece pieceBehind = board.getPieceFromSquare(squareBehind);
 
-    private Predicate<Square> filterAllSquaresBehindFromSquareToDestination(Square destination) {
-        return s -> s.getNumber() < square.getNumber() &&
-                s.getNumber() > destination.getNumber();
-    }
+            if(pieceBehind == null) {
+                path.add(squareBehind);
+            } else {
+                if(!pieceBehind.getColor().equals(piece.getColor())) {
+                    path.add(squareBehind);
+                }
+                break;
+            }
+        }
 
-    private Predicate<Square> filterAllSquaresAheadFromSquareToDestination(Square destination) {
-        return s -> s.getNumber() > square.getNumber() &&
-                s.getNumber() < destination.getNumber();
+        return path;
     }
 }
