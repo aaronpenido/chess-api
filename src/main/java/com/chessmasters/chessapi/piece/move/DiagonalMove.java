@@ -6,10 +6,7 @@ import com.chessmasters.chessapi.Square;
 import com.chessmasters.chessapi.piece.Piece;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class DiagonalMove extends Move {
 
@@ -54,99 +51,70 @@ public class DiagonalMove extends Move {
     }
 
     private List<Square> leftAhead() {
-        List<Square> path = new ArrayList<>();
-        Piece piece = board.getPieceFromSquare(square);
-        int nextNumber = square.getNumber() + 1;
-
         if(isOneSquarePerMove) {
-            Letter previousLetter = Letter.previousLetter(square.getLetter());
-            Square previousSquare = new Square(previousLetter, nextNumber);
-            Piece previousPiece = board.getPieceFromSquare(previousSquare);
-
-            if(previousPiece == null ||
-                    !previousPiece.getColor().equals(piece.getColor())) {
-
-                path.add(previousSquare);
-            }
-
-            return path;
+            int nextNumber = square.getNumber() + 1;
+            return oneSquareLeft(nextNumber);
         }
 
-        for (Letter letter : Letter.previousLetters(square.getLetter())) {
-            Square actualSquare = new Square(letter, nextNumber);
-            Piece actualPiece = board.getPieceFromSquare(actualSquare);
-            nextNumber++;
-
-            if(actualPiece == null) {
-                path.add(actualSquare);
-            } else {
-                if(!actualPiece.getColor().equals(piece.getColor())) {
-                    path.add(actualSquare);
-                }
-                break;
-            }
-        }
-
-        return path;
-    }
-
-    private List<Square> rightAhead() {
-        List<Square> path = new ArrayList<>();
-        Piece piece = board.getPieceFromSquare(square);
-        int nextNumber = square.getNumber() + 1;
-
-        if(isOneSquarePerMove) {
-            Letter nextLetter = Letter.nextLetter(square.getLetter());
-            Square nextSquare = new Square(nextLetter, nextNumber);
-            Piece nextPiece = board.getPieceFromSquare(nextSquare);
-
-            if(nextPiece == null ||
-                    !nextPiece.getColor().equals(piece.getColor())) {
-
-                path.add(nextSquare);
-            }
-
-            return path;
-        }
-
-        for (Letter letter : Letter.nextLetters(square.getLetter())) {
-            Square actualSquare = new Square(letter, nextNumber);
-            Piece actualPiece = board.getPieceFromSquare(actualSquare);
-            nextNumber++;
-
-            if(actualPiece == null) {
-                path.add(actualSquare);
-            } else {
-                if(!actualPiece.getColor().equals(piece.getColor())) {
-                    path.add(actualSquare);
-                }
-                break;
-            }
-        }
-
-        return path;
+        return allSquaresAhead(Letter.previousLetters(square.getLetter()));
     }
 
     private List<Square> leftBehind() {
+        if(isOneSquarePerMove) {
+            int previousNumber = square.getNumber() - 1;
+            return oneSquareLeft(previousNumber);
+        }
+
+        return allSquaresBehind(Letter.previousLetters(square.getLetter()));
+    }
+
+    private List<Square> rightAhead() {
+        if(isOneSquarePerMove) {
+            int nextNumber = square.getNumber() + 1;
+            return oneSquareRight(nextNumber);
+        }
+
+        return allSquaresAhead(Letter.nextLetters(square.getLetter()));
+    }
+
+    private List<Square> rightBehind() {
+        if(isOneSquarePerMove) {
+            int previousNumber = square.getNumber() - 1;
+            return oneSquareRight(previousNumber);
+        }
+
+        return allSquaresBehind(Letter.nextLetters(square.getLetter()));
+    }
+
+    private List<Square> allSquaresAhead(List<Letter> letters) {
+        List<Square> path = new ArrayList<>();
+        Piece piece = board.getPieceFromSquare(square);
+        int nextNumber = square.getNumber() + 1;
+
+        for (Letter letter : letters) {
+            Square actualSquare = new Square(letter, nextNumber);
+            Piece actualPiece = board.getPieceFromSquare(actualSquare);
+            nextNumber++;
+
+            if(actualPiece == null) {
+                path.add(actualSquare);
+            } else {
+                if(!actualPiece.getColor().equals(piece.getColor())) {
+                    path.add(actualSquare);
+                }
+                break;
+            }
+        }
+
+        return path;
+    }
+
+    private List<Square> allSquaresBehind(final List<Letter> letters) {
         List<Square> path = new ArrayList<>();
         Piece piece = board.getPieceFromSquare(square);
         int previousNumber = square.getNumber() - 1;
 
-        if(isOneSquarePerMove) {
-            Letter previousLetter = Letter.previousLetter(square.getLetter());
-            Square previousSquare = new Square(previousLetter, previousNumber);
-            Piece previousPiece = board.getPieceFromSquare(previousSquare);
-
-            if(previousPiece == null ||
-                    !previousPiece.getColor().equals(piece.getColor())) {
-
-                path.add(previousSquare);
-            }
-
-            return path;
-        }
-
-        for (Letter letter : Letter.previousLetters(square.getLetter())) {
+        for (Letter letter : letters) {
             if(previousNumber > 0) {
                 Square actualSquare = new Square(letter, previousNumber);
                 Piece actualPiece = board.getPieceFromSquare(actualSquare);
@@ -166,40 +134,27 @@ public class DiagonalMove extends Move {
         return path;
     }
 
-    private List<Square> rightBehind() {
-        List<Square> path = new ArrayList<>();
-        Piece piece = board.getPieceFromSquare(square);
-        int previousNumber = square.getNumber() - 1;
+    private List<Square> oneSquareLeft(final int number) {
+        final Letter previousLetter = Letter.previousLetter(square.getLetter());
+        return oneSquareIfIsAllowedToMove(number, previousLetter);
+    }
 
-        if(isOneSquarePerMove) {
-            Letter previousLetter = Letter.nextLetter(square.getLetter());
-            Square previousSquare = new Square(previousLetter, previousNumber);
-            Piece previousPiece = board.getPieceFromSquare(previousSquare);
+    private List<Square> oneSquareRight(final int number) {
+        final Letter nextLetter = Letter.nextLetter(square.getLetter());
+        return oneSquareIfIsAllowedToMove(number, nextLetter);
+    }
 
-            if(previousPiece == null ||
-                    !previousPiece.getColor().equals(piece.getColor())) {
+    private List<Square> oneSquareIfIsAllowedToMove(final int number, final Letter letter) {
+        final List<Square> path = new ArrayList<>();
+        final Piece piece = board.getPieceFromSquare(square);
+        final Square actualSquare = new Square(letter, number);
+        final Piece actualPiece = board.getPieceFromSquare(actualSquare);
+        final boolean squareIsEmpty = actualPiece == null;
+        final boolean actualPieceCanBeCaptured = (actualPiece != null &&
+                !actualPiece.getColor().equals(piece.getColor()));
 
-                path.add(previousSquare);
-            }
-
-            return path;
-        }
-
-        for (Letter letter : Letter.nextLetters(square.getLetter())) {
-            if(previousNumber > 0) {
-                Square actualSquare = new Square(letter, previousNumber);
-                Piece actualPiece = board.getPieceFromSquare(actualSquare);
-                previousNumber--;
-
-                if(actualPiece == null) {
-                    path.add(actualSquare);
-                } else {
-                    if(!actualPiece.getColor().equals(piece.getColor())) {
-                        path.add(actualSquare);
-                    }
-                    break;
-                }
-            }
+        if(squareIsEmpty || actualPieceCanBeCaptured) {
+            path.add(actualSquare);
         }
 
         return path;
