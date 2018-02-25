@@ -16,6 +16,22 @@ public class StraightMove extends Move {
         super(board, square, isOneSquarePerMove);
     }
 
+    @Override
+    public List<Square> path() {
+        List<Square> path = new ArrayList<>();
+
+        if(isOneSquarePerMove) {
+            return oneSquarePerMove(square);
+        }
+
+        path.addAll(leftPath());
+        path.addAll(rightPath());
+        path.addAll(aheadPath());
+        path.addAll(behindPath());
+
+        return path;
+    }
+
     private List<Square> oneSquarePerMove(final Square square) {
         List<Square> moves = new ArrayList<>();
 
@@ -71,62 +87,12 @@ public class StraightMove extends Move {
         return Collections.emptyList();
     }
 
-    @Override
-    public List<Square> path() {
-        List<Square> path = new ArrayList<>();
-
-        if(isOneSquarePerMove) {
-            return oneSquarePerMove(square);
-        }
-
-        path.addAll(leftPath());
-        path.addAll(rightPath());
-        path.addAll(aheadPath());
-        path.addAll(behindPath());
-
-        return path;
-    }
-
     private List<Square> leftPath() {
-        List<Square> path = new ArrayList<>();
-        Piece piece = board.getPieceFromSquare(square);
-
-        for (Letter letter : Letter.previousLetters(square.getLetter())) {
-            Square leftSquare = new Square(letter, square.getNumber());
-            Piece leftPiece = board.getPieceFromSquare(leftSquare);
-
-            if(leftPiece == null) {
-                path.add(leftSquare);
-            } else {
-                if(!leftPiece.getColor().equals(piece.getColor())) {
-                    path.add(leftSquare);
-                }
-                break;
-            }
-        }
-
-        return path;
+        return horizontalSquaresPath(Letter.previousLetters(square.getLetter()));
     }
 
     private List<Square> rightPath() {
-        List<Square> path = new ArrayList<>();
-        Piece piece = board.getPieceFromSquare(square);
-
-        for (Letter letter : Letter.nextLetters(square.getLetter())) {
-            Square rightSquare = new Square(letter, square.getNumber());
-            Piece rightPiece = board.getPieceFromSquare(rightSquare);
-
-            if(rightPiece == null) {
-                path.add(rightSquare);
-            } else {
-                if(!rightPiece.getColor().equals(piece.getColor())) {
-                    path.add(rightSquare);
-                }
-                break;
-            }
-        }
-
-        return path;
+        return horizontalSquaresPath(Letter.nextLetters(square.getLetter()));
     }
 
     private List<Square> aheadPath() {
@@ -163,6 +129,27 @@ public class StraightMove extends Move {
             } else {
                 if(!pieceBehind.getColor().equals(piece.getColor())) {
                     path.add(squareBehind);
+                }
+                break;
+            }
+        }
+
+        return path;
+    }
+
+    private List<Square> horizontalSquaresPath(List<Letter> letters) {
+        List<Square> path = new ArrayList<>();
+        Piece piece = board.getPieceFromSquare(square);
+
+        for (Letter letter : letters) {
+            Square actualSquare = new Square(letter, square.getNumber());
+            Piece actualPiece = board.getPieceFromSquare(actualSquare);
+
+            if(actualPiece == null) {
+                path.add(actualSquare);
+            } else {
+                if(!actualPiece.getColor().equals(piece.getColor())) {
+                    path.add(actualSquare);
                 }
                 break;
             }

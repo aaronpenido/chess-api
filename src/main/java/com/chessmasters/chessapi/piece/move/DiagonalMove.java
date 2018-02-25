@@ -56,7 +56,7 @@ public class DiagonalMove extends Move {
             return oneSquareLeft(nextNumber);
         }
 
-        return allSquaresAhead(Letter.previousLetters(square.getLetter()));
+        return squaresAheadPath(Letter.previousLetters(square.getLetter()));
     }
 
     private List<Square> leftBehind() {
@@ -65,7 +65,7 @@ public class DiagonalMove extends Move {
             return oneSquareLeft(previousNumber);
         }
 
-        return allSquaresBehind(Letter.previousLetters(square.getLetter()));
+        return squaresBehindPath(Letter.previousLetters(square.getLetter()));
     }
 
     private List<Square> rightAhead() {
@@ -74,7 +74,7 @@ public class DiagonalMove extends Move {
             return oneSquareRight(nextNumber);
         }
 
-        return allSquaresAhead(Letter.nextLetters(square.getLetter()));
+        return squaresAheadPath(Letter.nextLetters(square.getLetter()));
     }
 
     private List<Square> rightBehind() {
@@ -83,10 +83,10 @@ public class DiagonalMove extends Move {
             return oneSquareRight(previousNumber);
         }
 
-        return allSquaresBehind(Letter.nextLetters(square.getLetter()));
+        return squaresBehindPath(Letter.nextLetters(square.getLetter()));
     }
 
-    private List<Square> allSquaresAhead(List<Letter> letters) {
+    private List<Square> squaresAheadPath(List<Letter> letters) {
         List<Square> path = new ArrayList<>();
         Piece piece = board.getPieceFromSquare(square);
         int nextNumber = square.getNumber() + 1;
@@ -109,7 +109,7 @@ public class DiagonalMove extends Move {
         return path;
     }
 
-    private List<Square> allSquaresBehind(final List<Letter> letters) {
+    private List<Square> squaresBehindPath(final List<Letter> letters) {
         List<Square> path = new ArrayList<>();
         Piece piece = board.getPieceFromSquare(square);
         int previousNumber = square.getNumber() - 1;
