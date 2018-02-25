@@ -7,11 +7,8 @@ import com.chessmasters.chessapi.piece.Piece;
 import com.chessmasters.chessapi.piece.move.DiagonalMove;
 import com.chessmasters.chessapi.piece.move.Move;
 import com.chessmasters.chessapi.piece.move.StraightMove;
-
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 public class Board {
     private List<Piece> pieces;
