@@ -4,6 +4,7 @@ import com.chessmasters.chessapi.Board;
 import com.chessmasters.chessapi.Color;
 import com.chessmasters.chessapi.Square;
 import com.chessmasters.chessapi.piece.move.DiagonalMove;
+import com.chessmasters.chessapi.piece.move.KingMove;
 import com.chessmasters.chessapi.piece.move.StraightMove;
 
 import java.util.ArrayList;
@@ -19,9 +20,9 @@ public class King extends Piece{
     public List<Square> moves(Board board) {
         List<Square> moves = new ArrayList<>();
 
-        moves.addAll(new StraightMove(board, square, true).path());
-        moves.addAll(new DiagonalMove(board, square, true).path());
+        //moves.addAll(new StraightMove(board, square, true).path());
+        //moves.addAll(new DiagonalMove(board, square, true).path());
 
-        return moves;
+        return new KingMove(board, square).path();
     }
 }

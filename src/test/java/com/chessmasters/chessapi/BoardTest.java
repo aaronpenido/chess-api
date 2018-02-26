@@ -127,11 +127,6 @@ public class BoardTest {
         assertThat(knight).isNotNull();
     }
 
-    @Test
-    public void throwInvalidMoveExceptionWhenKingTriesToMoveToAnAttackedSquare() {
-
-    }
-
     //TODO: castling
     //TODO: En passant
     //TODO: Pawn Promotion

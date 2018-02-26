@@ -14,10 +14,6 @@ public class DiagonalMove extends Move {
         super(board, square);
     }
 
-    public DiagonalMove(Board board, Square square, boolean isOneSquarePerMove) {
-        super(board, square, isOneSquarePerMove);
-    }
-
     @Override
     public List<Square> path() {
         List<Square> path = new ArrayList<>();
@@ -51,38 +47,18 @@ public class DiagonalMove extends Move {
     }
 
     private List<Square> leftAhead() {
-        if(isOneSquarePerMove) {
-            int nextNumber = square.getNumber() + 1;
-            return oneSquareLeft(nextNumber);
-        }
-
         return squaresAheadPath(Letter.previousLetters(square.getLetter()));
     }
 
     private List<Square> leftBehind() {
-        if(isOneSquarePerMove) {
-            int previousNumber = square.getNumber() - 1;
-            return oneSquareLeft(previousNumber);
-        }
-
         return squaresBehindPath(Letter.previousLetters(square.getLetter()));
     }
 
     private List<Square> rightAhead() {
-        if(isOneSquarePerMove) {
-            int nextNumber = square.getNumber() + 1;
-            return oneSquareRight(nextNumber);
-        }
-
         return squaresAheadPath(Letter.nextLetters(square.getLetter()));
     }
 
     private List<Square> rightBehind() {
-        if(isOneSquarePerMove) {
-            int previousNumber = square.getNumber() - 1;
-            return oneSquareRight(previousNumber);
-        }
-
         return squaresBehindPath(Letter.nextLetters(square.getLetter()));
     }
 
@@ -129,32 +105,6 @@ public class DiagonalMove extends Move {
                     break;
                 }
             }
-        }
-
-        return path;
-    }
-
-    private List<Square> oneSquareLeft(final int number) {
-        final Letter previousLetter = Letter.previousLetter(square.getLetter());
-        return oneSquareIfIsAllowedToMove(number, previousLetter);
-    }
-
-    private List<Square> oneSquareRight(final int number) {
-        final Letter nextLetter = Letter.nextLetter(square.getLetter());
-        return oneSquareIfIsAllowedToMove(number, nextLetter);
-    }
-
-    private List<Square> oneSquareIfIsAllowedToMove(final int number, final Letter letter) {
-        final List<Square> path = new ArrayList<>();
-        final Piece piece = board.getPieceFromSquare(square);
-        final Square actualSquare = new Square(letter, number);
-        final Piece actualPiece = board.getPieceFromSquare(actualSquare);
-        final boolean squareIsEmpty = actualPiece == null;
-        final boolean actualPieceCanBeCaptured = (actualPiece != null &&
-                !actualPiece.getColor().equals(piece.getColor()));
-
-        if(squareIsEmpty || actualPieceCanBeCaptured) {
-            path.add(actualSquare);
         }
 
         return path;

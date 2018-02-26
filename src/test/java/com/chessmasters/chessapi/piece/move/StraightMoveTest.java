@@ -70,21 +70,6 @@ public class StraightMoveTest {
     }
 
     @Test
-    public void oneSquarePath() {
-        Square square = new Square(Letter.E, 4);
-        List<Square> squares = new ArrayList<>();
-
-        squares.add(new Square(Letter.D, 4));
-        squares.add(new Square(Letter.F, 4));
-        squares.add(new Square(Letter.E, 5));
-        squares.add(new Square(Letter.E, 3));
-
-        move = createStraightMove(square, true);
-
-        assertThat(move.path()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
-    }
-
-    @Test
     public void pathDoesNotContainsActualSquare() {
         Square square = new Square(Letter.E, 4);
         move = createStraightMove(square);
@@ -225,11 +210,7 @@ public class StraightMoveTest {
     }
 
     private StraightMove createStraightMove(Square square) {
-        return createStraightMove(square, false);
-    }
-
-    private StraightMove createStraightMove(Square square, boolean isOneSquarePerMove) {
         board = new Board(Collections.singletonList(new Rook(WHITE, square)));
-        return new StraightMove(board, square, isOneSquarePerMove);
+        return new StraightMove(board, square);
     }
 }

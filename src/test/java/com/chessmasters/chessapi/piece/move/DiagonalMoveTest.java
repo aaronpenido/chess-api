@@ -77,21 +77,6 @@ public class DiagonalMoveTest {
     }
 
     @Test
-    public void oneSquarePath() {
-        Square square = new Square(Letter.E, 4);
-        board = new Board(Collections.singletonList(new Bishop(WHITE, square)));
-        move = new DiagonalMove(board, square, true);
-
-        List<Square> squares = new ArrayList<>();
-        squares.add(new Square(Letter.D, 5));
-        squares.add(new Square(Letter.F, 5));
-        squares.add(new Square(Letter.D, 3));
-        squares.add(new Square(Letter.F, 3));
-
-        assertThat(move.path()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
-    }
-
-    @Test
     public void movesAheadOnlyToRightDiagonalWhenItsInLeftBottomBorder() {
         Square square = new Square(Letter.A, 1);
         board = new Board(Collections.singletonList(new Bishop(WHITE, square)));
