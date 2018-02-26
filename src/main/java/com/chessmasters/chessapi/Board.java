@@ -2,10 +2,11 @@ package com.chessmasters.chessapi;
 
 import com.chessmasters.chessapi.exception.InvalidMoveException;
 import com.chessmasters.chessapi.exception.PieceNotFoundException;
-import com.chessmasters.chessapi.piece.Pawn;
 import com.chessmasters.chessapi.piece.Piece;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Board {
     private List<Piece> pieces;
@@ -30,23 +31,15 @@ public class Board {
             throw new InvalidMoveException();
         }
 
-        if(pieceFrom instanceof Pawn) {
-            boolean isDiagonal = !from.getLetter().equals(destination.getLetter());
-
-            if(isDiagonal && pieceTo == null || (!isDiagonal && pieceTo !=  null)) {
-                throw new InvalidMoveException();
-            }
+        if(pieceTo != null) {
+            removePieceFromList(pieceTo);
         }
 
         pieceFrom.setSquare(destination);
 
-        if(pieceTo != null) {
-            pieces.remove(pieceTo);
-        }
     }
 
     public Piece getPieceFromSquare(Square square) {
-
         Piece piece = pieces
                 .stream()
                 .filter(p -> p != null)
@@ -61,5 +54,16 @@ public class Board {
         return piece.moves(this)
                 .stream()
                 .anyMatch(square -> square.equals(destination));
+    }
+
+    private void removePieceFromList(@NotNull final Piece piece) {
+        if(piece != null) {
+            List<Piece> newPieces = pieces
+                    .stream()
+                    .filter(p -> !p.equals(piece))
+                    .collect(Collectors.toList());
+
+            pieces = new ArrayList<>(newPieces);
+        }
     }
 }
