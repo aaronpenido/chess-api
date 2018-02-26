@@ -30,10 +30,6 @@ public class Board {
             throw new InvalidMoveException();
         }
 
-        if(isDestinationSquareFilledWithSameColorPiece(pieceFrom, pieceTo)) {
-            throw new InvalidMoveException();
-        }
-
         if(pieceFrom instanceof Pawn) {
             boolean isDiagonal = !from.getLetter().equals(destination.getLetter());
 
@@ -59,11 +55,6 @@ public class Board {
                 .orElse(null);
 
         return piece;
-    }
-
-    private boolean isDestinationSquareFilledWithSameColorPiece(Piece pieceFrom, Piece pieceTo) {
-        return pieceTo != null &&
-                pieceTo.getColor().equals(pieceFrom.getColor());
     }
 
     private boolean isMoveValid(@NotNull final Piece piece, @NotNull Square destination) {
