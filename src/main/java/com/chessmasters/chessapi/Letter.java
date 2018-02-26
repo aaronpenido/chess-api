@@ -1,5 +1,7 @@
 package com.chessmasters.chessapi;
 
+import com.chessmasters.chessapi.exception.LetterNotFoundException;
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -11,11 +13,19 @@ public enum Letter {
     public static Letter previousLetter(Letter letter) {
         final int previousIndex = letter.ordinal() - 1;
 
+        if(previousIndex < 0) {
+            throw new LetterNotFoundException("There is no previous letter from " + letter);
+        }
+
         return Letter.values()[previousIndex];
     }
 
     public static Letter nextLetter(Letter letter) {
         final int nextIndex = letter.ordinal() + 1;
+
+        if(nextIndex >= Letter.values().length) {
+            throw new LetterNotFoundException("There is no next letter from " + letter);
+        }
 
         return Letter.values()[nextIndex];
     }

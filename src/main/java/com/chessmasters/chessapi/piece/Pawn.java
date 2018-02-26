@@ -24,7 +24,6 @@ public class Pawn extends Piece {
         }
     }
 
-    @Override
     public List<Square> moves() {
         List<Square> moves = new ArrayList<>();
 

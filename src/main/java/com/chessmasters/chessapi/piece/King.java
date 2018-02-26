@@ -16,13 +16,6 @@ public class King extends Piece{
     }
 
     @Override
-    public List<Square> moves() {
-        List<Square> moves = new ArrayList<>();
-
-        return moves;
-    }
-
-    @Override
     public List<Square> moves(Board board) {
         List<Square> moves = new ArrayList<>();
 

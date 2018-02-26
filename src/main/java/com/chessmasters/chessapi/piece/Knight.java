@@ -14,7 +14,6 @@ public class Knight extends Piece {
         super(color, square);
     }
 
-    @Override
     public List<Square> moves() {
         List<Square> moves = new ArrayList<>();
 
