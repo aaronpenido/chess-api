@@ -1,9 +1,12 @@
 package com.chessmasters.chessapi.piece;
 
+import com.chessmasters.chessapi.Board;
 import com.chessmasters.chessapi.Letter;
 import com.chessmasters.chessapi.Square;
 import org.junit.Test;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static com.chessmasters.chessapi.Color.*;
@@ -11,127 +14,162 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class PawnTest {
 
+    private Pawn pawn;
+    private Board board;
+    
     @Test
     public void pawnHasValidMoves() {
-        Pawn pawn = new Pawn(WHITE, new Square(Letter.A, 1));
+        pawn = new Pawn(WHITE, new Square(Letter.A, 1));
+        board = new Board(Collections.singletonList(pawn));
 
-        assertThat(pawn.moves()).isNotNull();
-        assertThat(pawn.moves()).isNotEmpty();
+        assertThat(pawn.moves(board)).isNotEmpty();
     }
 
     @Test
     public void whiteMovesOneSquareAhead() {
-        Pawn pawn = new Pawn(WHITE, new Square(Letter.E, 4));
-        assertThat(pawn.moves()).contains(new Square(Letter.E, 5));
+        pawn = new Pawn(WHITE, new Square(Letter.E, 4));
+        board = new Board(Collections.singletonList(pawn));
+
+        assertThat(pawn.moves(board)).containsExactlyInAnyOrder(new Square(Letter.E, 5));
     }
 
     @Test
     public void blackMovesOneSquareAhead() {
-        Pawn pawn = new Pawn(BLACK, new Square(Letter.E, 4));
-        assertThat(pawn.moves()).contains(new Square(Letter.E, 3));
+        pawn = new Pawn(BLACK, new Square(Letter.E, 4));
+        board = new Board(Collections.singletonList(pawn));
+
+        assertThat(pawn.moves(board)).containsExactlyInAnyOrder(new Square(Letter.E, 3));
     }
 
     @Test
     public void whiteDoesNotMoveWhenItsInTopBorder() {
-        Pawn pawn = new Pawn(WHITE, new Square(Letter.E, 8));
-        assertThat(pawn.moves()).isEmpty();
+        pawn = new Pawn(WHITE, new Square(Letter.E, 8));
+        board = new Board(Collections.singletonList(pawn));
+
+        assertThat(pawn.moves(board)).isEmpty();
     }
 
     @Test
     public void blackDoesNotMoveWhenItsInTopBorder() {
-        Pawn pawn = new Pawn(BLACK, new Square(Letter.E, 1));
-        assertThat(pawn.moves()).isEmpty();
+        pawn = new Pawn(BLACK, new Square(Letter.E, 1));
+        board = new Board(Collections.singletonList(pawn));
+
+        assertThat(pawn.moves(board)).isEmpty();
     }
 
     @Test
     public void whiteMovesTwoSquaresAheadOnlyWhenItsInSecondRow() {
-        Pawn pawn = new Pawn(WHITE, new Square(Letter.E, 2));
-        assertThat(pawn.moves()).contains(new Square(Letter.E, 4));
+        pawn = new Pawn(WHITE, new Square(Letter.E, 2));
+        board = new Board(Collections.singletonList(pawn));
+
+        assertThat(pawn.moves(board)).contains(new Square(Letter.E, 4));
     }
 
     @Test
     public void blackMovesTwoSquaresAheadOnlyWhenItsInSeventhRow() {
-        Pawn pawn = new Pawn(BLACK, new Square(Letter.E, 7));
-        assertThat(pawn.moves()).contains(new Square(Letter.E, 5));
+        pawn = new Pawn(BLACK, new Square(Letter.E, 7));
+        board = new Board(Collections.singletonList(pawn));
+
+        assertThat(pawn.moves(board)).contains(new Square(Letter.E, 5));
     }
 
     @Test
     public void whiteDoesNotMoveTwoSquaresAheadWhenItsNotInSecondRow() {
-        Pawn pawn = new Pawn(WHITE, new Square(Letter.E, 3));
-        assertThat(pawn.moves()).doesNotContain(new Square(Letter.E, 5));
+        pawn = new Pawn(WHITE, new Square(Letter.E, 3));
+        board = new Board(Collections.singletonList(pawn));
+
+        assertThat(pawn.moves(board)).doesNotContain(new Square(Letter.E, 5));
     }
 
     @Test
     public void blackDoesNotMoveTwoSquaresAheadWhenItsNotInSeventhRow() {
-        Pawn pawn = new Pawn(BLACK, new Square(Letter.E, 6));
-        assertThat(pawn.moves()).doesNotContain(new Square(Letter.E, 4));
+        pawn = new Pawn(BLACK, new Square(Letter.E, 6));
+        board = new Board(Collections.singletonList(pawn));
+
+        assertThat(pawn.moves(board)).doesNotContain(new Square(Letter.E, 4));
     }
 
     @Test
-    public void whiteMovesOneSquareInRightDiagonal() {
-        Pawn pawn = new Pawn(WHITE, new Square(Letter.E, 3));
-        assertThat(pawn.moves()).contains(new Square(Letter.F, 4));
+    public void whiteMovesToLeftDiagonalSquareWhenThereIsAnEnemyPieceOnIt() {
+        pawn = new Pawn(WHITE, new Square(Letter.E, 4));
+        Square enemySquare = new Square(Letter.D, 5);
+        Pawn blackPawn = new Pawn(BLACK, enemySquare);
+        board = new Board(Arrays.asList(pawn, blackPawn));
+
+        assertThat(pawn.moves(board)).containsExactlyInAnyOrder(
+                new Square(Letter.E, 5),
+                enemySquare);
     }
 
     @Test
-    public void blackMovesOneSquareInRightDiagonal() {
-        Pawn pawn = new Pawn(BLACK, new Square(Letter.E, 3));
-        assertThat(pawn.moves()).contains(new Square(Letter.D, 2));
+    public void whiteMovesToRightDiagonalSquareWhenThereIsAnEnemyPieceOnIt() {
+        pawn = new Pawn(WHITE, new Square(Letter.E, 4));
+        Square enemySquare = new Square(Letter.F, 5);
+        Pawn blackPawn = new Pawn(BLACK, enemySquare);
+        board = new Board(Arrays.asList(pawn, blackPawn));
+
+        assertThat(pawn.moves(board)).containsExactlyInAnyOrder(
+                new Square(Letter.E, 5),
+                enemySquare);
     }
 
     @Test
-    public void whiteMovesOneSquareInLeftDiagonal() {
-        Pawn pawn = new Pawn(WHITE, new Square(Letter.E, 3));
-        assertThat(pawn.moves()).contains(new Square(Letter.D, 4));
+    public void blackMovesToLeftDiagonalSquareWhenThereIsAnEnemyPieceOnIt() {
+        pawn = new Pawn(BLACK, new Square(Letter.E, 4));
+        Square enemySquare = new Square(Letter.F, 3);
+        Pawn enemyPawn = new Pawn(WHITE, enemySquare);
+        board = new Board(Arrays.asList(pawn, enemyPawn));
+
+        assertThat(pawn.moves(board)).containsExactlyInAnyOrder(
+                new Square(Letter.E, 3),
+                enemySquare);
     }
 
     @Test
-    public void blackMovesOneSquareInLeftDiagonal() {
-        Pawn pawn = new Pawn(BLACK, new Square(Letter.E, 3));
-        assertThat(pawn.moves()).contains(new Square(Letter.F, 2));
+    public void blackMovesToRightDiagonalSquareWhenThereIsAnEnemyPieceOnIt() {
+        pawn = new Pawn(BLACK, new Square(Letter.E, 4));
+        Square enemySquare = new Square(Letter.D, 3);
+        Pawn enemyPawn = new Pawn(WHITE, enemySquare);
+        board = new Board(Arrays.asList(pawn, enemyPawn));
+
+        assertThat(pawn.moves(board)).containsExactlyInAnyOrder(
+                new Square(Letter.E, 3),
+                enemySquare);
     }
 
     @Test
-    public void whiteDoesNotMoveRightDiagonalWhenItsInRightBorder() {
-        Pawn pawn = new Pawn(WHITE, new Square(Letter.H, 4));
-        List<Square> squares = new ArrayList<>();
+    public void whiteDoesNotMoveWhenThereIsAFriendlyPieceAhead() {
+        pawn = new Pawn(WHITE, new Square(Letter.E, 4));
+        Pawn friendlyPawn = new Pawn(WHITE, new Square(Letter.E, 5));
+        board = new Board(Arrays.asList(pawn, friendlyPawn));
 
-        squares.add(new Square(Letter.H, 5));
-        squares.add(new Square(Letter.G, 5));
-
-        assertThat(pawn.moves()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
+        assertThat(pawn.moves(board)).isEmpty();
     }
 
     @Test
-    public void blackDoesNotMoveRightDiagonalWhenItsInRightBorder() {
-        Pawn pawn = new Pawn(BLACK, new Square(Letter.A, 4));
-        List<Square> squares = new ArrayList<>();
+    public void blackDoesNotMoveWhenThereIsAFriendlyPieceAhead() {
+        pawn = new Pawn(BLACK, new Square(Letter.E, 4));
+        Pawn friendlyPawn = new Pawn(WHITE, new Square(Letter.E, 3));
+        board = new Board(Arrays.asList(pawn, friendlyPawn));
 
-        squares.add(new Square(Letter.A, 3));
-        squares.add(new Square(Letter.B, 3));
-
-        assertThat(pawn.moves()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
+        assertThat(pawn.moves(board)).isEmpty();
     }
 
     @Test
-    public void whiteDoesNotMoveLeftDiagonalWhenItsInLeftBorder() {
-        Pawn pawn = new Pawn(WHITE, new Square(Letter.A, 4));
-        List<Square> squares = new ArrayList<>();
+    public void whiteDoesNotMoveTwoSquaresAheadAtInitialPositionIfThereIsAPieceInTheWay() {
+        pawn = new Pawn(WHITE, new Square(Letter.E, 2));
+        Pawn friendlyPawn = new Pawn(WHITE, new Square(Letter.E, 4));
+        board = new Board(Arrays.asList(pawn, friendlyPawn));
 
-        squares.add(new Square(Letter.A, 5));
-        squares.add(new Square(Letter.B, 5));
-
-        assertThat(pawn.moves()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
+        assertThat(pawn.moves(board)).containsExactlyInAnyOrder(new Square(Letter.E, 3));
     }
 
     @Test
-    public void blackDoesNotMoveLeftDiagonalWhenItsInLeftBorder() {
-        Pawn pawn = new Pawn(BLACK, new Square(Letter.H, 4));
-        List<Square> squares = new ArrayList<>();
+    public void blackDoesNotMoveTwoSquaresAheadAtInitialPositionIfThereIsAPieceInTheWay() {
+        pawn = new Pawn(BLACK, new Square(Letter.E, 7));
+        Pawn friendlyPawn = new Pawn(WHITE, new Square(Letter.E, 5));
+        board = new Board(Arrays.asList(pawn, friendlyPawn));
 
-        squares.add(new Square(Letter.H, 3));
-        squares.add(new Square(Letter.G, 3));
-
-        assertThat(pawn.moves()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
+        assertThat(pawn.moves(board)).containsExactlyInAnyOrder(new Square(Letter.E, 6));
     }
 }

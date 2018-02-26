@@ -4,6 +4,7 @@ import com.chessmasters.chessapi.Board;
 import com.chessmasters.chessapi.Letter;
 import com.chessmasters.chessapi.Square;
 import com.chessmasters.chessapi.piece.King;
+import com.chessmasters.chessapi.piece.Pawn;
 import com.chessmasters.chessapi.piece.Piece;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -154,6 +155,7 @@ public class KingMove extends Move {
                 .stream()
                 .filter(piece -> !piece.getColor().equals(pieceInActualSquare.getColor()))
                 .filter(piece -> !(piece instanceof King))
+                .filter(piece -> !(piece instanceof Pawn))
                 .collect(Collectors.toList());
 
         boolean isUnderAttack = enemyPieces
@@ -164,12 +166,33 @@ public class KingMove extends Move {
             if (isSquareUnderAttackByEnemyKing(moveSquare)) {
                 return true;
             }
+            if(isSquareUnderAttackByEnemyPawn(moveSquare)) {
+                return true;
+            }
         }
 
         return isUnderAttack;
     }
 
-    private boolean isSquareUnderAttackByEnemyKing(Square moveSquare) {
+    private boolean isSquareUnderAttackByEnemyPawn(Square destination) {
+        final Piece pieceInActualSquare = board.getPieceFromSquare(square);
+
+        Pawn enemyPawn = board.getPieces()
+                .stream()
+                .filter(piece -> piece instanceof Pawn)
+                .filter(piece -> !piece.getColor().equals(pieceInActualSquare.getColor()))
+                .map(pawn -> new Pawn(pawn.getColor(), pawn.getSquare()))
+                .findFirst()
+                .orElse(null);
+
+        if(enemyPawn != null) {
+            return enemyPawn.attackMoves().contains(destination);
+        }
+
+        return false;
+    }
+
+    private boolean isSquareUnderAttackByEnemyKing(Square destination) {
         final Piece pieceInActualSquare = board.getPieceFromSquare(square);
 
         Piece enemyKing = board.getPieces()
@@ -181,7 +204,7 @@ public class KingMove extends Move {
 
         if(enemyKing != null) {
             Board newBoard = new Board(Collections.singletonList(enemyKing));
-            if(enemyKing.moves(newBoard).contains(moveSquare)) {
+            if(enemyKing.moves(newBoard).contains(destination)) {
                 return true;
             }
         }
