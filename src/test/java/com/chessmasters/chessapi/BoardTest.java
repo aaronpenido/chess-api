@@ -3,10 +3,8 @@ package com.chessmasters.chessapi;
 import com.chessmasters.chessapi.exception.InvalidMoveException;
 import com.chessmasters.chessapi.piece.*;
 import org.junit.Test;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 import static com.chessmasters.chessapi.Color.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,7 +32,7 @@ public class BoardTest {
 
         board.movePiece(from, destination);
 
-        Piece piece = getPieceFromSquare(from);
+        Piece piece = board.getPieceFromSquare(from);
 
         assertThat(piece).isNull();
     }
@@ -113,7 +111,7 @@ public class BoardTest {
 
         board.movePiece(from, destination);
 
-        Piece knight = getPieceFromSquare(destination);
+        Piece knight = board.getPieceFromSquare(destination);
 
         assertThat(knight).isNotNull();
     }
@@ -126,13 +124,4 @@ public class BoardTest {
     //TODO: Stalemate
     //TODO: Draw
     //TODO: Piece can't move if king is or will be in check
-
-    private Piece getPieceFromSquare(Square square) {
-        return board.getPieces()
-                    .stream()
-                    .filter(p -> p != null)
-                    .filter(p -> p.getSquare().equals(square))
-                    .findFirst()
-                    .orElse(null);
-    }
 }
