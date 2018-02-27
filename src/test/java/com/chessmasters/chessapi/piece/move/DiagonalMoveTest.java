@@ -6,10 +6,8 @@ import com.chessmasters.chessapi.Square;
 import com.chessmasters.chessapi.piece.Bishop;
 import com.chessmasters.chessapi.piece.Rook;
 import org.junit.Test;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+
+import java.util.*;
 
 import static com.chessmasters.chessapi.Color.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -348,5 +346,21 @@ public class DiagonalMoveTest {
 
         assertThat(move.path()).contains(squares.toArray(new Square[squares.size()]));
         assertThat(move.path()).doesNotContain(nextSquareAfterEnemyPiece);
+    }
+
+    @Test
+    public void name() {
+        Square square = new Square(Letter.H, 1);
+        Square enemyPieceSquare = new Square(Letter.F, 3);
+
+        board = new Board(Arrays.asList(
+                new Bishop(WHITE, square),
+                new Rook(BLACK, enemyPieceSquare)));
+
+        move = new DiagonalMove(board, square);
+
+        assertThat(move.path()).containsExactlyInAnyOrder(
+                new Square(Letter.G, 2),
+                enemyPieceSquare);
     }
 }

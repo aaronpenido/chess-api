@@ -46,4 +46,12 @@ public enum Letter {
                 .filter(i -> i.ordinal() < ordinal)
                 .collect(Collectors.toList());
     }
+
+    public static boolean hasNextLetter(Letter letter) {
+        return !letter.equals(H);
+    }
+
+    public static boolean hasPreviousLetter(Letter letter) {
+        return !letter.equals(A);
+    }
 }
