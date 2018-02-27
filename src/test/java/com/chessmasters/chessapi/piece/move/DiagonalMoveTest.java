@@ -347,20 +347,4 @@ public class DiagonalMoveTest {
         assertThat(move.path()).contains(squares.toArray(new Square[squares.size()]));
         assertThat(move.path()).doesNotContain(nextSquareAfterEnemyPiece);
     }
-
-    @Test
-    public void name() {
-        Square square = new Square(Letter.H, 1);
-        Square enemyPieceSquare = new Square(Letter.F, 3);
-
-        board = new Board(Arrays.asList(
-                new Bishop(WHITE, square),
-                new Rook(BLACK, enemyPieceSquare)));
-
-        move = new DiagonalMove(board, square);
-
-        assertThat(move.path()).containsExactlyInAnyOrder(
-                new Square(Letter.G, 2),
-                enemyPieceSquare);
-    }
 }
