@@ -107,4 +107,68 @@ public class SquareTest {
         assertThat(square.nextNumberAndLetter()).isEqualTo(Optional.empty());
         assertThat(square.previousNumberAndNextLetter()).isEqualTo(Optional.empty());
     }
+
+    @Test
+    public void twoNextNumberAndOneNextLetter() {
+        Square square = new Square(Letter.E, 4);
+        Optional<Square> expected = Optional.of(new Square(Letter.F, 6));
+
+        assertThat(square.twoNextNumberAndOneNextLetter()).isEqualTo(expected);
+    }
+
+    @Test
+    public void twoNextNumberAndOnePreviousLetter() {
+        Square square = new Square(Letter.E, 4);
+        Optional<Square> expected = Optional.of(new Square(Letter.D, 6));
+
+        assertThat(square.twoNextNumberAndOnePreviousLetter()).isEqualTo(expected);
+    }
+
+    @Test
+    public void twoNextLetterAndOneNextNumber() {
+        Square square = new Square(Letter.E, 4);
+        Optional<Square> expected = Optional.of(new Square(Letter.G, 5));
+
+        assertThat(square.twoNextLetterAndOneNextNumber()).isEqualTo(expected);
+    }
+
+    @Test
+    public void twoPreviousLetterAndOneNextNumber() {
+        Square square = new Square(Letter.E, 4);
+        Optional<Square> expected = Optional.of(new Square(Letter.C, 5));
+
+        assertThat(square.twoPreviousLetterAndOneNextNumber()).isEqualTo(expected);
+    }
+
+    @Test
+    public void twoPreviousNumberAndOneNextLetter() {
+        Square square = new Square(Letter.E, 4);
+        Optional<Square> expected = Optional.of(new Square(Letter.F, 2));
+
+        assertThat(square.twoPreviousNumberAndOneNextLetter()).isEqualTo(expected);
+    }
+
+    @Test
+    public void twoPreviousNumberAndOnePreviousLetter() {
+        Square square = new Square(Letter.E, 4);
+        Optional<Square> expected = Optional.of(new Square(Letter.D, 2));
+
+        assertThat(square.twoPreviousNumberAndOnePreviousLetter()).isEqualTo(expected);
+    }
+
+    @Test
+    public void twoPreviousLetterAndOnePreviousNumber() {
+        Square square = new Square(Letter.E, 4);
+        Optional<Square> expected = Optional.of(new Square(Letter.C, 3));
+
+        assertThat(square.twoPreviousLetterAndOnePreviousNumber()).isEqualTo(expected);
+    }
+
+    @Test
+    public void twoNextLetterAndOnePreviousNumber() {
+        Square square = new Square(Letter.E, 4);
+        Optional<Square> expected = Optional.of(new Square(Letter.G, 3));
+
+        assertThat(square.twoNextLetterAndOnePreviousNumber()).isEqualTo(expected);
+    }
 }

@@ -118,4 +118,127 @@ public class Square {
 
         return Optional.empty();
     }
+
+    public Optional<Square> twoNextNumberAndOneNextLetter() {
+        Optional<Square> nextNumberAndLetter = nextNumberAndLetter();
+
+        if(nextNumberAndLetter.isPresent()) {
+            Optional<Square> twoNextNumber = nextNumberAndLetter.get().nextNumber();
+
+            if(twoNextNumber.isPresent()) {
+                return Optional.of(new Square(
+                        twoNextNumber.get().getLetter(),
+                        twoNextNumber.get().getNumber()));
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    public Optional<Square> twoNextNumberAndOnePreviousLetter() {
+        Optional<Square> nextNumberAndPreviousLetter = nextNumberAndPreviousLetter();
+
+        if(nextNumberAndPreviousLetter.isPresent()) {
+            Optional<Square> twoNextNumber = nextNumberAndPreviousLetter.get().nextNumber();
+
+            if(twoNextNumber.isPresent()) {
+                return Optional.of(new Square(
+                        twoNextNumber.get().getLetter(),
+                        twoNextNumber.get().getNumber()));
+            }
+        }
+        return Optional.empty();
+    }
+
+    public Optional<Square> twoNextLetterAndOneNextNumber() {
+        Optional<Square> nextNumberAndLetter = nextNumberAndLetter();
+
+        if(nextNumberAndLetter.isPresent()) {
+            Optional<Square> twoNextLetter = nextNumberAndLetter.get().nextLetter();
+
+            if(twoNextLetter.isPresent()) {
+                return Optional.of(new Square(
+                        twoNextLetter.get().getLetter(),
+                        twoNextLetter.get().getNumber()));
+            }
+        }
+        return Optional.empty();
+    }
+
+    public Optional<Square> twoPreviousLetterAndOneNextNumber() {
+        Optional<Square> nextNumberAndPreviousLetter = nextNumberAndPreviousLetter();
+
+        if(nextNumberAndPreviousLetter.isPresent()) {
+            Optional<Square> twoPreviousLetter = nextNumberAndPreviousLetter.get().previousLetter();
+
+            if(twoPreviousLetter.isPresent()) {
+                return Optional.of(new Square(
+                        twoPreviousLetter.get().getLetter(),
+                        twoPreviousLetter.get().getNumber()));
+            }
+        }
+        return Optional.empty();
+    }
+
+    public Optional<Square> twoPreviousNumberAndOneNextLetter() {
+        Optional<Square> previousNumberAndNextLetter = previousNumberAndNextLetter();
+
+        if(previousNumberAndNextLetter.isPresent()) {
+            Optional<Square> twoPreviousNumber = previousNumberAndNextLetter.get().previousNumber();
+
+            if(twoPreviousNumber.isPresent()) {
+                return Optional.of(new Square(
+                        twoPreviousNumber.get().getLetter(),
+                        twoPreviousNumber.get().getNumber()));
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    public Optional<Square> twoPreviousNumberAndOnePreviousLetter() {
+        Optional<Square> previousNumberAndLetter = previousNumberAndLetter();
+
+        if(previousNumberAndLetter.isPresent()) {
+            Optional<Square> twoPreviousNumber = previousNumberAndLetter.get().previousNumber();
+
+            if(twoPreviousNumber.isPresent()) {
+                return Optional.of(new Square(
+                        twoPreviousNumber.get().getLetter(),
+                        twoPreviousNumber.get().getNumber()));
+            }
+        }
+        return Optional.empty();
+    }
+
+    public Optional<Square> twoPreviousLetterAndOnePreviousNumber() {
+        Optional<Square> previousNumberAndLetter = previousNumberAndLetter();
+
+        if(previousNumberAndLetter.isPresent()) {
+            Optional<Square> previousLetter = previousNumberAndLetter.get().previousLetter();
+
+            if(previousLetter.isPresent()) {
+                return Optional.of(new Square(
+                        previousLetter.get().getLetter(),
+                        previousLetter.get().getNumber()));
+            }
+        }
+        return Optional.empty();
+    }
+
+    public Optional<Square> twoNextLetterAndOnePreviousNumber() {
+        Optional<Square> previousNumberAndNextLetter = previousNumberAndNextLetter();
+
+        if(previousNumberAndNextLetter.isPresent()) {
+            Optional<Square> nextLetter = previousNumberAndNextLetter.get().nextLetter();
+
+            if(nextLetter.isPresent()) {
+                return Optional.of(new Square(
+                        nextLetter.get().getLetter(),
+                        nextLetter.get().getNumber()));
+            }
+        }
+        return Optional.empty();
+    }
+
 }
