@@ -2,11 +2,8 @@ package com.chessmasters.chessapi.piece;
 
 import com.chessmasters.chessapi.Board;
 import com.chessmasters.chessapi.Color;
-import com.chessmasters.chessapi.Letter;
 import com.chessmasters.chessapi.Square;
 import com.chessmasters.chessapi.piece.move.KnightMove;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class Knight extends Piece {
