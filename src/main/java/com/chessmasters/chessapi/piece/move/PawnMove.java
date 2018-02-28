@@ -13,19 +13,14 @@ import java.util.stream.Collectors;
 public abstract class PawnMove extends Move {
 
     int initialNumber;
-    int promotionNumber;
     Function<Square, Optional<Square>> moveFunction;
 
     public PawnMove(Board board,
                     Square square,
                     int initialNumber,
-                    int promotionNumber,
-                    int nextNumber,
-                    int nextTwoNumber,
                     Function<Square, Optional<Square>> moveFunction) {
         super(board, square);
         this.initialNumber = initialNumber;
-        this.promotionNumber = promotionNumber;
         this.moveFunction = moveFunction;
     }
 
