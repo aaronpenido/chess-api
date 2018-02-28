@@ -186,7 +186,7 @@ public class KingMove extends Move {
                 .orElse(null);
 
         if(enemyPawn != null) {
-            return enemyPawn.attackMoves().contains(destination);
+            return enemyPawn.attackMoves(board).contains(destination);
         }
 
         return false;

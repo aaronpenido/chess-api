@@ -28,16 +28,12 @@ public class KnightMove extends Move {
     private List<Square> leftAhead() {
         List<Square> moves = new ArrayList<>();
 
-        Optional<Square> destination = squareByFunction(
-                Optional.of(square), s -> s.twoNextNumberAndOnePreviousLetter());
-        if(destination.isPresent()) {
-            moves.add(destination.get());
-        }
+        Optional<Square> destination =
+                squareByFunction(s -> s.twoNextNumberAndOnePreviousLetter());
+        destination.ifPresent(moves::add);
 
-        destination = squareByFunction(Optional.of(square), s -> s.twoPreviousLetterAndOneNextNumber());
-        if(destination.isPresent()) {
-            moves.add(destination.get());
-        }
+        destination = squareByFunction(s -> s.twoPreviousLetterAndOneNextNumber());
+        destination.ifPresent(moves::add);
 
         return moves;
     }
@@ -45,16 +41,12 @@ public class KnightMove extends Move {
     private List<Square> leftBehind() {
         List<Square> moves = new ArrayList<>();
 
-        Optional<Square> destination = squareByFunction(
-                Optional.of(square), s -> s.twoPreviousLetterAndOnePreviousNumber());
-        if(destination.isPresent()) {
-            moves.add(destination.get());
-        }
+        Optional<Square> destination =
+                squareByFunction(s -> s.twoPreviousLetterAndOnePreviousNumber());
+        destination.ifPresent(moves::add);
 
-        destination = squareByFunction(Optional.of(square), s -> s.twoPreviousNumberAndOnePreviousLetter());
-        if(destination.isPresent()) {
-            moves.add(destination.get());
-        }
+        destination = squareByFunction(s -> s.twoPreviousNumberAndOnePreviousLetter());
+        destination.ifPresent(moves::add);
 
         return moves;
     }
@@ -62,16 +54,12 @@ public class KnightMove extends Move {
     private List<Square> rightAhead() {
         List<Square> moves = new ArrayList<>();
 
-        Optional<Square> destination = squareByFunction(
-                Optional.of(square), s -> s.twoNextNumberAndOneNextLetter());
-        if(destination.isPresent()) {
-            moves.add(destination.get());
-        }
+        Optional<Square> destination =
+                squareByFunction(s -> s.twoNextNumberAndOneNextLetter());
+        destination.ifPresent(moves::add);
 
-        destination = squareByFunction(Optional.of(square), s -> s.twoNextLetterAndOneNextNumber());
-        if(destination.isPresent()) {
-            moves.add(destination.get());
-        }
+        destination = squareByFunction(s -> s.twoNextLetterAndOneNextNumber());
+        destination.ifPresent(moves::add);
 
         return moves;
     }
@@ -79,15 +67,11 @@ public class KnightMove extends Move {
     private List<Square> rightBehind() {
         List<Square> moves = new ArrayList<>();
 
-        Optional<Square> destination = squareByFunction(Optional.of(square), s -> s.twoPreviousNumberAndOneNextLetter());
-        if(destination.isPresent()) {
-            moves.add(destination.get());
-        }
+        Optional<Square> destination = squareByFunction(s -> s.twoPreviousNumberAndOneNextLetter());
+        destination.ifPresent(moves::add);
 
-        destination = squareByFunction(Optional.of(square), s -> s.twoNextLetterAndOnePreviousNumber());
-        if(destination.isPresent()) {
-            moves.add(destination.get());
-        }
+        destination = squareByFunction(s -> s.twoNextLetterAndOnePreviousNumber());
+        destination.ifPresent(moves::add);
 
         return moves;
     }

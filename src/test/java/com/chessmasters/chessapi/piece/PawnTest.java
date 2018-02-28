@@ -4,10 +4,8 @@ import com.chessmasters.chessapi.Board;
 import com.chessmasters.chessapi.Letter;
 import com.chessmasters.chessapi.Square;
 import org.junit.Test;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 import static com.chessmasters.chessapi.Color.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -147,7 +145,16 @@ public class PawnTest {
     }
 
     @Test
-    public void blackDoesNotMoveWhenThereIsAFriendlyPieceAhead() {
+    public void whiteDoesNotMoveWhenThereIsAnEnemyPieceAhead() {
+        pawn = new Pawn(WHITE, new Square(Letter.E, 4));
+        Pawn friendlyPawn = new Pawn(BLACK, new Square(Letter.E, 5));
+        board = new Board(Arrays.asList(pawn, friendlyPawn));
+
+        assertThat(pawn.moves(board)).isEmpty();
+    }
+
+    @Test
+    public void blackDoesNotMoveWhenThereIsAnEnemyPieceAhead() {
         pawn = new Pawn(BLACK, new Square(Letter.E, 4));
         Pawn friendlyPawn = new Pawn(WHITE, new Square(Letter.E, 3));
         board = new Board(Arrays.asList(pawn, friendlyPawn));
@@ -156,7 +163,7 @@ public class PawnTest {
     }
 
     @Test
-    public void whiteDoesNotMoveTwoSquaresAheadAtInitialPositionIfThereIsAPieceInTheWay() {
+    public void whiteDoesNotMoveTwoSquaresAheadAtInitialPositionIfThereIsAFriendlyPieceInTheWay() {
         pawn = new Pawn(WHITE, new Square(Letter.E, 2));
         Pawn friendlyPawn = new Pawn(WHITE, new Square(Letter.E, 4));
         board = new Board(Arrays.asList(pawn, friendlyPawn));
@@ -165,11 +172,49 @@ public class PawnTest {
     }
 
     @Test
-    public void blackDoesNotMoveTwoSquaresAheadAtInitialPositionIfThereIsAPieceInTheWay() {
+    public void blackDoesNotMoveTwoSquaresAheadAtInitialPositionIfThereIsAFriendlyPieceInTheWay() {
         pawn = new Pawn(BLACK, new Square(Letter.E, 7));
-        Pawn friendlyPawn = new Pawn(WHITE, new Square(Letter.E, 5));
+        Pawn friendlyPawn = new Pawn(BLACK, new Square(Letter.E, 5));
         board = new Board(Arrays.asList(pawn, friendlyPawn));
 
         assertThat(pawn.moves(board)).containsExactlyInAnyOrder(new Square(Letter.E, 6));
+    }
+
+    @Test
+    public void whiteDoesNotMoveTwoSquaresAheadAtInitialPositionIfThereIsAnEnemyPieceInTheWay() {
+        pawn = new Pawn(WHITE, new Square(Letter.E, 2));
+        Pawn enemyPawn = new Pawn(BLACK, new Square(Letter.E, 4));
+        board = new Board(Arrays.asList(pawn, enemyPawn));
+
+        assertThat(pawn.moves(board)).containsExactlyInAnyOrder(new Square(Letter.E, 3));
+    }
+
+    @Test
+    public void blackDoesNotMoveTwoSquaresAheadAtInitialPositionIfThereIsAnEnemyPieceInTheWay() {
+        pawn = new Pawn(BLACK, new Square(Letter.E, 7));
+        Pawn enemyPawn = new Pawn(WHITE, new Square(Letter.E, 5));
+        board = new Board(Arrays.asList(pawn, enemyPawn));
+
+        assertThat(pawn.moves(board)).containsExactlyInAnyOrder(new Square(Letter.E, 6));
+    }
+
+    @Test
+    public void whiteAttackMoves() {
+        pawn = new Pawn(WHITE, new Square(Letter.E, 4));
+        board = new Board(Collections.singletonList(pawn));
+
+        assertThat(pawn.attackMoves(board)).containsExactlyInAnyOrder(
+                new Square(Letter.D, 5),
+                new Square(Letter.F, 5));
+    }
+
+    @Test
+    public void blackAttackMoves() {
+        pawn = new Pawn(BLACK, new Square(Letter.E, 4));
+        board = new Board(Collections.singletonList(pawn));
+
+        assertThat(pawn.attackMoves(board)).containsExactlyInAnyOrder(
+                new Square(Letter.D, 3),
+                new Square(Letter.F, 3));
     }
 }

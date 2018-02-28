@@ -25,30 +25,37 @@ public abstract class Move {
         List<Square> path = new ArrayList<>();
         Optional<Square> destination = Optional.of(square);
 
-        while(destination.isPresent()) {
+        while(destination.isPresent() && !haveFoundPieceThatEndsPath(destination)) {
             destination = squareByFunction(destination, f);
-            if(destination.isPresent()) {
-                path.add(destination.get());
-            }
+            destination.ifPresent(path::add);
         }
 
         return path;
     }
 
-    Optional<Square> squareByFunction(Optional<Square> destination, Function<Square, Optional<Square>> f) {
+    Optional<Square> squareByFunction(Function<Square, Optional<Square>> f) {
+        return squareByFunction(Optional.of(square), f, true);
+    }
+
+    Optional<Square> squareByFunction(Function<Square, Optional<Square>> f, boolean isEnemyPieceCanBeCaptured) {
+        return squareByFunction(Optional.of(square), f, isEnemyPieceCanBeCaptured);
+    }
+
+    Optional<Square> squareByFunction(Optional<Square> destination,
+                                              Function<Square, Optional<Square>> f) {
+        return squareByFunction(destination, f, true);
+    }
+
+    Optional<Square> squareByFunction(Optional<Square> destination,
+                                              Function<Square, Optional<Square>> f,
+                                              boolean isEnemyPieceCanBeCaptured) {
         if(destination.isPresent()) {
-            Piece piece = board.getPieceFromSquare(destination.get());
-
-            if(isSquareFilledWithEnemyPiece(piece)) {
-                return Optional.empty();
-            }
-
             Optional<Square> squareToMove = f.apply(destination.get());
 
             if(squareToMove.isPresent()) {
                 Piece pieceToMove = board.getPieceFromSquare(squareToMove.get());
 
-                if(pieceToMove == null || isSquareFilledWithEnemyPiece(pieceToMove)) {
+                if(pieceToMove == null || (isEnemyPieceCanBeCaptured && isSquareFilledWithEnemyPiece(pieceToMove))) {
                     return squareToMove;
                 }
             }
@@ -62,5 +69,12 @@ public abstract class Move {
 
         return destinationPiece != null &&
                 !destinationPiece.getColor().equals(piece.getColor());
+    }
+
+    private boolean haveFoundPieceThatEndsPath(Optional<Square> destination) {
+        return destination
+                .map(board::getPieceFromSquare)
+                .map(this::isSquareFilledWithEnemyPiece)
+                .orElse(false);
     }
 }
