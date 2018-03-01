@@ -2,8 +2,6 @@ package com.chessmasters.chessapi;
 
 import com.chessmasters.chessapi.enums.Letter;
 import com.chessmasters.chessapi.piece.*;
-import com.chessmasters.chessapi.request.GameRequest;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,11 +27,11 @@ public class Game {
     @Transient
     private List<Piece> pieces;
 
-    public Game(Player player, Board board) {
-        this.board = board;
+    public Game(Player player) {
         this.player = player;
         this.player2 = null;
         initializePieces();
+        board = new Board(pieces);
     }
 
     private void initializePieces() {

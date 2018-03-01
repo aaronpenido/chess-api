@@ -4,9 +4,6 @@ import com.chessmasters.chessapi.enums.Letter;
 import com.chessmasters.chessapi.piece.*;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,16 +11,13 @@ import java.util.stream.Collectors;
 import static com.chessmasters.chessapi.enums.Color.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(MockitoJUnitRunner.class)
 public class GameTest {
 
-    @Mock
-    private Board board;
     private Game game;
 
     @Before
     public void setUp() {
-        game = new Game(new Player(), board);
+        game = new Game(new Player());
     }
 
     @Test

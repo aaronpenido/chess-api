@@ -1,6 +1,5 @@
 package com.chessmasters.chessapi.service;
 
-import com.chessmasters.chessapi.Board;
 import com.chessmasters.chessapi.Game;
 import com.chessmasters.chessapi.Player;
 import com.chessmasters.chessapi.repository.GameRepository;
@@ -26,8 +25,6 @@ public class GameServiceTest {
     private GameRepository repository;
     @Mock
     private PlayerRepository playerRepository;
-    @Mock
-    private Board board;
 
     @Test
     public void registerGame() {
@@ -36,7 +33,7 @@ public class GameServiceTest {
         GameRequest gameRequest = new GameRequest(playerId);
 
         when(playerRepository.findOne(any(Long.class))).thenReturn(player);
-        when(repository.save(any(Game.class))).thenReturn(new Game(player, board));
+        when(repository.save(any(Game.class))).thenReturn(new Game(player));
 
         Game game = service.registerGame(gameRequest);
 
@@ -58,7 +55,7 @@ public class GameServiceTest {
         GameRequest gameRequest = new GameRequest(playerId);
         Player player = new Player(playerId, null);
         when(playerRepository.findOne(any(Long.class))).thenReturn(new Player(playerId, null));
-        when(repository.save(any(Game.class))).thenReturn(new Game(player, board));
+        when(repository.save(any(Game.class))).thenReturn(new Game(player));
 
         Game game = service.registerGame(gameRequest);
 
@@ -71,7 +68,7 @@ public class GameServiceTest {
         final Long player2Id = 2L;
         Player player = new Player(playerId, null);
         Player player2 = new Player(player2Id, null);
-        Game game = new Game(player, board);
+        Game game = new Game(player);
         game.setPlayer2(player2);
         GameRequest gameRequest = new GameRequest(player2Id);
 

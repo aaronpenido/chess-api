@@ -1,14 +1,11 @@
 package com.chessmasters.chessapi.service;
 
-import com.chessmasters.chessapi.Board;
 import com.chessmasters.chessapi.Game;
 import com.chessmasters.chessapi.Player;
 import com.chessmasters.chessapi.repository.GameRepository;
 import com.chessmasters.chessapi.repository.PlayerRepository;
 import com.chessmasters.chessapi.request.GameRequest;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 
 @Service
 public class GameService {
@@ -23,7 +20,7 @@ public class GameService {
 
     public Game registerGame(GameRequest gameRequest) {
         Player player = playerRepository.findOne(gameRequest.getPlayerId());
-        Game game = new Game(player, new Board(new ArrayList<>()));
+        Game game = new Game(player);
         return repository.save(game);
     }
 
