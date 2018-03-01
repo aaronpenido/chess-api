@@ -10,9 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class ChessApiApplicationTests {
 
-	@Ignore
 	@Test
 	public void contextLoads() {
 	}
-
 }

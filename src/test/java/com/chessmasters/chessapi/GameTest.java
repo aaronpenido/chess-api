@@ -23,7 +23,7 @@ public class GameTest {
 
     @Before
     public void setUp() {
-        game = new Game(board);
+        game = new Game(new Player(), board);
     }
 
     @Test

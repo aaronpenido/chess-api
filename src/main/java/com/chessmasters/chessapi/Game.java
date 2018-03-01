@@ -2,20 +2,35 @@ package com.chessmasters.chessapi;
 
 import com.chessmasters.chessapi.enums.Letter;
 import com.chessmasters.chessapi.piece.*;
+import com.chessmasters.chessapi.request.GameRequest;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static com.chessmasters.chessapi.enums.Color.*;
 
+@Entity
 public class Game {
 
-    private Board board;
+    @Id
+    @GeneratedValue
+    private Long id;
+    @MapsId
+    @ManyToOne
+    private final Player player;
+    @MapsId
+    @ManyToOne
+    private Player player2;
+    @Transient
+    private final Board board;
+    @Transient
     private List<Piece> pieces;
 
-    public Game(Board board) {
+    public Game(Player player, Board board) {
         this.board = board;
+        this.player = player;
         initializePieces();
     }
 
@@ -79,5 +94,17 @@ public class Game {
 
     public List<Piece> getPieces() {
         return pieces;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public Player getPlayer2() {
+        return player2;
     }
 }
