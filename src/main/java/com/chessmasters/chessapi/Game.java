@@ -31,6 +31,7 @@ public class Game {
     public Game(Player player, Board board) {
         this.board = board;
         this.player = player;
+        this.player2 = null;
         initializePieces();
     }
 
