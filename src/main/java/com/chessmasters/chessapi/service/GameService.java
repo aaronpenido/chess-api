@@ -26,4 +26,16 @@ public class GameService {
         Game game = new Game(player, new Board(new ArrayList<>()));
         return repository.save(game);
     }
+
+    public Game startGame(Long gameId, GameRequest gameRequest) {
+        Player player = playerRepository.findOne(gameRequest.getPlayerId());
+        Game game = gameById(gameId);
+        game.setPlayer2(player);
+
+        return repository.save(game);
+    }
+
+    public Game gameById(Long id) {
+        return repository.findOne(id);
+    }
 }

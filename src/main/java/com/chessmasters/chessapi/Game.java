@@ -20,8 +20,9 @@ public class Game {
     @MapsId
     @ManyToOne
     private final Player player;
-    @MapsId
-    @ManyToOne
+    //@MapsId
+    //@ManyToOne
+    @Transient
     private Player player2;
     @Transient
     private final Board board;
@@ -107,5 +108,9 @@ public class Game {
 
     public Player getPlayer2() {
         return player2;
+    }
+
+    public void setPlayer2(Player player2) {
+        this.player2 = player2;
     }
 }

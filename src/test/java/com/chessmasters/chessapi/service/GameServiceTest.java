@@ -64,4 +64,24 @@ public class GameServiceTest {
 
         assertThat(game.getPlayer().getId()).isEqualTo(playerId);
     }
+
+    @Test
+    public void startGame() {
+        final Long playerId = 1L;
+        final Long player2Id = 2L;
+        Player player = new Player(playerId, null);
+        Player player2 = new Player(player2Id, null);
+        Game game = new Game(player, board);
+        game.setPlayer2(player2);
+        GameRequest gameRequest = new GameRequest(player2Id);
+
+        when(playerRepository.findOne(any(Long.class))).thenReturn(player);
+        when(repository.findOne(any(Long.class))).thenReturn(game);
+        when(repository.save(any(Game.class))).thenReturn(game);
+
+        Game startedGame = service.startGame(player2Id, gameRequest);
+
+        assertThat(startedGame).isNotNull();
+        assertThat(startedGame.getPlayer2()).isNotNull();
+    }
 }
