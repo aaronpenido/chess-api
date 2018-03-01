@@ -27,6 +27,11 @@ public class Game {
     @Transient
     private List<Piece> pieces;
 
+    public Game() {
+        this.player = null;
+        this.board = null;
+    }
+
     public Game(Player player) {
         this.player = player;
         this.player2 = null;

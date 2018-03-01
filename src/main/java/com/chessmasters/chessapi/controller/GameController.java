@@ -27,10 +27,10 @@ public class GameController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping(value = "{id}/start",
+    @PostMapping(value = "/games/{id}/start",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public GameResponse startGame(@PathVariable("id") Long id, GameRequest gameRequest) {
+    public GameResponse startGame(@PathVariable("id") Long id, @RequestBody GameRequest gameRequest) {
         Game game = service.startGame(id, gameRequest);
         return new GameResponse(game);
     }
