@@ -1,7 +1,7 @@
 package com.chessmasters.chessapi.piece;
 
 import com.chessmasters.chessapi.Board;
-import com.chessmasters.chessapi.Color;
+import com.chessmasters.chessapi.enums.Color;
 import com.chessmasters.chessapi.Square;
 import java.util.List;
 import java.util.Objects;

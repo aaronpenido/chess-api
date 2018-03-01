@@ -1,13 +1,14 @@
 package com.chessmasters.chessapi.piece;
 
 import com.chessmasters.chessapi.*;
+import com.chessmasters.chessapi.enums.Color;
 import com.chessmasters.chessapi.piece.move.BlackPawnMove;
 import com.chessmasters.chessapi.piece.move.PawnMove;
 import com.chessmasters.chessapi.piece.move.WhitePawnMove;
 
 import java.util.List;
 
-import static com.chessmasters.chessapi.Color.*;
+import static com.chessmasters.chessapi.enums.Color.*;
 
 public class Pawn extends Piece {
 

@@ -1,7 +1,7 @@
 package com.chessmasters.chessapi.piece.move;
 
 import com.chessmasters.chessapi.Board;
-import com.chessmasters.chessapi.Letter;
+import com.chessmasters.chessapi.enums.Letter;
 import com.chessmasters.chessapi.Square;
 import com.chessmasters.chessapi.piece.King;
 import com.chessmasters.chessapi.piece.Pawn;

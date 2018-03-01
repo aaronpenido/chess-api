@@ -1,5 +1,6 @@
 package com.chessmasters.chessapi;
 
+import com.chessmasters.chessapi.enums.Letter;
 import com.chessmasters.chessapi.exception.LetterNotFoundException;
 import org.junit.Test;
 import java.util.Arrays;

@@ -1,12 +1,13 @@
 package com.chessmasters.chessapi;
 
+import com.chessmasters.chessapi.enums.Letter;
 import com.chessmasters.chessapi.piece.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.chessmasters.chessapi.Color.*;
+import static com.chessmasters.chessapi.enums.Color.*;
 
 public class Game {
 

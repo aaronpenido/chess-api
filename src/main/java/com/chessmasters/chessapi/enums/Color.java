@@ -1,4 +1,4 @@
-package com.chessmasters.chessapi;
+package com.chessmasters.chessapi.enums;
 
 public enum Color {
     BLACK("Black"), WHITE("White");

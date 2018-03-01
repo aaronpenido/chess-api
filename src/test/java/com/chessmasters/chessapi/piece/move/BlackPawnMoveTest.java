@@ -1,7 +1,7 @@
 package com.chessmasters.chessapi.piece.move;
 
 import com.chessmasters.chessapi.Board;
-import com.chessmasters.chessapi.Letter;
+import com.chessmasters.chessapi.enums.Letter;
 import com.chessmasters.chessapi.Square;
 import com.chessmasters.chessapi.piece.Pawn;
 import org.junit.Test;
@@ -9,8 +9,8 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static com.chessmasters.chessapi.Color.BLACK;
-import static com.chessmasters.chessapi.Color.WHITE;
+import static com.chessmasters.chessapi.enums.Color.BLACK;
+import static com.chessmasters.chessapi.enums.Color.WHITE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BlackPawnMoveTest {

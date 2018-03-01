@@ -1,4 +1,4 @@
-package com.chessmasters.chessapi;
+package com.chessmasters.chessapi.enums;
 
 import com.chessmasters.chessapi.exception.LetterNotFoundException;
 

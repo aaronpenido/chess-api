@@ -1,5 +1,7 @@
 package com.chessmasters.chessapi;
 
+import com.chessmasters.chessapi.enums.Letter;
+
 import java.util.Objects;
 import java.util.Optional;
 
