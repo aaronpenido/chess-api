@@ -25,13 +25,11 @@ public class Game {
     @Transient
     private final Board board;
     @MapsId
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Piece> pieces;
 
     public Game() {
-        this.id = null;
-        this.player = null;
-        this.board = null;
+        this(null);
     }
 
     public Game(Player player) {
@@ -39,7 +37,13 @@ public class Game {
         this.player = player;
         this.player2 = null;
         initializePieces();
-        board = new Board(pieces);
+        this.board = new Board(pieces);
+    }
+
+    public void movePiece(Square from, Square destination) {
+        board.movePiece(from, destination);
+        pieces.clear();
+        pieces.addAll(board.getPieces());
     }
 
     private void initializePieces() {

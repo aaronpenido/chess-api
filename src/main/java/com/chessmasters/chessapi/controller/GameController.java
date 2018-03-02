@@ -34,4 +34,13 @@ public class GameController {
         Game game = service.startGame(id, gameRequest);
         return new GameResponse(game);
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping(value = "/games/{id}/move",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public GameResponse movePiece(@PathVariable("id") Long id, @RequestBody GameRequest gameRequest) {
+        Game game = service.movePiece(id, gameRequest);
+        return new GameResponse(game);
+    }
 }

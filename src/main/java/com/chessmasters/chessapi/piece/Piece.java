@@ -18,7 +18,7 @@ public abstract class Piece {
     private Long id;
     Color color;
     @MapsId
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     Square square;
 
     public Piece() {

@@ -32,7 +32,19 @@ public class GameService {
         return repository.save(game);
     }
 
+    public Game movePiece(Long gameId, GameRequest gameRequest) {
+        Game game = gameById(gameId);
+
+        game.movePiece(gameRequest.getFrom(), gameRequest.getDestination());
+
+        return save(game);
+    }
+
     public Game gameById(Long id) {
         return repository.findOne(id);
+    }
+
+    public Game save(Game game) {
+        return repository.save(game);
     }
 }

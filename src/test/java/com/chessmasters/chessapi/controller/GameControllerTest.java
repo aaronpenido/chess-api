@@ -50,4 +50,21 @@ public class GameControllerTest {
 
         assertThat(response).isNotNull();
     }
+
+    @Test
+    public void movePiece() {
+        final Long gameId = 1L;
+        final Long playerId = 1L;
+        Player player = new Player(playerId, null);
+        Game game = new Game(player);
+        GameRequest request = new GameRequest(playerId);
+
+        when(service.gameById(gameId)).thenReturn(game);
+        when(service.movePiece(gameId, request)).thenReturn(game);
+        when(service.save(game)).thenReturn(game);
+
+        GameResponse response = controller.movePiece(gameId, request);
+
+        assertThat(response).isNotNull();
+    }
 }

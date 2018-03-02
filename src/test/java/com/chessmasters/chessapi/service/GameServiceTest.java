@@ -2,6 +2,8 @@ package com.chessmasters.chessapi.service;
 
 import com.chessmasters.chessapi.Game;
 import com.chessmasters.chessapi.Player;
+import com.chessmasters.chessapi.Square;
+import com.chessmasters.chessapi.enums.Letter;
 import com.chessmasters.chessapi.repository.GameRepository;
 import com.chessmasters.chessapi.repository.PlayerRepository;
 import com.chessmasters.chessapi.request.GameRequest;
@@ -81,5 +83,23 @@ public class GameServiceTest {
         assertThat(startedGame).isNotNull();
         assertThat(startedGame.getPlayer2()).isNotNull();
         assertThat(startedGame.getPieces()).isNotNull();
+    }
+
+    @Test
+    public void movePiece() {
+        final Long playerId = 1L;
+        Player player = new Player(playerId, null);
+        Game game = new Game(player);
+        Square from = new Square(Letter.E, 2);
+        Square destination = new Square(Letter.E, 3);
+        GameRequest gameRequest = new GameRequest(from, destination);
+
+        when(playerRepository.findOne(any(Long.class))).thenReturn(player);
+        when(repository.findOne(any(Long.class))).thenReturn(game);
+        when(repository.save(any(Game.class))).thenReturn(game);
+
+        game = service.movePiece(game.getId(), gameRequest);
+
+        assertThat(game).isNotNull();
     }
 }
