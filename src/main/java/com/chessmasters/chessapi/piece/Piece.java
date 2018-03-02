@@ -3,13 +3,26 @@ package com.chessmasters.chessapi.piece;
 import com.chessmasters.chessapi.Board;
 import com.chessmasters.chessapi.enums.Color;
 import com.chessmasters.chessapi.Square;
+
+import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "piece_type")
 public abstract class Piece {
 
+    @Id
+    @GeneratedValue
+    private Long id;
     Color color;
+    @MapsId
+    @OneToOne
     Square square;
+
+    public Piece() {
+    }
 
     public Piece(Color color, Square square) {
         this.color = color;
@@ -29,6 +42,10 @@ public abstract class Piece {
     }
 
     public abstract List<Square> moves(Board board);
+
+    public Long getId() {
+        return id;
+    }
 
     @Override
     public boolean equals(Object o) {

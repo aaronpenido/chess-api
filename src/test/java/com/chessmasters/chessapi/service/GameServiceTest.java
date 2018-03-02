@@ -80,5 +80,6 @@ public class GameServiceTest {
 
         assertThat(startedGame).isNotNull();
         assertThat(startedGame.getPlayer2()).isNotNull();
+        assertThat(startedGame.getPieces()).isNotNull();
     }
 }

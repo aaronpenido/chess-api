@@ -5,10 +5,18 @@ import com.chessmasters.chessapi.enums.Color;
 import com.chessmasters.chessapi.Square;
 import com.chessmasters.chessapi.piece.move.DiagonalMove;
 import com.chessmasters.chessapi.piece.move.StraightMove;
+
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity(name = "Queen")
+@DiscriminatorValue("Queen")
 public class Queen extends Piece {
+
+    public Queen() {
+    }
 
     public Queen(Color color, Square square) {
         super(color, square);

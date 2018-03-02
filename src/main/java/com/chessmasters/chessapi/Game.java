@@ -14,7 +14,7 @@ public class Game {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private final Long id;
     @MapsId
     @ManyToOne
     private final Player player;
@@ -24,15 +24,18 @@ public class Game {
     private Player player2;
     @Transient
     private final Board board;
-    @Transient
+    @MapsId
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Piece> pieces;
 
     public Game() {
+        this.id = null;
         this.player = null;
         this.board = null;
     }
 
     public Game(Player player) {
+        this.id = null;
         this.player = player;
         this.player2 = null;
         initializePieces();
@@ -40,14 +43,17 @@ public class Game {
     }
 
     private void initializePieces() {
-        pieces = new ArrayList<>();
 
-        initializeKings();
-        initializeQueens();
-        initializeRooks();
-        initializeKnights();
-        initializeBishops();
-        initializePawns();
+        if(pieces == null || pieces.isEmpty()) {
+            pieces = new ArrayList<>();
+
+            initializeKings();
+            initializeQueens();
+            initializeRooks();
+            initializeKnights();
+            initializeBishops();
+            initializePawns();
+        }
     }
 
     private void initializeKings() {

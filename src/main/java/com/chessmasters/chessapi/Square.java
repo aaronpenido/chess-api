@@ -2,12 +2,23 @@ package com.chessmasters.chessapi;
 
 import com.chessmasters.chessapi.enums.Letter;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.util.Objects;
 import java.util.Optional;
 
+@Entity
 public class Square {
+
+    @Id
+    @GeneratedValue
+    private Long id;
     private int number;
     private Letter letter;
+
+    public Square() {
+    }
 
     public Square(Letter letter, int number) {
         this.letter = letter;
@@ -20,6 +31,10 @@ public class Square {
 
     public Letter getLetter() {
         return letter;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     @Override
