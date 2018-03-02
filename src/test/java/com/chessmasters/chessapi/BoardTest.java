@@ -117,6 +117,20 @@ public class BoardTest {
         assertThat(knight).isNotNull();
     }
 
+    @Test
+    public void throwInvalidMoveExceptionWhenMovePieceAfterAnotherWithSameColor() {
+        Square from = new Square(Letter.E, 4);
+        Square destination = new Square(Letter.E, 5);
+        Square secondDestination = new Square(Letter.E, 6);
+
+        board = new Board(Collections.singletonList(new Pawn(WHITE, from)));
+
+        board.movePiece(from, destination);
+
+        assertThatThrownBy(() -> board.movePiece(destination, secondDestination))
+                .isInstanceOf(InvalidMoveException.class);
+    }
+
     //TODO: castling
     //TODO: En passant
     //TODO: Pawn Promotion

@@ -1,5 +1,6 @@
 package com.chessmasters.chessapi;
 
+import com.chessmasters.chessapi.enums.Color;
 import com.chessmasters.chessapi.exception.InvalidMoveException;
 import com.chessmasters.chessapi.exception.PieceNotFoundException;
 import com.chessmasters.chessapi.piece.Piece;
@@ -9,6 +10,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Board {
+
+    private Color nextMoveColor = Color.WHITE;
     private List<Piece> pieces;
 
     public Board(List<Piece> pieces) {
@@ -27,8 +30,12 @@ public class Board {
             throw new PieceNotFoundException(from);
         }
 
+        if(!isColorMoveValid(pieceFrom)) {
+            throw new InvalidMoveException("It's opponent's turn");
+        }
+
         if(!isMoveValid(pieceFrom, destination)) {
-            throw new InvalidMoveException();
+            throw new InvalidMoveException("Invalid move");
         }
 
         if(pieceTo != null) {
@@ -36,7 +43,12 @@ public class Board {
         }
 
         pieceFrom.setSquare(destination);
+        nextMoveColor = Color.opposite(pieceFrom.getColor());
 
+    }
+
+    private boolean isColorMoveValid(@NotNull final Piece piece) {
+        return piece.getColor().equals(nextMoveColor);
     }
 
     public Piece getPieceFromSquare(Square square) {
