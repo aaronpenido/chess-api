@@ -2,6 +2,8 @@ package com.chessmasters.chessapi.service;
 
 import com.chessmasters.chessapi.Game;
 import com.chessmasters.chessapi.Player;
+import com.chessmasters.chessapi.exception.GameNotFoundException;
+import com.chessmasters.chessapi.exception.PlayerNotFoundException;
 import com.chessmasters.chessapi.repository.GameRepository;
 import com.chessmasters.chessapi.repository.PlayerRepository;
 import com.chessmasters.chessapi.request.GameRequest;
@@ -20,13 +22,28 @@ public class GameService {
 
     public Game registerGame(GameRequest gameRequest) {
         Player player = playerRepository.findOne(gameRequest.getPlayerId());
+
+        if(player == null) {
+            throw new PlayerNotFoundException();
+        }
+
         Game game = new Game(player);
         return repository.save(game);
     }
 
     public Game startGame(Long gameId, GameRequest gameRequest) {
-        Player player = playerRepository.findOne(gameRequest.getPlayerId());
         Game game = gameById(gameId);
+
+        if(game == null) {
+            throw new GameNotFoundException();
+        }
+
+        Player player = playerRepository.findOne(gameRequest.getPlayerId());
+
+        if(player == null) {
+            throw new PlayerNotFoundException();
+        }
+
         game.setPlayer2(player);
         game.start();
 
@@ -35,6 +52,10 @@ public class GameService {
 
     public Game movePiece(Long gameId, GameRequest gameRequest) {
         Game game = gameById(gameId);
+
+        if(game == null) {
+            throw new GameNotFoundException();
+        }
 
         game.movePiece(gameRequest.getFrom(), gameRequest.getDestination());
 

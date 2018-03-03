@@ -1,6 +1,7 @@
 package com.chessmasters.chessapi;
 
 import com.chessmasters.chessapi.enums.Letter;
+import com.chessmasters.chessapi.exception.GameNotStartedException;
 import com.chessmasters.chessapi.piece.*;
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -40,6 +41,10 @@ public class Game {
     }
 
     public void movePiece(Square from, Square destination) {
+        if(pieces == null) {
+            throw new GameNotStartedException(id);
+        }
+
         board = new Board(pieces);
         board.movePiece(from, destination);
     }

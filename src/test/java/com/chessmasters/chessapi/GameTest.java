@@ -1,15 +1,19 @@
 package com.chessmasters.chessapi;
 
 import com.chessmasters.chessapi.enums.Letter;
+import com.chessmasters.chessapi.exception.GameNotStartedException;
 import com.chessmasters.chessapi.piece.*;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.test.util.ReflectionTestUtils;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.chessmasters.chessapi.enums.Color.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class GameTest {
 
@@ -96,5 +100,17 @@ public class GameTest {
         game.movePiece(from, destination);
 
         assertThat(game.getPieces()).contains(new Pawn(WHITE, destination));
+    }
+
+    @Test
+    public void throwExceptionWhenTryingToMovePieceOnNonStartedGame() {
+        Square from = new Square(Letter.E, 2);
+        Square destination = new Square(Letter.E, 3);
+        game = new Game();
+        final Long gameId = 1L;
+        ReflectionTestUtils.setField(game, "id", gameId);
+
+        assertThatThrownBy(() -> game.movePiece(from, destination))
+                .isInstanceOf(GameNotStartedException.class);
     }
 }

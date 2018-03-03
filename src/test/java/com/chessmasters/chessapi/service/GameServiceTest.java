@@ -4,6 +4,8 @@ import com.chessmasters.chessapi.Game;
 import com.chessmasters.chessapi.Player;
 import com.chessmasters.chessapi.Square;
 import com.chessmasters.chessapi.enums.Letter;
+import com.chessmasters.chessapi.exception.GameNotFoundException;
+import com.chessmasters.chessapi.exception.PlayerNotFoundException;
 import com.chessmasters.chessapi.repository.GameRepository;
 import com.chessmasters.chessapi.repository.PlayerRepository;
 import com.chessmasters.chessapi.request.GameRequest;
@@ -16,6 +18,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -50,6 +53,7 @@ public class GameServiceTest {
         final Long playerId = 1L;
         GameRequest request = new GameRequest(playerId);
 
+        when(playerRepository.findOne(any(Long.class))).thenReturn(new Player());
         service.registerGame(request);
         verify(repository).save(any(Game.class));
     }
@@ -102,5 +106,53 @@ public class GameServiceTest {
         game = service.movePiece(game.getId(), gameRequest);
 
         assertThat(game).isNotNull();
+    }
+
+    @Test
+    public void throwPlayerNotFoundExceptionWhenTryingToRegisterGameWithNonExistentPlayer() {
+        final Long playerId = 1L;
+        GameRequest request = new GameRequest(playerId);
+
+        when(playerRepository.findOne(any(Long.class))).thenReturn(null);
+
+        assertThatThrownBy(() -> service.registerGame(request))
+                .isInstanceOf(PlayerNotFoundException.class);
+    }
+
+    @Test
+    public void throwPlayerNotFoundExceptionWhenTryingToStartGameWithNonExistentPlayer() {
+        final Long playerId = 1L;
+        final Long gameId = 1L;
+        GameRequest request = new GameRequest(playerId);
+
+        when(playerRepository.findOne(any(Long.class))).thenReturn(null);
+        when(repository.findOne(any(Long.class))).thenReturn(game);
+
+        assertThatThrownBy(() -> service.startGame(gameId, request))
+                .isInstanceOf(PlayerNotFoundException.class);
+    }
+
+    @Test
+    public void throwGameNotFoundExceptionWhenTryingToStartNonExistentGame() {
+        final Long playerId = 1L;
+        final Long gameId = 1L;
+        GameRequest request = new GameRequest(playerId);
+
+        when(playerRepository.findOne(any(Long.class))).thenReturn(new Player());
+        when(repository.findOne(any(Long.class))).thenReturn(null);
+
+        assertThatThrownBy(() -> service.startGame(gameId, request))
+                .isInstanceOf(GameNotFoundException.class);
+    }
+
+    @Test
+    public void throwGameNotFoundExceptionWhenTryingToMovePieceOnNonExistentGame() {
+        final Long gameId = 1L;
+        Square from = new Square(Letter.E, 2);
+        Square destination = new Square(Letter.E, 3);
+        GameRequest request = new GameRequest(from, destination);
+
+        assertThatThrownBy(() -> service.movePiece(gameId, request))
+                .isInstanceOf(GameNotFoundException.class);
     }
 }
