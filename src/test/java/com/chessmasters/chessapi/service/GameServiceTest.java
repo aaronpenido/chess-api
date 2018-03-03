@@ -13,6 +13,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.ArrayList;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
@@ -27,6 +29,7 @@ public class GameServiceTest {
     private GameRepository repository;
     @Mock
     private PlayerRepository playerRepository;
+    @Mock Game game;
 
     @Test
     public void registerGame() {
@@ -59,26 +62,24 @@ public class GameServiceTest {
         when(playerRepository.findOne(any(Long.class))).thenReturn(new Player(playerId, null));
         when(repository.save(any(Game.class))).thenReturn(new Game(player));
 
-        Game game = service.registerGame(gameRequest);
+        Game registeredGame = service.registerGame(gameRequest);
 
-        assertThat(game.getPlayer().getId()).isEqualTo(playerId);
+        assertThat(registeredGame.getPlayer().getId()).isEqualTo(playerId);
     }
 
     @Test
     public void startGame() {
-        final Long playerId = 1L;
+        final Long gameId = 1L;
         final Long player2Id = 2L;
-        Player player = new Player(playerId, null);
         Player player2 = new Player(player2Id, null);
-        Game game = new Game(player);
-        game.setPlayer2(player2);
         GameRequest gameRequest = new GameRequest(player2Id);
 
-        when(playerRepository.findOne(any(Long.class))).thenReturn(player);
+        when(playerRepository.findOne(any(Long.class))).thenReturn(player2);
         when(repository.findOne(any(Long.class))).thenReturn(game);
         when(repository.save(any(Game.class))).thenReturn(game);
+        when(game.getPlayer2()).thenReturn(player2);
 
-        Game startedGame = service.startGame(player2Id, gameRequest);
+        Game startedGame = service.startGame(gameId, gameRequest);
 
         assertThat(startedGame).isNotNull();
         assertThat(startedGame.getPlayer2()).isNotNull();
@@ -89,12 +90,12 @@ public class GameServiceTest {
     public void movePiece() {
         final Long playerId = 1L;
         Player player = new Player(playerId, null);
-        Game game = new Game(player);
         Square from = new Square(Letter.E, 2);
         Square destination = new Square(Letter.E, 3);
         GameRequest gameRequest = new GameRequest(from, destination);
 
         when(playerRepository.findOne(any(Long.class))).thenReturn(player);
+        when(game.getPieces()).thenReturn(new ArrayList<>());
         when(repository.findOne(any(Long.class))).thenReturn(game);
         when(repository.save(any(Game.class))).thenReturn(game);
 

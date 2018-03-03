@@ -23,7 +23,7 @@ public class Game {
     @Transient
     private Player player2;
     @Transient
-    private final Board board;
+    private Board board;
     @MapsId
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Piece> pieces;
@@ -36,28 +36,27 @@ public class Game {
         this.id = null;
         this.player = player;
         this.player2 = null;
-        initializePieces();
         this.board = new Board(pieces);
     }
 
     public void movePiece(Square from, Square destination) {
+        board = new Board(pieces);
         board.movePiece(from, destination);
-        pieces.clear();
-        pieces.addAll(board.getPieces());
     }
 
-    private void initializePieces() {
-
-        if(pieces == null || pieces.isEmpty()) {
+    public void start() {
+        if(pieces == null) {
             pieces = new ArrayList<>();
-
-            initializeKings();
-            initializeQueens();
-            initializeRooks();
-            initializeKnights();
-            initializeBishops();
-            initializePawns();
         }
+
+        initializeKings();
+        initializeQueens();
+        initializeRooks();
+        initializeKnights();
+        initializeBishops();
+        initializePawns();
+
+        board = new Board(pieces);
     }
 
     private void initializeKings() {

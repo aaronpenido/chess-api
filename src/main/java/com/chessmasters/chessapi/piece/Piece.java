@@ -17,8 +17,10 @@ public abstract class Piece {
     @GeneratedValue
     private Long id;
     Color color;
-    @MapsId
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @AttributeOverrides( {
+            @AttributeOverride(name="letter", column = @Column(name="letter") ),
+            @AttributeOverride(name="number", column = @Column(name="number") )
+    })
     Square square;
 
     public Piece() {

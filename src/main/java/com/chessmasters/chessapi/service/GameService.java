@@ -28,6 +28,7 @@ public class GameService {
         Player player = playerRepository.findOne(gameRequest.getPlayerId());
         Game game = gameById(gameId);
         game.setPlayer2(player);
+        game.start();
 
         return repository.save(game);
     }
