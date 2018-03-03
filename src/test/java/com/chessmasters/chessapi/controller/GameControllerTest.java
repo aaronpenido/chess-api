@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import static com.chessmasters.chessapi.enums.Color.WHITE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -26,7 +27,7 @@ public class GameControllerTest {
     public void registerGame() {
         final Long playerId = 1L;
         GameRequest request = new GameRequest(playerId);
-        Player player = new Player(playerId, null);
+        Player player = new Player(WHITE, playerId, null);
         Game game = new Game(player);
         when(service.registerGame(request)).thenReturn(game);
 
@@ -39,7 +40,7 @@ public class GameControllerTest {
     public void startGame() {
         final Long gameId = 1L;
         final Long playerId = 2L;
-        Player player = new Player(playerId, null);
+        Player player = new Player(WHITE, playerId, null);
         Game game = new Game(player);
         GameRequest request = new GameRequest(playerId);
 
@@ -55,7 +56,7 @@ public class GameControllerTest {
     public void movePiece() {
         final Long gameId = 1L;
         final Long playerId = 1L;
-        Player player = new Player(playerId, null);
+        Player player = new Player(WHITE, playerId, null);
         Game game = new Game(player);
         GameRequest request = new GameRequest(playerId);
 

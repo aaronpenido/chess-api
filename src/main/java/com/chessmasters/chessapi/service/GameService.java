@@ -57,7 +57,10 @@ public class GameService {
             throw new GameNotFoundException();
         }
 
-        game.movePiece(gameRequest.getFrom(), gameRequest.getDestination());
+        Long playerId = gameRequest.getPlayerId() != null ? gameRequest.getPlayerId() : gameRequest.getPlayer2Id();
+        Player player = playerRepository.findOne(playerId);
+
+        game.movePiece(player, gameRequest.getFrom(), gameRequest.getDestination());
 
         return save(game);
     }

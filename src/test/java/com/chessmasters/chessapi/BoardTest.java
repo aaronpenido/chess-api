@@ -14,6 +14,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class BoardTest {
 
     private Board board;
+    private Player whitePlayer = new Player(WHITE);
 
     @Test
     public void throwInvalidMoveExceptionWhenPawnMovesToDiagonalSquareWithoutPieceToCapture() {
@@ -21,7 +22,7 @@ public class BoardTest {
         Square destination = new Square(Letter.B, 3);
         board = new Board(Collections.singletonList(new Pawn(WHITE, from)));
 
-        assertThatThrownBy(() -> board.movePiece(from, destination))
+        assertThatThrownBy(() -> board.movePiece(whitePlayer, from, destination))
                 .isInstanceOf(InvalidMoveException.class);
     }
 
@@ -31,7 +32,7 @@ public class BoardTest {
         Square destination = new Square(Letter.A, 3);
         board = new Board(Collections.singletonList(new Pawn(WHITE, from)));
 
-        board.movePiece(from, destination);
+        board.movePiece(whitePlayer, from, destination);
 
         Piece piece = board.getPieceFromSquare(from);
 
@@ -46,7 +47,7 @@ public class BoardTest {
                 new Rook(WHITE, from),
                 new Rook(BLACK, destination)));
 
-        board.movePiece(from, destination);
+        board.movePiece(whitePlayer, from, destination);
 
         assertThat(board.getPieces().size()).isEqualTo(1);
     }
@@ -59,7 +60,7 @@ public class BoardTest {
                 new Pawn(WHITE, from),
                 new Pawn(BLACK, destination)));
 
-        assertThatThrownBy(() -> board.movePiece(from, destination))
+        assertThatThrownBy(() -> board.movePiece(whitePlayer, from, destination))
                 .isInstanceOf(InvalidMoveException.class);
     }
 
@@ -71,7 +72,7 @@ public class BoardTest {
                 new Rook(WHITE, from),
                 new Rook(WHITE, destination)));
 
-        assertThatThrownBy(() -> board.movePiece(from, destination))
+        assertThatThrownBy(() -> board.movePiece(whitePlayer, from, destination))
                 .isInstanceOf(InvalidMoveException.class);
     }
 
@@ -84,7 +85,7 @@ public class BoardTest {
                 new Bishop(WHITE, from),
                 new Pawn(WHITE, between)));
 
-        assertThatThrownBy(() -> board.movePiece(from, destination))
+        assertThatThrownBy(() -> board.movePiece(whitePlayer, from, destination))
                 .isInstanceOf(InvalidMoveException.class);
     }
 
@@ -97,7 +98,7 @@ public class BoardTest {
                 new Rook(WHITE, from),
                 new Pawn(WHITE, between)));
 
-        assertThatThrownBy(() -> board.movePiece(from, destination))
+        assertThatThrownBy(() -> board.movePiece(whitePlayer, from, destination))
                 .isInstanceOf(InvalidMoveException.class);
     }
 
@@ -110,7 +111,7 @@ public class BoardTest {
                 new Knight(WHITE, from),
                 new Pawn(WHITE, between)));
 
-        board.movePiece(from, destination);
+        board.movePiece(whitePlayer, from, destination);
 
         Piece knight = board.getPieceFromSquare(destination);
 
@@ -125,10 +126,26 @@ public class BoardTest {
 
         board = new Board(Collections.singletonList(new Pawn(WHITE, from)));
 
-        board.movePiece(from, destination);
+        board.movePiece(whitePlayer, from, destination);
 
-        assertThatThrownBy(() -> board.movePiece(destination, secondDestination))
+        assertThatThrownBy(() -> board.movePiece(whitePlayer, destination, secondDestination))
                 .isInstanceOf(InvalidMoveException.class);
+    }
+
+    @Test
+    public void throwInvalidMoveExceptionWhenPlayerTriesToMoveOpponentsPiece() {
+        Square from = new Square(Letter.E, 2);
+        Square destination = new Square(Letter.E, 3);
+        board = new Board(Collections.singletonList(new Pawn(WHITE, from)));
+
+        board.movePiece(whitePlayer, from, destination);
+
+        Square nextMoveFrom = destination;
+        Square nextMoveDestination = new Square(Letter.E, 4);
+
+        assertThatThrownBy(() -> board.movePiece(new Player(BLACK), nextMoveFrom, nextMoveDestination))
+                .isInstanceOf(InvalidMoveException.class)
+                .hasMessageContaining("It's opponent's turn");
     }
 
     //TODO: castling

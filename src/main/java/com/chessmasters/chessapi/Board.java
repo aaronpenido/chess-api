@@ -22,7 +22,9 @@ public class Board {
         return pieces;
     }
 
-    public void movePiece(@NotNull final Square from, @NotNull final Square destination) {
+    public void movePiece(@NotNull final Player player,
+                          @NotNull final Square from,
+                          @NotNull final Square destination) {
         Piece pieceFrom = getPieceFromSquare(from);
         Piece pieceTo = getPieceFromSquare(destination);
 
@@ -30,7 +32,7 @@ public class Board {
             throw new PieceNotFoundException(from);
         }
 
-        if(!isColorMoveValid(pieceFrom)) {
+        if(!isColorMoveValid(player, pieceFrom)) {
             throw new InvalidMoveException("It's opponent's turn");
         }
 
@@ -44,11 +46,10 @@ public class Board {
 
         pieceFrom.setSquare(destination);
         nextMoveColor = Color.opposite(pieceFrom.getColor());
-
     }
 
-    private boolean isColorMoveValid(@NotNull final Piece piece) {
-        return piece.getColor().equals(nextMoveColor);
+    private boolean isColorMoveValid(@NotNull final Player player, @NotNull final Piece piece) {
+        return piece.getColor().equals(nextMoveColor) && piece.getColor().equals(player.getColor());
     }
 
     public Piece getPieceFromSquare(Square square) {

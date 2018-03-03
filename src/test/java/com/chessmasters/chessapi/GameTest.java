@@ -2,6 +2,7 @@ package com.chessmasters.chessapi;
 
 import com.chessmasters.chessapi.enums.Letter;
 import com.chessmasters.chessapi.exception.GameNotStartedException;
+import com.chessmasters.chessapi.exception.InvalidMoveException;
 import com.chessmasters.chessapi.piece.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -97,7 +98,7 @@ public class GameTest {
         Square from = new Square(Letter.E, 2);
         Square destination = new Square(Letter.E, 4);
 
-        game.movePiece(from, destination);
+        game.movePiece(new Player(WHITE), from, destination);
 
         assertThat(game.getPieces()).contains(new Pawn(WHITE, destination));
     }
@@ -110,7 +111,7 @@ public class GameTest {
         final Long gameId = 1L;
         ReflectionTestUtils.setField(game, "id", gameId);
 
-        assertThatThrownBy(() -> game.movePiece(from, destination))
+        assertThatThrownBy(() -> game.movePiece(new Player(WHITE), from, destination))
                 .isInstanceOf(GameNotStartedException.class);
     }
 }

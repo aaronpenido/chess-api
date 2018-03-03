@@ -17,6 +17,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 
+import static com.chessmasters.chessapi.enums.Color.WHITE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Matchers.any;
@@ -37,7 +38,7 @@ public class GameServiceTest {
     @Test
     public void registerGame() {
         final Long playerId = 1L;
-        Player player = new Player(playerId, null);
+        Player player = new Player(WHITE, playerId, null);
         GameRequest gameRequest = new GameRequest(playerId);
 
         when(playerRepository.findOne(any(Long.class))).thenReturn(player);
@@ -62,8 +63,8 @@ public class GameServiceTest {
     public void gameContainsPlayerWithGivenPlayerId() {
         final Long playerId = 1L;
         GameRequest gameRequest = new GameRequest(playerId);
-        Player player = new Player(playerId, null);
-        when(playerRepository.findOne(any(Long.class))).thenReturn(new Player(playerId, null));
+        Player player = new Player(WHITE, playerId, null);
+        when(playerRepository.findOne(any(Long.class))).thenReturn(player);
         when(repository.save(any(Game.class))).thenReturn(new Game(player));
 
         Game registeredGame = service.registerGame(gameRequest);
@@ -75,7 +76,7 @@ public class GameServiceTest {
     public void startGame() {
         final Long gameId = 1L;
         final Long player2Id = 2L;
-        Player player2 = new Player(player2Id, null);
+        Player player2 = new Player(WHITE, player2Id, null);
         GameRequest gameRequest = new GameRequest(player2Id);
 
         when(playerRepository.findOne(any(Long.class))).thenReturn(player2);
@@ -93,7 +94,7 @@ public class GameServiceTest {
     @Test
     public void movePiece() {
         final Long playerId = 1L;
-        Player player = new Player(playerId, null);
+        Player player = new Player(WHITE, playerId, null);
         Square from = new Square(Letter.E, 2);
         Square destination = new Square(Letter.E, 3);
         GameRequest gameRequest = new GameRequest(from, destination);

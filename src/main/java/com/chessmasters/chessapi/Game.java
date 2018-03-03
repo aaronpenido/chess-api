@@ -2,6 +2,7 @@ package com.chessmasters.chessapi;
 
 import com.chessmasters.chessapi.enums.Letter;
 import com.chessmasters.chessapi.exception.GameNotStartedException;
+import com.chessmasters.chessapi.exception.PlayerNotFoundException;
 import com.chessmasters.chessapi.piece.*;
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -40,13 +41,17 @@ public class Game {
         this.board = new Board(pieces);
     }
 
-    public void movePiece(Square from, Square destination) {
+    public void movePiece(Player movePlayer, Square from, Square destination) {
         if(pieces == null) {
             throw new GameNotStartedException(id);
         }
 
+        if(movePlayer == null) {
+            throw new PlayerNotFoundException();
+        }
+
         board = new Board(pieces);
-        board.movePiece(from, destination);
+        board.movePiece(movePlayer, from, destination);
     }
 
     public void start() {

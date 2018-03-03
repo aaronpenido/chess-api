@@ -1,5 +1,6 @@
 package com.chessmasters.chessapi;
 
+import com.chessmasters.chessapi.enums.Color;
 import com.chessmasters.chessapi.request.PlayerRequest;
 
 import javax.persistence.Entity;
@@ -13,20 +14,30 @@ public class Player {
     @GeneratedValue
     private final Long id;
     private final String name;
+    private final Color color;
 
     public Player() {
         this.id = null;
         this.name = null;
+        this.color = null;
+    }
+
+    public Player(Color color) {
+        this.id = null;
+        this.name = null;
+        this.color = color;
     }
 
     public Player(PlayerRequest playerRequest) {
         this.id = null;
         this.name = playerRequest.getName();
+        this.color = null;
     }
 
-    public Player(Long id, String name) {
+    public Player(Color color, Long id, String name) {
         this.id = id;
         this.name = name;
+        this.color = color;
     }
 
     public Long getId() {
@@ -35,5 +46,9 @@ public class Player {
 
     public String getName() {
         return name;
+    }
+
+    public Color getColor() {
+        return color;
     }
 }
