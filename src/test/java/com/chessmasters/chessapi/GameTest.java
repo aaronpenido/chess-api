@@ -87,4 +87,14 @@ public class GameTest {
 
         assertThat(game.getPieces()).contains(pawns.toArray(new Pawn[pawns.size()]));
     }
+
+    @Test
+    public void movePiece() {
+        Square from = new Square(Letter.E, 2);
+        Square destination = new Square(Letter.E, 4);
+
+        game.movePiece(from, destination);
+
+        assertThat(game.getPieces()).contains(new Pawn(WHITE, destination));
+    }
 }
