@@ -1,7 +1,6 @@
 package com.chessmasters.chessapi.piece.move;
 
 import com.chessmasters.chessapi.Board;
-import com.chessmasters.chessapi.enums.Letter;
 import com.chessmasters.chessapi.Square;
 import com.chessmasters.chessapi.piece.King;
 import com.chessmasters.chessapi.piece.Pawn;
@@ -9,7 +8,8 @@ import com.chessmasters.chessapi.piece.Piece;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
+import java.util.function.Function;
 
 public class KingMove extends Move {
 
@@ -21,120 +21,62 @@ public class KingMove extends Move {
     public List<Square> path() {
         List<Square> path = new ArrayList<>();
 
-        path.addAll(oneSquareAhead());
-        path.addAll(oneSquareBehind());
-        path.addAll(oneSquareLeft());
-        path.addAll(oneSquareRight());
+        oneSquareAhead().ifPresent(path::add);
+        oneSquareBehind().ifPresent(path::add);
+        oneSquareLeft().ifPresent(path::add);
+        oneSquareRight().ifPresent(path::add);
 
-        path.addAll(diagonalLeftAhead());
-        path.addAll(diagonalLeftBehind());
-        path.addAll(diagonalRightAhead());
-        path.addAll(diagonalRightBehind());
+        diagonalLeftAhead().ifPresent(path::add);
+        diagonalLeftBehind().ifPresent(path::add);
+        diagonalRightAhead().ifPresent(path::add);
+        diagonalRightBehind().ifPresent(path::add);
 
         return path;
     }
 
-    private List<Square> oneSquareAhead() {
-        final int topBorderNumber = 8;
+    private Optional<Square> oneSquareAhead() {
+        return pathBySquareFunctionIfIsAllowedToMove(s -> s.nextNumber());
+    }
 
-        if(square.getNumber() != topBorderNumber) {
-            final int nextNumber = square.getNumber() + 1;
-            return oneSquareIfIsAllowedToMove(new Square(square.getLetter(), nextNumber));
+    private Optional<Square> oneSquareBehind() {
+        return pathBySquareFunctionIfIsAllowedToMove(s -> s.previousNumber());
+    }
+
+    private Optional<Square> oneSquareLeft() {
+        return pathBySquareFunctionIfIsAllowedToMove(s -> s.previousLetter());
+    }
+
+    private Optional<Square> oneSquareRight() {
+        return pathBySquareFunctionIfIsAllowedToMove(s -> s.nextLetter());
+    }
+
+    private Optional<Square> diagonalLeftAhead() {
+        return pathBySquareFunctionIfIsAllowedToMove(s -> s.nextNumberAndPreviousLetter());
+    }
+
+    private Optional<Square> diagonalLeftBehind() {
+        return pathBySquareFunctionIfIsAllowedToMove(s -> s.previousNumberAndLetter());
+    }
+
+    private Optional<Square> diagonalRightAhead() {
+        return pathBySquareFunctionIfIsAllowedToMove(s -> s.nextNumberAndLetter());
+    }
+
+    private Optional<Square> diagonalRightBehind() {
+        return pathBySquareFunctionIfIsAllowedToMove(s -> s.previousNumberAndNextLetter());
+    }
+
+    private Optional<Square> pathBySquareFunctionIfIsAllowedToMove(Function<Square, Optional<Square>> f) {
+        List<Square> path = pathBySquareFunction(f);
+
+        if(!path.isEmpty()) {
+            return oneSquareIfIsAllowedToMove(path.get(0));
         }
 
-        return Collections.emptyList();
+        return Optional.empty();
     }
 
-    private List<Square> oneSquareBehind() {
-        final int downBorderNumber = 1;
-
-        if(square.getNumber() != downBorderNumber) {
-            final int previousNumber = square.getNumber() - 1;
-            return oneSquareIfIsAllowedToMove(new Square(square.getLetter(), previousNumber));
-        }
-
-        return Collections.emptyList();
-    }
-
-    private List<Square> oneSquareLeft() {
-        final Letter leftBorderLetter = Letter.A;
-
-        if(!square.getLetter().equals(leftBorderLetter)) {
-            final Letter previousLetter = Letter.previousLetter(square.getLetter());
-            return oneSquareIfIsAllowedToMove(new Square(previousLetter, square.getNumber()));
-        }
-
-        return Collections.emptyList();
-    }
-
-    private List<Square> oneSquareRight() {
-        final Letter rightBorderLetter = Letter.H;
-
-        if(!square.getLetter().equals(rightBorderLetter)) {
-            final Letter nextLetter = Letter.nextLetter(square.getLetter());
-            return oneSquareIfIsAllowedToMove(new Square(nextLetter, square.getNumber()));
-        }
-
-        return Collections.emptyList();
-    }
-
-    private List<Square> diagonalLeftAhead() {
-        final Letter leftBorderLetter = Letter.A;
-        final int topBorderNumber = 8;
-
-        if(!square.getLetter().equals(leftBorderLetter) && square.getNumber() < topBorderNumber) {
-            int nextNumber = square.getNumber() + 1;
-            return oneSquareLeft(nextNumber);
-        }
-
-        return Collections.emptyList();
-    }
-
-    private List<Square> diagonalLeftBehind() {
-        final Letter leftBorderLetter = Letter.A;
-        final int bottomBorderNumber = 1;
-
-        if(!square.getLetter().equals(leftBorderLetter) && square.getNumber() > bottomBorderNumber) {
-            int previousNumber = square.getNumber() - 1;
-            return oneSquareLeft(previousNumber);
-        }
-        return Collections.emptyList();
-    }
-
-    private List<Square> diagonalRightAhead() {
-        final Letter rightBorderLetter = Letter.H;
-        final int topBorderNumber = 8;
-
-        if(!square.getLetter().equals(rightBorderLetter) && square.getNumber() < topBorderNumber) {
-            int nextNumber = square.getNumber() + 1;
-            return oneSquareRight(nextNumber);
-        }
-        return Collections.emptyList();
-    }
-
-    private List<Square> diagonalRightBehind() {
-        final Letter rightBorderLetter = Letter.H;
-        final int bottomBorderNumber = 1;
-
-        if(!square.getLetter().equals(rightBorderLetter) && square.getNumber() > bottomBorderNumber) {
-            int previousNumber = square.getNumber() - 1;
-            return oneSquareRight(previousNumber);
-        }
-        return Collections.emptyList();
-    }
-
-    private List<Square> oneSquareLeft(final int number) {
-        final Letter previousLetter = Letter.previousLetter(square.getLetter());
-        return oneSquareIfIsAllowedToMove(new Square(previousLetter, number));
-    }
-
-    private List<Square> oneSquareRight(final int number) {
-        final Letter nextLetter = Letter.nextLetter(square.getLetter());
-        return oneSquareIfIsAllowedToMove(new Square(nextLetter, number));
-    }
-
-    private List<Square> oneSquareIfIsAllowedToMove(Square moveSquare) {
-        final List<Square> path = new ArrayList<>();
+    private Optional<Square> oneSquareIfIsAllowedToMove(Square moveSquare) {
         final Piece king = board.getPieceFromSquare(square);
         final Piece pieceFromMoveSquare = board.getPieceFromSquare(moveSquare);
         final boolean squareIsEmpty = pieceFromMoveSquare == null;
@@ -142,31 +84,27 @@ public class KingMove extends Move {
                 !pieceFromMoveSquare.getColor().equals(king.getColor()));
 
         if(!isSquareUnderAttack(moveSquare) && (squareIsEmpty || pieceCanBeCaptured)) {
-            path.add(moveSquare);
+            return Optional.of(moveSquare);
         }
 
-        return path;
+        return Optional.empty();
     }
 
-    private boolean isSquareUnderAttack(Square moveSquare) {
+    private boolean isSquareUnderAttack(Square destination) {
         final Piece pieceInActualSquare = board.getPieceFromSquare(square);
 
-        List<Piece> enemyPieces = board.getPieces()
+        boolean isUnderAttack = board.getPieces()
                 .stream()
                 .filter(piece -> !piece.getColor().equals(pieceInActualSquare.getColor()))
                 .filter(piece -> !(piece instanceof King))
                 .filter(piece -> !(piece instanceof Pawn))
-                .collect(Collectors.toList());
-
-        boolean isUnderAttack = enemyPieces
-                .stream()
-                .anyMatch(piece -> piece.moves(board).contains(moveSquare));
+                .anyMatch(piece -> piece.moves(board).contains(destination));
 
         if(!isUnderAttack) {
-            if (isSquareUnderAttackByEnemyKing(moveSquare)) {
+            if (isSquareUnderAttackByEnemyKing(destination)) {
                 return true;
             }
-            if(isSquareUnderAttackByEnemyPawn(moveSquare)) {
+            if(isSquareUnderAttackByEnemyPawn(destination)) {
                 return true;
             }
         }
@@ -177,19 +115,14 @@ public class KingMove extends Move {
     private boolean isSquareUnderAttackByEnemyPawn(Square destination) {
         final Piece pieceInActualSquare = board.getPieceFromSquare(square);
 
-        Pawn enemyPawn = board.getPieces()
+        boolean isUnderAttack = board.getPieces()
                 .stream()
                 .filter(piece -> piece instanceof Pawn)
                 .filter(piece -> !piece.getColor().equals(pieceInActualSquare.getColor()))
                 .map(pawn -> new Pawn(pawn.getColor(), pawn.getSquare()))
-                .findFirst()
-                .orElse(null);
+                .anyMatch(piece -> piece.attackMoves(board).contains(destination));
 
-        if(enemyPawn != null) {
-            return enemyPawn.attackMoves(board).contains(destination);
-        }
-
-        return false;
+        return isUnderAttack;
     }
 
     private boolean isSquareUnderAttackByEnemyKing(Square destination) {
