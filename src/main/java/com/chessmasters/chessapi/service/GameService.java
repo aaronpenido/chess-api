@@ -44,8 +44,7 @@ public class GameService {
             throw new PlayerNotFoundException();
         }
 
-        game.setPlayer2(player);
-        game.start();
+        game.start(player);
 
         return repository.save(game);
     }

@@ -2,7 +2,6 @@ package com.chessmasters.chessapi;
 
 import com.chessmasters.chessapi.enums.Letter;
 import com.chessmasters.chessapi.exception.GameNotStartedException;
-import com.chessmasters.chessapi.exception.InvalidMoveException;
 import com.chessmasters.chessapi.piece.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +22,7 @@ public class GameTest {
     @Before
     public void setUp() {
         game = new Game(new Player());
-        game.start();
+        game.start(new Player());
     }
 
     @Test

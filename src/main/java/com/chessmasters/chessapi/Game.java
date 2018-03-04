@@ -54,7 +54,7 @@ public class Game {
         board.movePiece(movePlayer, from, destination);
     }
 
-    public void start() {
+    public void start(Player player) {
         if(pieces == null) {
             pieces = new ArrayList<>();
         }
@@ -67,6 +67,7 @@ public class Game {
         initializePawns();
 
         board = new Board(pieces);
+        player2 = player;
     }
 
     private void initializeKings() {
