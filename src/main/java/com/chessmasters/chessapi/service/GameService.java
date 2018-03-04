@@ -21,29 +21,15 @@ public class GameService {
     }
 
     public Game registerGame(GameRequest gameRequest) {
-        Player player = playerRepository.findOne(gameRequest.getPlayerId());
-
-        if(player == null) {
-            throw new PlayerNotFoundException();
-        }
-
+        Player player = playerById(gameRequest.getPlayerId());
         Game game = new Game(player);
+
         return repository.save(game);
     }
 
     public Game startGame(Long gameId, GameRequest gameRequest) {
         Game game = gameById(gameId);
-
-        if(game == null) {
-            throw new GameNotFoundException();
-        }
-
-        Player player = playerRepository.findOne(gameRequest.getPlayerId());
-
-        if(player == null) {
-            throw new PlayerNotFoundException();
-        }
-
+        Player player = playerById(gameRequest.getPlayerId());
         game.start(player);
 
         return repository.save(game);
@@ -52,23 +38,36 @@ public class GameService {
     public Game movePiece(Long gameId, GameRequest gameRequest) {
         Game game = gameById(gameId);
 
-        if(game == null) {
-            throw new GameNotFoundException();
-        }
+        Long playerId = gameRequest.getPlayerId() != null ?
+                gameRequest.getPlayerId() :
+                gameRequest.getPlayer2Id();
 
-        Long playerId = gameRequest.getPlayerId() != null ? gameRequest.getPlayerId() : gameRequest.getPlayer2Id();
-        Player player = playerRepository.findOne(playerId);
-
+        Player player = playerById(playerId);
         game.movePiece(player, gameRequest.getFrom(), gameRequest.getDestination());
 
         return save(game);
     }
 
     public Game gameById(Long id) {
-        return repository.findOne(id);
+        Game game = repository.findOne(id);
+
+        if(game == null) {
+            throw new GameNotFoundException();
+        }
+        return game;
     }
 
     public Game save(Game game) {
         return repository.save(game);
+    }
+
+    private Player playerById(final Long id) {
+        Player player = playerRepository.findOne(id);
+
+        if(player == null) {
+            throw new PlayerNotFoundException();
+        }
+
+        return player;
     }
 }
