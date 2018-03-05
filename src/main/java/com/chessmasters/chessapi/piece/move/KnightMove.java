@@ -29,10 +29,10 @@ public class KnightMove extends Move {
         List<Square> moves = new ArrayList<>();
 
         Optional<Square> destination =
-                squareByFunction(s -> s.twoNextNumberAndOnePreviousLetter());
+                squareByFunction(Square::twoNextNumberAndOnePreviousLetter);
         destination.ifPresent(moves::add);
 
-        destination = squareByFunction(s -> s.twoPreviousLetterAndOneNextNumber());
+        destination = squareByFunction(Square::twoPreviousLetterAndOneNextNumber);
         destination.ifPresent(moves::add);
 
         return moves;
@@ -42,10 +42,10 @@ public class KnightMove extends Move {
         List<Square> moves = new ArrayList<>();
 
         Optional<Square> destination =
-                squareByFunction(s -> s.twoPreviousLetterAndOnePreviousNumber());
+                squareByFunction(Square::twoPreviousLetterAndOnePreviousNumber);
         destination.ifPresent(moves::add);
 
-        destination = squareByFunction(s -> s.twoPreviousNumberAndOnePreviousLetter());
+        destination = squareByFunction(Square::twoPreviousNumberAndOnePreviousLetter);
         destination.ifPresent(moves::add);
 
         return moves;
@@ -55,10 +55,10 @@ public class KnightMove extends Move {
         List<Square> moves = new ArrayList<>();
 
         Optional<Square> destination =
-                squareByFunction(s -> s.twoNextNumberAndOneNextLetter());
+                squareByFunction(Square::twoNextNumberAndOneNextLetter);
         destination.ifPresent(moves::add);
 
-        destination = squareByFunction(s -> s.twoNextLetterAndOneNextNumber());
+        destination = squareByFunction(Square::twoNextLetterAndOneNextNumber);
         destination.ifPresent(moves::add);
 
         return moves;
@@ -67,10 +67,10 @@ public class KnightMove extends Move {
     private List<Square> rightBehind() {
         List<Square> moves = new ArrayList<>();
 
-        Optional<Square> destination = squareByFunction(s -> s.twoPreviousNumberAndOneNextLetter());
+        Optional<Square> destination = squareByFunction(Square::twoPreviousNumberAndOneNextLetter);
         destination.ifPresent(moves::add);
 
-        destination = squareByFunction(s -> s.twoNextLetterAndOnePreviousNumber());
+        destination = squareByFunction(Square::twoNextLetterAndOnePreviousNumber);
         destination.ifPresent(moves::add);
 
         return moves;

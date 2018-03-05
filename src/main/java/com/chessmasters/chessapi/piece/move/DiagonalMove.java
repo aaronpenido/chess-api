@@ -25,18 +25,18 @@ public class DiagonalMove extends Move {
     }
 
     private List<Square> leftAhead() {
-        return pathBySquareFunction(s -> s.nextNumberAndPreviousLetter());
+        return pathBySquareFunction(Square::nextNumberAndPreviousLetter);
     }
 
     private List<Square> leftBehind() {
-        return pathBySquareFunction(s -> s.previousNumberAndLetter());
+        return pathBySquareFunction(Square::previousNumberAndLetter);
     }
 
     private List<Square> rightAhead() {
-        return pathBySquareFunction(s -> s.nextNumberAndLetter());
+        return pathBySquareFunction(Square::nextNumberAndLetter);
     }
 
     private List<Square> rightBehind() {
-        return pathBySquareFunction(s -> s.previousNumberAndNextLetter());
+        return pathBySquareFunction(Square::previousNumberAndNextLetter);
     }
 }

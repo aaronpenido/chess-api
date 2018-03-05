@@ -23,18 +23,18 @@ public class StraightMove extends Move {
     }
 
     private List<Square> leftPath() {
-        return pathBySquareFunction(s -> s.previousLetter());
+        return pathBySquareFunction(Square::previousLetter);
     }
 
     private List<Square> rightPath() {
-        return pathBySquareFunction(s -> s.nextLetter());
+        return pathBySquareFunction(Square::nextLetter);
     }
 
     private List<Square> aheadPath() {
-        return pathBySquareFunction(s -> s.nextNumber());
+        return pathBySquareFunction(Square::nextNumber);
     }
 
     private List<Square> behindPath() {
-        return pathBySquareFunction(s -> s.previousNumber());
+        return pathBySquareFunction(Square::previousNumber);
     }
 }

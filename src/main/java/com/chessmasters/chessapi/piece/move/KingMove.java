@@ -35,35 +35,35 @@ public class KingMove extends Move {
     }
 
     private Optional<Square> oneSquareAhead() {
-        return pathBySquareFunctionIfIsAllowedToMove(s -> s.nextNumber());
+        return pathBySquareFunctionIfIsAllowedToMove(Square::nextNumber);
     }
 
     private Optional<Square> oneSquareBehind() {
-        return pathBySquareFunctionIfIsAllowedToMove(s -> s.previousNumber());
+        return pathBySquareFunctionIfIsAllowedToMove(Square::previousNumber);
     }
 
     private Optional<Square> oneSquareLeft() {
-        return pathBySquareFunctionIfIsAllowedToMove(s -> s.previousLetter());
+        return pathBySquareFunctionIfIsAllowedToMove(Square::previousLetter);
     }
 
     private Optional<Square> oneSquareRight() {
-        return pathBySquareFunctionIfIsAllowedToMove(s -> s.nextLetter());
+        return pathBySquareFunctionIfIsAllowedToMove(Square::nextLetter);
     }
 
     private Optional<Square> diagonalLeftAhead() {
-        return pathBySquareFunctionIfIsAllowedToMove(s -> s.nextNumberAndPreviousLetter());
+        return pathBySquareFunctionIfIsAllowedToMove(Square::nextNumberAndPreviousLetter);
     }
 
     private Optional<Square> diagonalLeftBehind() {
-        return pathBySquareFunctionIfIsAllowedToMove(s -> s.previousNumberAndLetter());
+        return pathBySquareFunctionIfIsAllowedToMove(Square::previousNumberAndLetter);
     }
 
     private Optional<Square> diagonalRightAhead() {
-        return pathBySquareFunctionIfIsAllowedToMove(s -> s.nextNumberAndLetter());
+        return pathBySquareFunctionIfIsAllowedToMove(Square::nextNumberAndLetter);
     }
 
     private Optional<Square> diagonalRightBehind() {
-        return pathBySquareFunctionIfIsAllowedToMove(s -> s.previousNumberAndNextLetter());
+        return pathBySquareFunctionIfIsAllowedToMove(Square::previousNumberAndNextLetter);
     }
 
     private Optional<Square> pathBySquareFunctionIfIsAllowedToMove(Function<Square, Optional<Square>> f) {
