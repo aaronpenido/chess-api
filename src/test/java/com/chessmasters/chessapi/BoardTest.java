@@ -147,13 +147,4 @@ public class BoardTest {
                 .isInstanceOf(InvalidMoveException.class)
                 .hasMessageContaining("It's opponent's turn");
     }
-
-    //TODO: castling
-    //TODO: En passant
-    //TODO: Pawn Promotion
-    //TODO: Check
-    //TODO: Check Mate
-    //TODO: Stalemate
-    //TODO: Draw
-    //TODO: Piece can't move if king is or will be in check
 }
