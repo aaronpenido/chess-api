@@ -13,8 +13,8 @@ public class GameRequest {
         this.playerId = playerId;
     }
 
-    public GameRequest(Square from, Square destination) {
-        this.playerId = null;
+    public GameRequest(Long playerId, Square from, Square destination) {
+        this.playerId = playerId;
         this.from = from;
         this.destination = destination;
     }

@@ -6,9 +6,14 @@ import com.chessmasters.chessapi.Square;
 import com.chessmasters.chessapi.enums.Letter;
 import com.chessmasters.chessapi.exception.GameNotFoundException;
 import com.chessmasters.chessapi.exception.PlayerNotFoundException;
+import com.chessmasters.chessapi.piece.Bishop;
+import com.chessmasters.chessapi.piece.Knight;
+import com.chessmasters.chessapi.piece.Queen;
+import com.chessmasters.chessapi.piece.Rook;
 import com.chessmasters.chessapi.repository.GameRepository;
 import com.chessmasters.chessapi.repository.PlayerRepository;
 import com.chessmasters.chessapi.request.GameRequest;
+import com.chessmasters.chessapi.response.GameResponse;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -97,7 +102,7 @@ public class GameServiceTest {
         Player player = new Player(WHITE, playerId, null);
         Square from = new Square(Letter.E, 2);
         Square destination = new Square(Letter.E, 3);
-        GameRequest gameRequest = new GameRequest(from, destination);
+        GameRequest gameRequest = new GameRequest(playerId, from, destination);
 
         when(playerRepository.findOne(any(Long.class))).thenReturn(player);
         when(game.getPieces()).thenReturn(new ArrayList<>());
@@ -149,9 +154,10 @@ public class GameServiceTest {
     @Test
     public void throwGameNotFoundExceptionWhenTryingToMovePieceOnNonExistentGame() {
         final Long gameId = 1L;
+        final Long playerId = 1L;
         Square from = new Square(Letter.E, 2);
         Square destination = new Square(Letter.E, 3);
-        GameRequest request = new GameRequest(from, destination);
+        GameRequest request = new GameRequest(playerId, from, destination);
 
         assertThatThrownBy(() -> service.movePiece(gameId, request))
                 .isInstanceOf(GameNotFoundException.class);
