@@ -113,4 +113,11 @@ public class GameTest {
         assertThatThrownBy(() -> game.movePiece(new Player(WHITE), from, destination))
                 .isInstanceOf(GameNotStartedException.class);
     }
+
+    @Test
+    public void playersColorsAreDefinedOnGameStart() {
+        assertThat(game.getPlayer().getColor()).isNotNull();
+        assertThat(game.getPlayer2().getColor()).isNotNull();
+        assertThat(game.getPlayer().getColor()).isNotEqualTo(game.getPlayer2().getColor());
+    }
 }

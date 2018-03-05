@@ -14,7 +14,7 @@ public class Player {
     @GeneratedValue
     private final Long id;
     private final String name;
-    private final Color color;
+    private Color color;
 
     public Player() {
         this.id = null;
@@ -50,5 +50,9 @@ public class Player {
 
     public Color getColor() {
         return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 }

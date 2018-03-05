@@ -1,5 +1,6 @@
 package com.chessmasters.chessapi;
 
+import com.chessmasters.chessapi.enums.Color;
 import com.chessmasters.chessapi.enums.Letter;
 import com.chessmasters.chessapi.exception.GameNotStartedException;
 import com.chessmasters.chessapi.exception.PlayerNotFoundException;
@@ -8,6 +9,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import static com.chessmasters.chessapi.enums.Color.*;
 
@@ -67,6 +69,7 @@ public class Game {
 
         board = new Board(pieces);
         player2 = player;
+        setPlayersColors();
     }
 
     private void initializeKings() {
@@ -112,6 +115,12 @@ public class Game {
                 .forEach(pieces::add);
     }
 
+    private void setPlayersColors() {
+        final int randomNumber = new Random().nextInt(1);
+        player.setColor(randomNumber == 0 ? WHITE : BLACK);
+        player2.setColor(Color.opposite(player.getColor()));
+    }
+
     public Board getBoard() {
         return board;
     }
@@ -130,9 +139,5 @@ public class Game {
 
     public Player getPlayer2() {
         return player2;
-    }
-
-    public void setPlayer2(Player player2) {
-        this.player2 = player2;
     }
 }
