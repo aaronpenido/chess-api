@@ -18,11 +18,10 @@ public class Game {
     @GeneratedValue
     private final Long id;
     @MapsId
-    @ManyToOne
+    @OneToOne
     private final Player player;
-    //@MapsId
-    //@ManyToOne
-    @Transient
+    @OneToOne (cascade=CascadeType.ALL)
+    @JoinColumn(name="player2_id")
     private Player player2;
     @Transient
     private Board board;

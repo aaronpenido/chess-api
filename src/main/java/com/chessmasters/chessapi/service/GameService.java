@@ -38,9 +38,7 @@ public class GameService {
     public Game movePiece(Long gameId, GameRequest gameRequest) {
         Game game = gameById(gameId);
 
-        Long playerId = gameRequest.getPlayerId() != null ?
-                gameRequest.getPlayerId() :
-                gameRequest.getPlayer2Id();
+        Long playerId = gameRequest.getPlayerId();
 
         Player player = playerById(playerId);
         game.movePiece(player, gameRequest.getFrom(), gameRequest.getDestination());

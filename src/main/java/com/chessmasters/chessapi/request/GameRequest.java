@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class GameRequest {
 
     private final Long playerId;
-    private Long player2Id;
     private Square from;
     private Square destination;
 
@@ -22,10 +21,6 @@ public class GameRequest {
 
     public Long getPlayerId() {
         return playerId;
-    }
-
-    public Long getPlayer2Id() {
-        return player2Id;
     }
 
     public Square getFrom() {
