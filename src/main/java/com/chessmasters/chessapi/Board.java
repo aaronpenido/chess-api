@@ -7,6 +7,7 @@ import com.chessmasters.chessapi.piece.Piece;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Board {
@@ -55,7 +56,7 @@ public class Board {
     public Piece getPieceFromSquare(Square square) {
         Piece piece = pieces
                 .stream()
-                .filter(p -> p != null)
+                .filter(Objects::nonNull)
                 .filter(p -> p.getSquare().equals(square))
                 .findFirst()
                 .orElse(null);
