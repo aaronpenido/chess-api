@@ -1,26 +1,36 @@
 package com.chessmasters.chessapi.piece.move;
 
 import com.chessmasters.chessapi.Board;
+import com.chessmasters.chessapi.Game;
 import com.chessmasters.chessapi.enums.Letter;
 import com.chessmasters.chessapi.Square;
 import com.chessmasters.chessapi.piece.Knight;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import static com.chessmasters.chessapi.enums.Color.WHITE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 public class KnightMoveTest {
 
     private Board board;
     private KnightMove move;
+    @Mock
+    private Game game;
     
     @Test
     public void knightMovesLeftAhead() {
         Knight knight = new Knight(WHITE, new Square(Letter.E, 4));
-        board = new Board(Collections.singletonList(knight));
+        when(game.getPieces()).thenReturn(Collections.singletonList(knight));
+        board = new Board(game);
         move = new KnightMove(board, knight.getSquare());
         
         List<Square> expected = new ArrayList<>();
@@ -33,7 +43,8 @@ public class KnightMoveTest {
     @Test
     public void knightMovesLeftBehind() {
         Knight knight = new Knight(WHITE, new Square(Letter.E, 4));
-        board = new Board(Collections.singletonList(knight));
+        when(game.getPieces()).thenReturn(Collections.singletonList(knight));
+        board = new Board(game);
         move = new KnightMove(board, knight.getSquare());
         
         List<Square> expected = new ArrayList<>();
@@ -46,7 +57,8 @@ public class KnightMoveTest {
     @Test
     public void knightMovesRightAhead() {
         Knight knight = new Knight(WHITE, new Square(Letter.E, 4));
-        board = new Board(Collections.singletonList(knight));
+        when(game.getPieces()).thenReturn(Collections.singletonList(knight));
+        board = new Board(game);
         move = new KnightMove(board, knight.getSquare());
         
         List<Square> expected = new ArrayList<>();
@@ -59,7 +71,8 @@ public class KnightMoveTest {
     @Test
     public void knightMovesRightBehind() {
         Knight knight = new Knight(WHITE, new Square(Letter.E, 4));
-        board = new Board(Collections.singletonList(knight));
+        when(game.getPieces()).thenReturn(Collections.singletonList(knight));
+        board = new Board(game);
         move = new KnightMove(board, knight.getSquare());
         
         List<Square> expected = new ArrayList<>();
@@ -72,7 +85,8 @@ public class KnightMoveTest {
     @Test
     public void knightMovesMovesToAllDirectionsInCenter() {
         Knight knight = new Knight(WHITE, new Square(Letter.E, 4));
-        board = new Board(Collections.singletonList(knight));
+        when(game.getPieces()).thenReturn(Collections.singletonList(knight));
+        board = new Board(game);
         move = new KnightMove(board, knight.getSquare());
         
         List<Square> expected = new ArrayList<>();
@@ -91,7 +105,8 @@ public class KnightMoveTest {
     @Test
     public void knightMovesOnlyRightWhenItsOnLeftBorder() {
         Knight knight = new Knight(WHITE, new Square(Letter.A, 4));
-        board = new Board(Collections.singletonList(knight));
+        when(game.getPieces()).thenReturn(Collections.singletonList(knight));
+        board = new Board(game);
         move = new KnightMove(board, knight.getSquare());
 
         List<Square> expected = new ArrayList<>();
@@ -106,7 +121,8 @@ public class KnightMoveTest {
     @Test
     public void knightMovesOnlyLeftWhenItsOnRightBorder() {
         Knight knight = new Knight(WHITE, new Square(Letter.H, 4));
-        board = new Board(Collections.singletonList(knight));
+        when(game.getPieces()).thenReturn(Collections.singletonList(knight));
+        board = new Board(game);
         move = new KnightMove(board, knight.getSquare());
 
         List<Square> expected = new ArrayList<>();
@@ -121,7 +137,8 @@ public class KnightMoveTest {
     @Test
     public void knightHasOnlyTwoMovesOnLeftWhenItsOneSquareNearLeftBorder() {
         Knight knight = new Knight(WHITE, new Square(Letter.B, 4));
-        board = new Board(Collections.singletonList(knight));
+        when(game.getPieces()).thenReturn(Collections.singletonList(knight));
+        board = new Board(game);
         move = new KnightMove(board, knight.getSquare());
 
         List<Square> expected = new ArrayList<>();
@@ -134,7 +151,8 @@ public class KnightMoveTest {
     @Test
     public void knightHasOnlyTwoMovesOnRightWhenItsOneSquareNearRightBorder() {
         Knight knight = new Knight(WHITE, new Square(Letter.G, 4));
-        board = new Board(Collections.singletonList(knight));
+        when(game.getPieces()).thenReturn(Collections.singletonList(knight));
+        board = new Board(game);
         move = new KnightMove(board, knight.getSquare());
 
         List<Square> expected = new ArrayList<>();
@@ -147,7 +165,8 @@ public class KnightMoveTest {
     @Test
     public void knightHasOnlyMoveAheadWhenItsOnBottomBorder() {
         Knight knight = new Knight(WHITE, new Square(Letter.E, 1));
-        board = new Board(Collections.singletonList(knight));
+        when(game.getPieces()).thenReturn(Collections.singletonList(knight));
+        board = new Board(game);
         move = new KnightMove(board, knight.getSquare());
 
         List<Square> expected = new ArrayList<>();
@@ -162,7 +181,8 @@ public class KnightMoveTest {
     @Test
     public void knightHasOnlyMoveBehindWhenItsOnTopBorder() {
         Knight knight = new Knight(WHITE, new Square(Letter.E, 8));
-        board = new Board(Collections.singletonList(knight));
+        when(game.getPieces()).thenReturn(Collections.singletonList(knight));
+        board = new Board(game);
         move = new KnightMove(board, knight.getSquare());
 
         List<Square> expected = new ArrayList<>();
@@ -177,7 +197,8 @@ public class KnightMoveTest {
     @Test
     public void knightHasOnlyTwoMovesBehindWhenItsOneSquareNearBottomBorder() {
         Knight knight = new Knight(WHITE, new Square(Letter.E, 2));
-        board = new Board(Collections.singletonList(knight));
+        when(game.getPieces()).thenReturn(Collections.singletonList(knight));
+        board = new Board(game);
         move = new KnightMove(board, knight.getSquare());
 
         List<Square> expected = new ArrayList<>();
@@ -194,7 +215,8 @@ public class KnightMoveTest {
     @Test
     public void knightHasOnlyTwoMovesAheadWhenItsOneSquareNearTopBorder() {
         Knight knight = new Knight(WHITE, new Square(Letter.E, 7));
-        board = new Board(Collections.singletonList(knight));
+        when(game.getPieces()).thenReturn(Collections.singletonList(knight));
+        board = new Board(game);
         move = new KnightMove(board, knight.getSquare());
 
         List<Square> expected = new ArrayList<>();
@@ -211,7 +233,8 @@ public class KnightMoveTest {
     @Test
     public void knightHasOnlyTwoMovesWhenItsOnLeftBottomBorder() {
         Knight knight = new Knight(WHITE, new Square(Letter.A, 1));
-        board = new Board(Collections.singletonList(knight));
+        when(game.getPieces()).thenReturn(Collections.singletonList(knight));
+        board = new Board(game);
         move = new KnightMove(board, knight.getSquare());
         
         List<Square> expected = new ArrayList<>();
@@ -224,7 +247,8 @@ public class KnightMoveTest {
     @Test
     public void knightHasOnlyTwoMovesWhenItsOnRightBottomBorder() {
         Knight knight = new Knight(WHITE, new Square(Letter.H, 1));
-        board = new Board(Collections.singletonList(knight));
+        when(game.getPieces()).thenReturn(Collections.singletonList(knight));
+        board = new Board(game);
         move = new KnightMove(board, knight.getSquare());
         
         List<Square> expected = new ArrayList<>();
@@ -237,7 +261,8 @@ public class KnightMoveTest {
     @Test
     public void knightHasOnlyTwoMovesWhenItsOnLeftTopBorder() {
         Knight knight = new Knight(WHITE, new Square(Letter.A, 8));
-        board = new Board(Collections.singletonList(knight));
+        when(game.getPieces()).thenReturn(Collections.singletonList(knight));
+        board = new Board(game);
         move = new KnightMove(board, knight.getSquare());
         
         List<Square> expected = new ArrayList<>();
@@ -250,7 +275,8 @@ public class KnightMoveTest {
     @Test
     public void knightHasOnlyTwoMovesWhenItsOnRightTopBorder() {
         Knight knight = new Knight(WHITE, new Square(Letter.H, 8));
-        board = new Board(Collections.singletonList(knight));
+        when(game.getPieces()).thenReturn(Collections.singletonList(knight));
+        board = new Board(game);
         move = new KnightMove(board, knight.getSquare());
         
         List<Square> expected = new ArrayList<>();

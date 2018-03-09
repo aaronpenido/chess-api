@@ -26,11 +26,6 @@ public class GameTest {
     }
 
     @Test
-    public void gameHasABoard() {
-        assertThat(game.getBoard()).isNotNull();
-    }
-
-    @Test
     public void gameHasThirtyTwoPieces() {
         assertThat(game.getPieces()).isNotNull();
         assertThat(game.getPieces().size()).isEqualTo(32);
@@ -90,28 +85,6 @@ public class GameTest {
                 .collect(Collectors.toList());
 
         assertThat(game.getPieces()).contains(pawns.toArray(new Pawn[pawns.size()]));
-    }
-
-    @Test
-    public void movePiece() {
-        Square from = new Square(Letter.E, 2);
-        Square destination = new Square(Letter.E, 4);
-
-        game.movePiece(new Player(WHITE), from, destination);
-
-        assertThat(game.getPieces()).contains(new Pawn(WHITE, destination));
-    }
-
-    @Test
-    public void throwExceptionWhenTryingToMovePieceOnNonStartedGame() {
-        Square from = new Square(Letter.E, 2);
-        Square destination = new Square(Letter.E, 3);
-        game = new Game();
-        final Long gameId = 1L;
-        ReflectionTestUtils.setField(game, "id", gameId);
-
-        assertThatThrownBy(() -> game.movePiece(new Player(WHITE), from, destination))
-                .isInstanceOf(GameNotStartedException.class);
     }
 
     @Test

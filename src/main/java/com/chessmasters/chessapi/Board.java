@@ -15,8 +15,8 @@ public class Board {
     private Color nextMoveColor = Color.WHITE;
     private List<Piece> pieces;
 
-    public Board(List<Piece> pieces) {
-        this.pieces = pieces;
+    public Board(Game game) {
+        this.pieces = game.getPieces();
     }
 
     public List<Piece> getPieces() {
@@ -26,6 +26,7 @@ public class Board {
     public void movePiece(@NotNull final Player player,
                           @NotNull final Square from,
                           @NotNull final Square destination) {
+
         Piece pieceFrom = getPieceFromSquare(from);
         Piece pieceTo = getPieceFromSquare(destination);
 

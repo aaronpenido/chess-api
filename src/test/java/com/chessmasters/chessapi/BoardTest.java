@@ -4,114 +4,129 @@ import com.chessmasters.chessapi.enums.Letter;
 import com.chessmasters.chessapi.exception.InvalidMoveException;
 import com.chessmasters.chessapi.piece.*;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 import java.util.Arrays;
 import java.util.Collections;
 
 import static com.chessmasters.chessapi.enums.Color.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 public class BoardTest {
 
     private Board board;
     private Player whitePlayer = new Player(WHITE);
-
+    @Mock
+    private Game game;
+    
     @Test
     public void throwInvalidMoveExceptionWhenPawnMovesToDiagonalSquareWithoutPieceToCapture() {
-        Square from = new Square(Letter.A, 2);
+        Square origin = new Square(Letter.A, 2);
         Square destination = new Square(Letter.B, 3);
-        board = new Board(Collections.singletonList(new Pawn(WHITE, from)));
+        when(game.getPieces()).thenReturn(Collections.singletonList(new Pawn(WHITE, origin)));
+        board = new Board(game);
 
-        assertThatThrownBy(() -> board.movePiece(whitePlayer, from, destination))
+        assertThatThrownBy(() -> board.movePiece(whitePlayer, origin, destination))
                 .isInstanceOf(InvalidMoveException.class);
     }
 
     @Test
     public void pieceMovesLeavingPreviousSquareEmpty() {
-        Square from = new Square(Letter.A, 2);
+        Square origin = new Square(Letter.A, 2);
         Square destination = new Square(Letter.A, 3);
-        board = new Board(Collections.singletonList(new Pawn(WHITE, from)));
+        when(game.getPieces()).thenReturn(Collections.singletonList(new Pawn(WHITE, origin)));
+        board = new Board(game);
 
-        board.movePiece(whitePlayer, from, destination);
+        board.movePiece(whitePlayer, origin, destination);
 
-        Piece piece = board.getPieceFromSquare(from);
+        Piece piece = board.getPieceFromSquare(origin);
 
         assertThat(piece).isNull();
     }
 
     @Test
     public void pieceIsRemovedFromBoardWhenCaptured() {
-        Square from = new Square(Letter.A, 2);
+        Square origin = new Square(Letter.A, 2);
         Square destination = new Square(Letter.A, 3);
-        board = new Board(Arrays.asList(
-                new Rook(WHITE, from),
+        when(game.getPieces()).thenReturn(Arrays.asList(
+                new Rook(WHITE, origin),
                 new Rook(BLACK, destination)));
+        board = new Board(game);
 
-        board.movePiece(whitePlayer, from, destination);
+        board.movePiece(whitePlayer, origin, destination);
 
         assertThat(board.getPieces().size()).isEqualTo(1);
     }
 
     @Test
     public void throwInvalidMoveExceptionWhenPawnTriesToMoveAheadToFilledSquare() {
-        Square from = new Square(Letter.A, 2);
+        Square origin = new Square(Letter.A, 2);
         Square destination = new Square(Letter.A, 3);
-        board = new Board(Arrays.asList(
-                new Pawn(WHITE, from),
+        when(game.getPieces()).thenReturn(Arrays.asList(
+                new Pawn(WHITE, origin),
                 new Pawn(BLACK, destination)));
+        board = new Board(game);
 
-        assertThatThrownBy(() -> board.movePiece(whitePlayer, from, destination))
+        assertThatThrownBy(() -> board.movePiece(whitePlayer, origin, destination))
                 .isInstanceOf(InvalidMoveException.class);
     }
 
     @Test
     public void throwInvalidMoveExceptionWhenPieceTriesToMoveToFilledSquareWithSamePieceColor() {
-        Square from = new Square(Letter.A, 2);
+        Square origin = new Square(Letter.A, 2);
         Square destination = new Square(Letter.A, 3);
-        board = new Board(Arrays.asList(
-                new Rook(WHITE, from),
+        when(game.getPieces()).thenReturn(Arrays.asList(
+                new Rook(WHITE, origin),
                 new Rook(WHITE, destination)));
+        board = new Board(game);
 
-        assertThatThrownBy(() -> board.movePiece(whitePlayer, from, destination))
+        assertThatThrownBy(() -> board.movePiece(whitePlayer, origin, destination))
                 .isInstanceOf(InvalidMoveException.class);
     }
 
     @Test
     public void throwInvalidMoveExceptionWhenThereIsAPieceOnTheWayToDiagonalDestinationSquare() {
-        Square from = new Square(Letter.E, 4);
+        Square origin = new Square(Letter.E, 4);
         Square destination = new Square(Letter.A, 8);
         Square between = new Square(Letter.C, 6);
-        board = new Board(Arrays.asList(
-                new Bishop(WHITE, from),
-                new Pawn(WHITE, between)));
+        when(game.getPieces()).thenReturn(Arrays.asList(
+                new Rook(WHITE, origin),
+                new Rook(WHITE, between)));
+        board = new Board(game);
 
-        assertThatThrownBy(() -> board.movePiece(whitePlayer, from, destination))
+        assertThatThrownBy(() -> board.movePiece(whitePlayer, origin, destination))
                 .isInstanceOf(InvalidMoveException.class);
     }
 
     @Test
     public void throwInvalidMoveExceptionWhenThereIsAPieceOnTheWayToStraightDestinationSquare() {
-        Square from = new Square(Letter.E, 4);
+        Square origin = new Square(Letter.E, 4);
         Square destination = new Square(Letter.E, 8);
         Square between = new Square(Letter.E, 6);
-        board = new Board(Arrays.asList(
-                new Rook(WHITE, from),
+        when(game.getPieces()).thenReturn(Arrays.asList(
+                new Rook(WHITE, origin),
                 new Pawn(WHITE, between)));
+        board = new Board(game);
 
-        assertThatThrownBy(() -> board.movePiece(whitePlayer, from, destination))
+        assertThatThrownBy(() -> board.movePiece(whitePlayer, origin, destination))
                 .isInstanceOf(InvalidMoveException.class);
     }
 
     @Test
     public void knightMovesEvenIfThereIsAPieceOnTheWay() {
-        Square from = new Square(Letter.E, 4);
+        Square origin = new Square(Letter.E, 4);
         Square destination = new Square(Letter.F, 6);
         Square between = new Square(Letter.E, 5);
-        board = new Board(Arrays.asList(
-                new Knight(WHITE, from),
+        when(game.getPieces()).thenReturn(Arrays.asList(
+                new Knight(WHITE, origin),
                 new Pawn(WHITE, between)));
+        board = new Board(game);
 
-        board.movePiece(whitePlayer, from, destination);
+        board.movePiece(whitePlayer, origin, destination);
 
         Piece knight = board.getPieceFromSquare(destination);
 
@@ -120,13 +135,13 @@ public class BoardTest {
 
     @Test
     public void throwInvalidMoveExceptionWhenMovePieceAfterAnotherWithSameColor() {
-        Square from = new Square(Letter.E, 4);
+        Square origin = new Square(Letter.E, 4);
         Square destination = new Square(Letter.E, 5);
         Square secondDestination = new Square(Letter.E, 6);
+        when(game.getPieces()).thenReturn(Collections.singletonList(new Pawn(WHITE, origin)));
+        board = new Board(game);
 
-        board = new Board(Collections.singletonList(new Pawn(WHITE, from)));
-
-        board.movePiece(whitePlayer, from, destination);
+        board.movePiece(whitePlayer, origin, destination);
 
         assertThatThrownBy(() -> board.movePiece(whitePlayer, destination, secondDestination))
                 .isInstanceOf(InvalidMoveException.class);
@@ -134,11 +149,12 @@ public class BoardTest {
 
     @Test
     public void throwInvalidMoveExceptionWhenPlayerTriesToMoveOpponentsPiece() {
-        Square from = new Square(Letter.E, 2);
+        Square origin = new Square(Letter.E, 2);
         Square destination = new Square(Letter.E, 3);
-        board = new Board(Collections.singletonList(new Pawn(WHITE, from)));
+        when(game.getPieces()).thenReturn(Collections.singletonList(new Pawn(WHITE, origin)));
+        board = new Board(game);
 
-        board.movePiece(whitePlayer, from, destination);
+        board.movePiece(whitePlayer, origin, destination);
 
         Square nextMoveFrom = destination;
         Square nextMoveDestination = new Square(Letter.E, 4);
@@ -147,4 +163,28 @@ public class BoardTest {
                 .isInstanceOf(InvalidMoveException.class)
                 .hasMessageContaining("It's opponent's turn");
     }
+
+    /*
+    @Test
+    public void movePiece() {
+        Square from = new Square(Letter.E, 2);
+        Square destination = new Square(Letter.E, 4);
+
+        game.movePiece(new Player(WHITE), from, destination);
+
+        assertThat(game.getPieces()).contains(new Pawn(WHITE, destination));
+    }
+
+    @Test
+    public void throwExceptionWhenTryingToMovePieceOnNonStartedGame() {
+        Square from = new Square(Letter.E, 2);
+        Square destination = new Square(Letter.E, 3);
+        game = new Game();
+        final Long gameId = 1L;
+        ReflectionTestUtils.setField(game, "id", gameId);
+
+        assertThatThrownBy(() -> game.movePiece(new Player(WHITE), from, destination))
+                .isInstanceOf(GameNotStartedException.class);
+    }
+     */
 }

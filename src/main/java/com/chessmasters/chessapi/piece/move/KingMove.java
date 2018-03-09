@@ -1,6 +1,7 @@
 package com.chessmasters.chessapi.piece.move;
 
 import com.chessmasters.chessapi.Board;
+import com.chessmasters.chessapi.Game;
 import com.chessmasters.chessapi.Square;
 import com.chessmasters.chessapi.piece.King;
 import com.chessmasters.chessapi.piece.Pawn;
@@ -136,7 +137,11 @@ public class KingMove extends Move {
                 .orElse(null);
 
         if(enemyKing != null) {
-            Board newBoard = new Board(Collections.singletonList(enemyKing));
+            Game game = new Game();
+            game.setPieces(Collections.singletonList(enemyKing));
+
+            Board newBoard = new Board(game);
+
             if(enemyKing.moves(newBoard).contains(destination)) {
                 return true;
             }

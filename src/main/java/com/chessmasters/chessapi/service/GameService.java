@@ -41,6 +41,7 @@ public class GameService {
         Long playerId = gameRequest.getPlayerId();
 
         Player player = playerById(playerId);
+
         game.movePiece(player, gameRequest.getFrom(), gameRequest.getDestination());
 
         return save(game);

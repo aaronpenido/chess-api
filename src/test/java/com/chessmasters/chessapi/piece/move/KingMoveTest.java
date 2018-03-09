@@ -1,10 +1,15 @@
 package com.chessmasters.chessapi.piece.move;
 
 import com.chessmasters.chessapi.Board;
+import com.chessmasters.chessapi.Game;
 import com.chessmasters.chessapi.enums.Letter;
 import com.chessmasters.chessapi.Square;
 import com.chessmasters.chessapi.piece.*;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -12,17 +17,21 @@ import java.util.List;
 
 import static com.chessmasters.chessapi.enums.Color.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 public class KingMoveTest {
 
     private KingMove move;
     private Board board;
-    private List<Piece> pieces;
+    @Mock
+    private Game game;
 
     @Test
     public void pathOnCenterWithoutOtherPieces() {
         Square square = new Square(Letter.E, 4);
-        board = new Board(Collections.singletonList(new King(WHITE, square)));
+        when(game.getPieces()).thenReturn(Collections.singletonList(new King(WHITE, square)));
+        board = new Board(game);
 
         List<Square> squares = new ArrayList<>();
         squares.add(new Square(Letter.D, 5));
@@ -42,7 +51,8 @@ public class KingMoveTest {
     @Test
     public void pathOnBottomBorderWithoutOtherPieces() {
         Square square = new Square(Letter.E, 1);
-        board = new Board(Collections.singletonList(new King(WHITE, square)));
+        when(game.getPieces()).thenReturn(Collections.singletonList(new King(WHITE, square)));
+        board = new Board(game);
 
         List<Square> squares = new ArrayList<>();
         squares.add(new Square(Letter.D, 1));
@@ -59,7 +69,8 @@ public class KingMoveTest {
     @Test
     public void pathOnTopBorderWithoutOtherPieces() {
         Square square = new Square(Letter.E, 8);
-        board = new Board(Collections.singletonList(new King(WHITE, square)));
+        when(game.getPieces()).thenReturn(Collections.singletonList(new King(WHITE, square)));
+        board = new Board(game);
 
         List<Square> squares = new ArrayList<>();
         squares.add(new Square(Letter.D, 8));
@@ -76,7 +87,8 @@ public class KingMoveTest {
     @Test
     public void pathOnLeftBorderWithoutOtherPieces() {
         Square square = new Square(Letter.A, 4);
-        board = new Board(Collections.singletonList(new King(WHITE, square)));
+        when(game.getPieces()).thenReturn(Collections.singletonList(new King(WHITE, square)));
+        board = new Board(game);
 
         List<Square> squares = new ArrayList<>();
         squares.add(new Square(Letter.A, 3));
@@ -93,7 +105,8 @@ public class KingMoveTest {
     @Test
     public void pathOnRightBorderWithoutOtherPieces() {
         Square square = new Square(Letter.H, 4);
-        board = new Board(Collections.singletonList(new King(WHITE, square)));
+        when(game.getPieces()).thenReturn(Collections.singletonList(new King(WHITE, square)));
+        board = new Board(game);
 
         List<Square> squares = new ArrayList<>();
         squares.add(new Square(Letter.H, 3));
@@ -112,10 +125,11 @@ public class KingMoveTest {
         Square square = new Square(Letter.H, 4);
         Square pawnSquare = new Square(Letter.H, 4);
 
-        board = new Board(Arrays.asList(
+        when(game.getPieces()).thenReturn(Arrays.asList(
                 new King(WHITE, square),
                 new Pawn(WHITE, pawnSquare)));
 
+        board = new Board(game);
         move = new KingMove(board, square);
 
         assertThat(move.path()).doesNotContain(pawnSquare);
@@ -127,11 +141,11 @@ public class KingMoveTest {
         Square destination = new Square(Letter.F, 5);
         Square bishopSquare = new Square(Letter.C, 8);
 
-        pieces = new ArrayList<>();
-        pieces.add(new King(WHITE, square));
-        pieces.add(new Bishop(BLACK, bishopSquare));
-        board = new Board(pieces);
+        when(game.getPieces()).thenReturn(Arrays.asList(
+                new King(WHITE, square),
+                new Bishop(BLACK, bishopSquare)));
 
+        board = new Board(game);
         move = new KingMove(board, square);
 
         assertThat(move.path()).doesNotContain(destination);
@@ -143,11 +157,11 @@ public class KingMoveTest {
         Square destination = new Square(Letter.F, 5);
         Square rookSquare = new Square(Letter.F, 1);
 
-        pieces = new ArrayList<>();
-        pieces.add(new King(WHITE, square));
-        pieces.add(new Rook(BLACK, rookSquare));
-        board = new Board(pieces);
+        when(game.getPieces()).thenReturn(Arrays.asList(
+                new King(WHITE, square),
+                new Rook(BLACK, rookSquare)));
 
+        board = new Board(game);
         move = new KingMove(board, square);
 
         assertThat(move.path()).doesNotContain(destination);
@@ -159,11 +173,11 @@ public class KingMoveTest {
         Square destination = new Square(Letter.F, 5);
         Square knightSquare = new Square(Letter.E, 3);
 
-        pieces = new ArrayList<>();
-        pieces.add(new King(WHITE, square));
-        pieces.add(new Knight(BLACK, knightSquare));
-        board = new Board(pieces);
+        when(game.getPieces()).thenReturn(Arrays.asList(
+                new King(WHITE, square),
+                new Knight(BLACK, knightSquare)));
 
+        board = new Board(game);
         move = new KingMove(board, square);
 
         assertThat(move.path()).doesNotContain(destination);
@@ -178,11 +192,11 @@ public class KingMoveTest {
         attackedSquares.add(new Square(Letter.D, 4));
         attackedSquares.add(new Square(Letter.F, 4));
 
-        pieces = new ArrayList<>();
-        pieces.add(new King(WHITE, square));
-        pieces.add(new Pawn(BLACK, pawnSquare));
-        board = new Board(pieces);
+        when(game.getPieces()).thenReturn(Arrays.asList(
+                new King(WHITE, square),
+                new Pawn(BLACK, pawnSquare)));
 
+        board = new Board(game);
         move = new KingMove(board, square);
 
         assertThat(move.path()).doesNotContainAnyElementsOf(attackedSquares);
@@ -200,11 +214,11 @@ public class KingMoveTest {
         attackedSquares.add(new Square(Letter.E, 5));
         attackedSquares.add(new Square(Letter.F, 4));
 
-        pieces = new ArrayList<>();
-        pieces.add(new King(WHITE, square));
-        pieces.add(new Queen(BLACK, queenSquare));
-        board = new Board(pieces);
+        when(game.getPieces()).thenReturn(Arrays.asList(
+                new King(WHITE, square),
+                new Queen(BLACK, queenSquare)));
 
+        board = new Board(game);
         move = new KingMove(board, square);
 
         assertThat(move.path()).doesNotContainAnyElementsOf(attackedSquares);
@@ -220,11 +234,11 @@ public class KingMoveTest {
         attackedSquares.add(new Square(Letter.E, 5));
         attackedSquares.add(new Square(Letter.F, 5));
 
-        pieces = new ArrayList<>();
-        pieces.add(new King(WHITE, square));
-        pieces.add(new King(BLACK, kingSquare));
-        board = new Board(pieces);
+        when(game.getPieces()).thenReturn(Arrays.asList(
+                new King(WHITE, square),
+                new King(BLACK, kingSquare)));
 
+        board = new Board(game);
         move = new KingMove(board, square);
 
         assertThat(move.path()).doesNotContainAnyElementsOf(attackedSquares);

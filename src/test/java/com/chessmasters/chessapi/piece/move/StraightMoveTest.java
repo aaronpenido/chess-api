@@ -1,10 +1,15 @@
 package com.chessmasters.chessapi.piece.move;
 
 import com.chessmasters.chessapi.Board;
+import com.chessmasters.chessapi.Game;
 import com.chessmasters.chessapi.enums.Letter;
 import com.chessmasters.chessapi.Square;
 import com.chessmasters.chessapi.piece.Rook;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -13,11 +18,15 @@ import java.util.List;
 import static com.chessmasters.chessapi.enums.Color.BLACK;
 import static com.chessmasters.chessapi.enums.Color.WHITE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 public class StraightMoveTest {
 
     private StraightMove move;
     private Board board;
+    @Mock
+    private Game game;
 
     @Test
     public void leftPath() {
@@ -86,9 +95,11 @@ public class StraightMoveTest {
         squares.add(new Square(Letter.F, 4));
         squares.add(new Square(Letter.G, 4));
 
-        board = new Board(Arrays.asList(
+        when(game.getPieces()).thenReturn(Arrays.asList(
                 new Rook(WHITE, square),
                 new Rook(WHITE, friendlyPieceSquare)));
+
+        board = new Board(game);
         move = new StraightMove(board, square);
 
         assertThat(move.path()).contains(squares.toArray(new Square[squares.size()]));
@@ -102,9 +113,11 @@ public class StraightMoveTest {
         List<Square> squares = new ArrayList<>();
         squares.add(enemyPieceSquare);
 
-        board = new Board(Arrays.asList(
+        when(game.getPieces()).thenReturn(Arrays.asList(
                 new Rook(WHITE, square),
                 new Rook(BLACK, enemyPieceSquare)));
+
+        board = new Board(game);
         move = new StraightMove(board, square);
 
         assertThat(move.path()).contains(squares.toArray(new Square[squares.size()]));
@@ -119,9 +132,11 @@ public class StraightMoveTest {
         squares.add(new Square(Letter.B, 4));
         squares.add(new Square(Letter.C, 4));
 
-        board = new Board(Arrays.asList(
+        when(game.getPieces()).thenReturn(Arrays.asList(
                 new Rook(WHITE, square),
                 new Rook(WHITE, friendlyPieceSquare)));
+
+        board = new Board(game);
         move = new StraightMove(board, square);
 
         assertThat(move.path()).contains(squares.toArray(new Square[squares.size()]));
@@ -135,9 +150,11 @@ public class StraightMoveTest {
         List<Square> squares = new ArrayList<>();
         squares.add(enemyPieceSquare);
 
-        board = new Board(Arrays.asList(
+        when(game.getPieces()).thenReturn(Arrays.asList(
                 new Rook(WHITE, square),
                 new Rook(BLACK, enemyPieceSquare)));
+
+        board = new Board(game);
         move = new StraightMove(board, square);
 
         assertThat(move.path()).contains(squares.toArray(new Square[squares.size()]));
@@ -152,9 +169,11 @@ public class StraightMoveTest {
         squares.add(new Square(Letter.E, 5));
         squares.add(new Square(Letter.E, 6));
 
-        board = new Board(Arrays.asList(
+        when(game.getPieces()).thenReturn(Arrays.asList(
                 new Rook(WHITE, square),
                 new Rook(WHITE, friendlyPieceSquare)));
+
+        board = new Board(game);
         move = new StraightMove(board, square);
 
         assertThat(move.path()).contains(squares.toArray(new Square[squares.size()]));
@@ -168,9 +187,11 @@ public class StraightMoveTest {
         List<Square> squares = new ArrayList<>();
 
         squares.add(enemyPieceSquare);
-        board = new Board(Arrays.asList(
+        when(game.getPieces()).thenReturn(Arrays.asList(
                 new Rook(WHITE, square),
                 new Rook(BLACK, enemyPieceSquare)));
+
+        board = new Board(game);
         move = new StraightMove(board, square);
 
         assertThat(move.path()).contains(squares.toArray(new Square[squares.size()]));
@@ -185,9 +206,11 @@ public class StraightMoveTest {
         squares.add(new Square(Letter.E, 2));
         squares.add(new Square(Letter.E, 3));
 
-        board = new Board(Arrays.asList(
+        when(game.getPieces()).thenReturn(Arrays.asList(
                 new Rook(WHITE, square),
                 new Rook(WHITE, friendlyPieceSquare)));
+
+        board = new Board(game);
         move = new StraightMove(board, square);
 
         assertThat(move.path()).contains(squares.toArray(new Square[squares.size()]));
@@ -201,16 +224,20 @@ public class StraightMoveTest {
         List<Square> squares = new ArrayList<>();
 
         squares.add(enemyPieceSquare);
-        board = new Board(Arrays.asList(
+        when(game.getPieces()).thenReturn(Arrays.asList(
                 new Rook(WHITE, square),
                 new Rook(BLACK, enemyPieceSquare)));
+
+
+        board = new Board(game);
         move = new StraightMove(board, square);
 
         assertThat(move.path()).contains(squares.toArray(new Square[squares.size()]));
     }
 
     private StraightMove createStraightMove(Square square) {
-        board = new Board(Collections.singletonList(new Rook(WHITE, square)));
+        when(game.getPieces()).thenReturn(Collections.singletonList(new Rook(WHITE, square)));
+        board = new Board(game);
         return new StraightMove(board, square);
     }
 }

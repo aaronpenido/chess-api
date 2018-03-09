@@ -6,10 +6,7 @@ import com.chessmasters.chessapi.Square;
 import com.chessmasters.chessapi.enums.Letter;
 import com.chessmasters.chessapi.exception.GameNotFoundException;
 import com.chessmasters.chessapi.exception.PlayerNotFoundException;
-import com.chessmasters.chessapi.piece.Bishop;
-import com.chessmasters.chessapi.piece.Knight;
-import com.chessmasters.chessapi.piece.Queen;
-import com.chessmasters.chessapi.piece.Rook;
+import com.chessmasters.chessapi.piece.*;
 import com.chessmasters.chessapi.repository.GameRepository;
 import com.chessmasters.chessapi.repository.PlayerRepository;
 import com.chessmasters.chessapi.request.GameRequest;
@@ -21,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static com.chessmasters.chessapi.enums.Color.WHITE;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -100,12 +98,12 @@ public class GameServiceTest {
     public void movePiece() {
         final Long playerId = 1L;
         Player player = new Player(WHITE, playerId, null);
-        Square from = new Square(Letter.E, 2);
+        Square origin = new Square(Letter.E, 2);
         Square destination = new Square(Letter.E, 3);
-        GameRequest gameRequest = new GameRequest(playerId, from, destination);
+        GameRequest gameRequest = new GameRequest(playerId, origin, destination);
 
         when(playerRepository.findOne(any(Long.class))).thenReturn(player);
-        when(game.getPieces()).thenReturn(new ArrayList<>());
+        when(game.getPieces()).thenReturn(Arrays.asList(new Pawn(WHITE, origin)));
         when(repository.findOne(any(Long.class))).thenReturn(game);
         when(repository.save(any(Game.class))).thenReturn(game);
 

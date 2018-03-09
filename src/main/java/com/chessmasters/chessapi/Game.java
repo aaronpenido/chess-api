@@ -25,8 +25,6 @@ public class Game {
     @OneToOne (cascade=CascadeType.ALL)
     @JoinColumn(name="player2_id")
     private Player player2;
-    @Transient
-    private Board board;
     @MapsId
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Piece> pieces;
@@ -39,20 +37,27 @@ public class Game {
         this.id = null;
         this.player = player;
         this.player2 = null;
-        this.board = new Board(pieces);
     }
 
-    public void movePiece(Player movePlayer, Square from, Square destination) {
-        if(pieces == null) {
-            throw new GameNotStartedException(id);
-        }
+    public List<Piece> getPieces() {
+        return pieces;
+    }
 
-        if(movePlayer == null) {
-            throw new PlayerNotFoundException();
-        }
+    //TODO: Remove after refactoring KingMove
+    public void setPieces(List<Piece> pieces) {
+        this.pieces = pieces;
+    }
 
-        board = new Board(pieces);
-        board.movePiece(movePlayer, from, destination);
+    public Long getId() {
+        return id;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public Player getPlayer2() {
+        return player2;
     }
 
     public void start(Player player) {
@@ -67,9 +72,21 @@ public class Game {
         initializeBishops();
         initializePawns();
 
-        board = new Board(pieces);
         player2 = player;
         setPlayersColors();
+    }
+
+    public void movePiece(Player movePlayer, Square from, Square destination) {
+        if(pieces == null) {
+            throw new GameNotStartedException(id);
+        }
+
+        if(movePlayer == null) {
+            throw new PlayerNotFoundException();
+        }
+
+        Board board = new Board(this);
+        board.movePiece(movePlayer, from, destination);
     }
 
     private void initializeKings() {
@@ -119,25 +136,5 @@ public class Game {
         final int randomNumber = new Random().nextInt(1);
         player.setColor(randomNumber == 0 ? WHITE : BLACK);
         player2.setColor(Color.opposite(player.getColor()));
-    }
-
-    public Board getBoard() {
-        return board;
-    }
-
-    public List<Piece> getPieces() {
-        return pieces;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Player getPlayer() {
-        return player;
-    }
-
-    public Player getPlayer2() {
-        return player2;
     }
 }
