@@ -1,12 +1,12 @@
-package com.chessmasters.chessapi.move;
+package com.chessmasters.chessapi.movement;
 
 import com.chessmasters.chessapi.Board;
 import com.chessmasters.chessapi.Square;
 import java.util.*;
 
-public class StraightMove extends Move {
+public class StraightMovement extends Movement {
 
-    public StraightMove(Board board, Square square) {
+    public StraightMovement(Board board, Square square) {
         super(board, square);
     }
 

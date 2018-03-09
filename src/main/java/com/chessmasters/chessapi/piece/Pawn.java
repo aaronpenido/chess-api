@@ -2,9 +2,9 @@ package com.chessmasters.chessapi.piece;
 
 import com.chessmasters.chessapi.*;
 import com.chessmasters.chessapi.enums.Color;
-import com.chessmasters.chessapi.move.BlackPawnMove;
-import com.chessmasters.chessapi.move.PawnMove;
-import com.chessmasters.chessapi.move.WhitePawnMove;
+import com.chessmasters.chessapi.movement.BlackPawnMovement;
+import com.chessmasters.chessapi.movement.PawnMovement;
+import com.chessmasters.chessapi.movement.WhitePawnMovement;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -18,7 +18,7 @@ import static com.chessmasters.chessapi.enums.Color.*;
 public class Pawn extends Piece {
 
     @Transient
-    private PawnMove pawnMove;
+    private PawnMovement pawnMove;
 
     public Pawn() {
     }
@@ -30,9 +30,9 @@ public class Pawn extends Piece {
     @Override
     public List<Square> moves(Board board) {
         if(color.equals(WHITE)) {
-            pawnMove = new WhitePawnMove(board, square);
+            pawnMove = new WhitePawnMovement(board, square);
         } else {
-            pawnMove = new BlackPawnMove(board, square);
+            pawnMove = new BlackPawnMovement(board, square);
         }
 
         return pawnMove.path();
@@ -40,9 +40,9 @@ public class Pawn extends Piece {
 
     public List<Square> attackMoves(Board board) {
         if(color.equals(WHITE)) {
-            pawnMove = new WhitePawnMove(board, square);
+            pawnMove = new WhitePawnMovement(board, square);
         } else {
-            pawnMove = new BlackPawnMove(board, square);
+            pawnMove = new BlackPawnMovement(board, square);
         }
 
         return pawnMove.attackMoves();

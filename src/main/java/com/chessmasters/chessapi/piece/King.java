@@ -3,7 +3,7 @@ package com.chessmasters.chessapi.piece;
 import com.chessmasters.chessapi.Board;
 import com.chessmasters.chessapi.enums.Color;
 import com.chessmasters.chessapi.Square;
-import com.chessmasters.chessapi.move.KingMove;
+import com.chessmasters.chessapi.movement.KingMovement;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -22,6 +22,6 @@ public class King extends Piece{
 
     @Override
     public List<Square> moves(Board board) {
-        return new KingMove(board, square).path();
+        return new KingMovement(board, square).path();
     }
 }

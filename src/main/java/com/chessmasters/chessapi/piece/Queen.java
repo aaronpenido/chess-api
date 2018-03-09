@@ -3,8 +3,8 @@ package com.chessmasters.chessapi.piece;
 import com.chessmasters.chessapi.Board;
 import com.chessmasters.chessapi.enums.Color;
 import com.chessmasters.chessapi.Square;
-import com.chessmasters.chessapi.move.DiagonalMove;
-import com.chessmasters.chessapi.move.StraightMove;
+import com.chessmasters.chessapi.movement.DiagonalMovement;
+import com.chessmasters.chessapi.movement.StraightMovement;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -26,8 +26,8 @@ public class Queen extends Piece {
     public List<Square> moves(Board board) {
         List<Square> moves = new ArrayList<>();
 
-        StraightMove straightMove = new StraightMove(board, square);
-        DiagonalMove diagonalMove = new DiagonalMove(board, square);
+        StraightMovement straightMove = new StraightMovement(board, square);
+        DiagonalMovement diagonalMove = new DiagonalMovement(board, square);
 
         moves.addAll(straightMove.path());
         moves.addAll(diagonalMove.path());

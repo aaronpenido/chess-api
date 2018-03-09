@@ -1,4 +1,4 @@
-package com.chessmasters.chessapi.move;
+package com.chessmasters.chessapi.movement;
 
 import com.chessmasters.chessapi.Board;
 import com.chessmasters.chessapi.Game;
@@ -20,12 +20,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class KingMoveTest {
+public class KingMovementTest {
 
-    private KingMove move;
-    private Board board;
+    KingMovement movement;
+    Board board;
     @Mock
-    private Game game;
+    Game game;
 
     @Test
     public void pathOnCenterWithoutOtherPieces() {
@@ -43,9 +43,9 @@ public class KingMoveTest {
         squares.add(new Square(Letter.E, 3));
         squares.add(new Square(Letter.F, 3));
 
-        move = new KingMove(board, square);
+        movement = new KingMovement(board, square);
 
-        assertThat(move.path()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
+        assertThat(movement.path()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
     }
 
     @Test
@@ -61,9 +61,9 @@ public class KingMoveTest {
         squares.add(new Square(Letter.E, 2));
         squares.add(new Square(Letter.F, 2));
 
-        move = new KingMove(board, square);
+        movement = new KingMovement(board, square);
 
-        assertThat(move.path()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
+        assertThat(movement.path()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
     }
 
     @Test
@@ -79,9 +79,9 @@ public class KingMoveTest {
         squares.add(new Square(Letter.E, 7));
         squares.add(new Square(Letter.F, 7));
 
-        move = new KingMove(board, square);
+        movement = new KingMovement(board, square);
 
-        assertThat(move.path()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
+        assertThat(movement.path()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
     }
 
     @Test
@@ -97,9 +97,9 @@ public class KingMoveTest {
         squares.add(new Square(Letter.B, 4));
         squares.add(new Square(Letter.B, 3));
 
-        move = new KingMove(board, square);
+        movement = new KingMovement(board, square);
 
-        assertThat(move.path()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
+        assertThat(movement.path()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
     }
 
     @Test
@@ -115,9 +115,9 @@ public class KingMoveTest {
         squares.add(new Square(Letter.G, 4));
         squares.add(new Square(Letter.G, 3));
 
-        move = new KingMove(board, square);
+        movement = new KingMovement(board, square);
 
-        assertThat(move.path()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
+        assertThat(movement.path()).containsExactlyInAnyOrder(squares.toArray(new Square[squares.size()]));
     }
 
     @Test
@@ -130,9 +130,9 @@ public class KingMoveTest {
                 new Pawn(WHITE, pawnSquare)));
 
         board = new Board(game);
-        move = new KingMove(board, square);
+        movement = new KingMovement(board, square);
 
-        assertThat(move.path()).doesNotContain(pawnSquare);
+        assertThat(movement.path()).doesNotContain(pawnSquare);
     }
 
     @Test
@@ -146,9 +146,9 @@ public class KingMoveTest {
                 new Bishop(BLACK, bishopSquare)));
 
         board = new Board(game);
-        move = new KingMove(board, square);
+        movement = new KingMovement(board, square);
 
-        assertThat(move.path()).doesNotContain(destination);
+        assertThat(movement.path()).doesNotContain(destination);
     }
 
     @Test
@@ -162,9 +162,9 @@ public class KingMoveTest {
                 new Rook(BLACK, rookSquare)));
 
         board = new Board(game);
-        move = new KingMove(board, square);
+        movement = new KingMovement(board, square);
 
-        assertThat(move.path()).doesNotContain(destination);
+        assertThat(movement.path()).doesNotContain(destination);
     }
 
     @Test
@@ -178,9 +178,9 @@ public class KingMoveTest {
                 new Knight(BLACK, knightSquare)));
 
         board = new Board(game);
-        move = new KingMove(board, square);
+        movement = new KingMovement(board, square);
 
-        assertThat(move.path()).doesNotContain(destination);
+        assertThat(movement.path()).doesNotContain(destination);
     }
 
     @Test
@@ -197,9 +197,9 @@ public class KingMoveTest {
                 new Pawn(BLACK, pawnSquare)));
 
         board = new Board(game);
-        move = new KingMove(board, square);
+        movement = new KingMovement(board, square);
 
-        assertThat(move.path()).doesNotContainAnyElementsOf(attackedSquares);
+        assertThat(movement.path()).doesNotContainAnyElementsOf(attackedSquares);
     }
 
     @Test
@@ -219,9 +219,9 @@ public class KingMoveTest {
                 new Queen(BLACK, queenSquare)));
 
         board = new Board(game);
-        move = new KingMove(board, square);
+        movement = new KingMovement(board, square);
 
-        assertThat(move.path()).doesNotContainAnyElementsOf(attackedSquares);
+        assertThat(movement.path()).doesNotContainAnyElementsOf(attackedSquares);
     }
 
     @Test
@@ -239,8 +239,8 @@ public class KingMoveTest {
                 new King(BLACK, kingSquare)));
 
         board = new Board(game);
-        move = new KingMove(board, square);
+        movement = new KingMovement(board, square);
 
-        assertThat(move.path()).doesNotContainAnyElementsOf(attackedSquares);
+        assertThat(movement.path()).doesNotContainAnyElementsOf(attackedSquares);
     }
 }

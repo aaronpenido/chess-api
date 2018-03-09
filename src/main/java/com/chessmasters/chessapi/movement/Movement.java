@@ -1,4 +1,4 @@
-package com.chessmasters.chessapi.move;
+package com.chessmasters.chessapi.movement;
 
 import com.chessmasters.chessapi.Board;
 import com.chessmasters.chessapi.Square;
@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-public abstract class Move {
+public abstract class Movement {
 
     Board board;
     Square square;
 
-    public Move(Board board, Square square) {
+    public Movement(Board board, Square square) {
         this.board = board;
         this.square = square;
     }

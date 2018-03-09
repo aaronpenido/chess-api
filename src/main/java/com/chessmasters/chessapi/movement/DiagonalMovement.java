@@ -1,4 +1,4 @@
-package com.chessmasters.chessapi.move;
+package com.chessmasters.chessapi.movement;
 
 import com.chessmasters.chessapi.Board;
 import com.chessmasters.chessapi.Square;
@@ -6,9 +6,9 @@ import com.chessmasters.chessapi.Square;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DiagonalMove extends Move {
+public class DiagonalMovement extends Movement {
 
-    public DiagonalMove(Board board, Square square) {
+    public DiagonalMovement(Board board, Square square) {
         super(board, square);
     }
 

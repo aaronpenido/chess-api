@@ -1,4 +1,4 @@
-package com.chessmasters.chessapi.move;
+package com.chessmasters.chessapi.movement;
 
 import com.chessmasters.chessapi.Board;
 import com.chessmasters.chessapi.Square;
@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class KnightMove extends Move {
+public class KnightMovement extends Movement {
 
-    public KnightMove(Board board, Square square) {
+    public KnightMovement(Board board, Square square) {
         super(board, square);
     }
 

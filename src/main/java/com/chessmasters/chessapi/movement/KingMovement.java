@@ -1,4 +1,4 @@
-package com.chessmasters.chessapi.move;
+package com.chessmasters.chessapi.movement;
 
 import com.chessmasters.chessapi.Board;
 import com.chessmasters.chessapi.Game;
@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class KingMove extends Move {
+public class KingMovement extends Movement {
 
-    public KingMove(Board board, Square square) {
+    public KingMovement(Board board, Square square) {
         super(board, square);
     }
 

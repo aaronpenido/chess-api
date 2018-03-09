@@ -1,4 +1,4 @@
-package com.chessmasters.chessapi.move;
+package com.chessmasters.chessapi.movement;
 
 import com.chessmasters.chessapi.Board;
 import com.chessmasters.chessapi.Game;
@@ -21,16 +21,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class StraightMoveTest {
+public class StraightMovementTest {
 
-    private StraightMove move;
-    private Board board;
+    StraightMovement movement;
+    Board board;
     @Mock
-    private Game game;
+    Game game;
 
     @Test
     public void leftPath() {
-        move = createStraightMove(new Square(Letter.E, 4));
+        movement = createStraightMove(new Square(Letter.E, 4));
         List<Square> squares = new ArrayList<>();
 
         squares.add(new Square(Letter.A, 4));
@@ -38,24 +38,24 @@ public class StraightMoveTest {
         squares.add(new Square(Letter.C, 4));
         squares.add(new Square(Letter.D, 4));
 
-        assertThat(move.path()).contains(squares.toArray(new Square[squares.size()]));
+        assertThat(movement.path()).contains(squares.toArray(new Square[squares.size()]));
     }
 
     @Test
     public void rightPath() {
-        move = createStraightMove(new Square(Letter.E, 4));
+        movement = createStraightMove(new Square(Letter.E, 4));
         List<Square> squares = new ArrayList<>();
 
         squares.add(new Square(Letter.F, 4));
         squares.add(new Square(Letter.G, 4));
         squares.add(new Square(Letter.H, 4));
 
-        assertThat(move.path()).contains(squares.toArray(new Square[squares.size()]));
+        assertThat(movement.path()).contains(squares.toArray(new Square[squares.size()]));
     }
 
     @Test
     public void aheadPath() {
-        move = createStraightMove(new Square(Letter.E, 4));
+        movement = createStraightMove(new Square(Letter.E, 4));
         List<Square> squares = new ArrayList<>();
 
         squares.add(new Square(Letter.E, 5));
@@ -63,27 +63,27 @@ public class StraightMoveTest {
         squares.add(new Square(Letter.E, 7));
         squares.add(new Square(Letter.E, 8));
 
-        assertThat(move.path()).contains(squares.toArray(new Square[squares.size()]));
+        assertThat(movement.path()).contains(squares.toArray(new Square[squares.size()]));
     }
 
     @Test
     public void behindPath() {
-        move = createStraightMove(new Square(Letter.E, 4));
+        movement = createStraightMove(new Square(Letter.E, 4));
         List<Square> squares = new ArrayList<>();
 
         squares.add(new Square(Letter.E, 1));
         squares.add(new Square(Letter.E, 2));
         squares.add(new Square(Letter.E, 3));
 
-        assertThat(move.path()).contains(squares.toArray(new Square[squares.size()]));
+        assertThat(movement.path()).contains(squares.toArray(new Square[squares.size()]));
     }
 
     @Test
     public void pathDoesNotContainsActualSquare() {
         Square square = new Square(Letter.E, 4);
-        move = createStraightMove(square);
+        movement = createStraightMove(square);
 
-        assertThat(move.path()).doesNotContain(square);
+        assertThat(movement.path()).doesNotContain(square);
     }
 
     @Test
@@ -100,9 +100,9 @@ public class StraightMoveTest {
                 new Rook(WHITE, friendlyPieceSquare)));
 
         board = new Board(game);
-        move = new StraightMove(board, square);
+        movement = new StraightMovement(board, square);
 
-        assertThat(move.path()).contains(squares.toArray(new Square[squares.size()]));
+        assertThat(movement.path()).contains(squares.toArray(new Square[squares.size()]));
     }
 
     @Test
@@ -118,9 +118,9 @@ public class StraightMoveTest {
                 new Rook(BLACK, enemyPieceSquare)));
 
         board = new Board(game);
-        move = new StraightMove(board, square);
+        movement = new StraightMovement(board, square);
 
-        assertThat(move.path()).contains(squares.toArray(new Square[squares.size()]));
+        assertThat(movement.path()).contains(squares.toArray(new Square[squares.size()]));
     }
 
     @Test
@@ -137,9 +137,9 @@ public class StraightMoveTest {
                 new Rook(WHITE, friendlyPieceSquare)));
 
         board = new Board(game);
-        move = new StraightMove(board, square);
+        movement = new StraightMovement(board, square);
 
-        assertThat(move.path()).contains(squares.toArray(new Square[squares.size()]));
+        assertThat(movement.path()).contains(squares.toArray(new Square[squares.size()]));
     }
 
     @Test
@@ -155,9 +155,9 @@ public class StraightMoveTest {
                 new Rook(BLACK, enemyPieceSquare)));
 
         board = new Board(game);
-        move = new StraightMove(board, square);
+        movement = new StraightMovement(board, square);
 
-        assertThat(move.path()).contains(squares.toArray(new Square[squares.size()]));
+        assertThat(movement.path()).contains(squares.toArray(new Square[squares.size()]));
     }
 
     @Test
@@ -174,9 +174,9 @@ public class StraightMoveTest {
                 new Rook(WHITE, friendlyPieceSquare)));
 
         board = new Board(game);
-        move = new StraightMove(board, square);
+        movement = new StraightMovement(board, square);
 
-        assertThat(move.path()).contains(squares.toArray(new Square[squares.size()]));
+        assertThat(movement.path()).contains(squares.toArray(new Square[squares.size()]));
     }
 
     @Test
@@ -192,9 +192,9 @@ public class StraightMoveTest {
                 new Rook(BLACK, enemyPieceSquare)));
 
         board = new Board(game);
-        move = new StraightMove(board, square);
+        movement = new StraightMovement(board, square);
 
-        assertThat(move.path()).contains(squares.toArray(new Square[squares.size()]));
+        assertThat(movement.path()).contains(squares.toArray(new Square[squares.size()]));
     }
 
     @Test
@@ -211,9 +211,9 @@ public class StraightMoveTest {
                 new Rook(WHITE, friendlyPieceSquare)));
 
         board = new Board(game);
-        move = new StraightMove(board, square);
+        movement = new StraightMovement(board, square);
 
-        assertThat(move.path()).contains(squares.toArray(new Square[squares.size()]));
+        assertThat(movement.path()).contains(squares.toArray(new Square[squares.size()]));
     }
 
     @Test
@@ -230,14 +230,14 @@ public class StraightMoveTest {
 
 
         board = new Board(game);
-        move = new StraightMove(board, square);
+        movement = new StraightMovement(board, square);
 
-        assertThat(move.path()).contains(squares.toArray(new Square[squares.size()]));
+        assertThat(movement.path()).contains(squares.toArray(new Square[squares.size()]));
     }
 
-    private StraightMove createStraightMove(Square square) {
+    private StraightMovement createStraightMove(Square square) {
         when(game.getPieces()).thenReturn(Collections.singletonList(new Rook(WHITE, square)));
         board = new Board(game);
-        return new StraightMove(board, square);
+        return new StraightMovement(board, square);
     }
 }

@@ -1,4 +1,4 @@
-package com.chessmasters.chessapi.move;
+package com.chessmasters.chessapi.movement;
 
 import com.chessmasters.chessapi.Board;
 import com.chessmasters.chessapi.Game;
@@ -19,13 +19,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class WhitePawnMoveTest {
+public class WhitePawnMovementTest {
 
-    private WhitePawnMove move;
-    private Pawn pawn;
-    private Board board;
+    WhitePawnMovement movement;
+    Pawn pawn;
+    Board board;
     @Mock
-    private Game game;
+    Game game;
     
     @Test
     public void oneSquareAhead() {
@@ -33,9 +33,9 @@ public class WhitePawnMoveTest {
         pawn = new Pawn(WHITE, square);
         when(game.getPieces()).thenReturn(Collections.singletonList(pawn));
         board = new Board(game);
-        move = new WhitePawnMove(board, square);
+        movement = new WhitePawnMovement(board, square);
         
-        assertThat(move.path()).containsExactlyInAnyOrder(new Square(Letter.E, 5));
+        assertThat(movement.path()).containsExactlyInAnyOrder(new Square(Letter.E, 5));
     }
 
     @Test
@@ -44,9 +44,9 @@ public class WhitePawnMoveTest {
         pawn = new Pawn(WHITE, square);
         when(game.getPieces()).thenReturn(Collections.singletonList(pawn));
         board = new Board(game);
-        move = new WhitePawnMove(board, square);
+        movement = new WhitePawnMovement(board, square);
 
-        assertThat(move.path()).isEmpty();
+        assertThat(movement.path()).isEmpty();
     }
 
     @Test
@@ -55,9 +55,9 @@ public class WhitePawnMoveTest {
         pawn = new Pawn(WHITE, square);
         when(game.getPieces()).thenReturn(Collections.singletonList(pawn));
         board = new Board(game);
-        move = new WhitePawnMove(board, square);
+        movement = new WhitePawnMovement(board, square);
 
-        assertThat(move.path()).contains(new Square(Letter.E, 4));
+        assertThat(movement.path()).contains(new Square(Letter.E, 4));
     }
 
     @Test
@@ -66,9 +66,9 @@ public class WhitePawnMoveTest {
         pawn = new Pawn(WHITE, square);
         when(game.getPieces()).thenReturn(Collections.singletonList(pawn));
         board = new Board(game);
-        move = new WhitePawnMove(board, square);
+        movement = new WhitePawnMovement(board, square);
 
-        assertThat(move.path()).doesNotContain(new Square(Letter.E, 5));
+        assertThat(movement.path()).doesNotContain(new Square(Letter.E, 5));
     }
 
     @Test
@@ -79,9 +79,9 @@ public class WhitePawnMoveTest {
         Pawn enemy = new Pawn(BLACK, enemySquare);
         when(game.getPieces()).thenReturn(Arrays.asList(pawn, enemy));
         board = new Board(game);
-        move = new WhitePawnMove(board, square);
+        movement = new WhitePawnMovement(board, square);
 
-        assertThat(move.path()).contains(enemySquare);
+        assertThat(movement.path()).contains(enemySquare);
     }
 
     @Test
@@ -92,9 +92,9 @@ public class WhitePawnMoveTest {
         Pawn enemy = new Pawn(BLACK, enemySquare);
         when(game.getPieces()).thenReturn(Arrays.asList(pawn, enemy));
         board = new Board(game);
-        move = new WhitePawnMove(board, square);
+        movement = new WhitePawnMovement(board, square);
 
-        assertThat(move.path()).contains(enemySquare);
+        assertThat(movement.path()).contains(enemySquare);
     }
 
     @Test
@@ -104,9 +104,9 @@ public class WhitePawnMoveTest {
         Pawn friendly = new Pawn(WHITE, new Square(Letter.E, 5));
         when(game.getPieces()).thenReturn(Arrays.asList(pawn, friendly));
         board = new Board(game);
-        move = new WhitePawnMove(board, square);
+        movement = new WhitePawnMovement(board, square);
 
-        assertThat(move.path()).isEmpty();
+        assertThat(movement.path()).isEmpty();
     }
 
     @Test
@@ -116,9 +116,9 @@ public class WhitePawnMoveTest {
         Pawn enemy = new Pawn(BLACK, new Square(Letter.E, 5));
         when(game.getPieces()).thenReturn(Arrays.asList(pawn, enemy));
         board = new Board(game);
-        move = new WhitePawnMove(board, square);
+        movement = new WhitePawnMovement(board, square);
 
-        assertThat(move.path()).isEmpty();
+        assertThat(movement.path()).isEmpty();
     }
 
     @Test
@@ -128,9 +128,9 @@ public class WhitePawnMoveTest {
         Pawn friendly = new Pawn(WHITE, new Square(Letter.E, 4));
         when(game.getPieces()).thenReturn(Arrays.asList(pawn, friendly));
         board = new Board(game);
-        move = new WhitePawnMove(board, square);
+        movement = new WhitePawnMovement(board, square);
 
-        assertThat(move.path()).containsExactlyInAnyOrder(new Square(Letter.E, 3));
+        assertThat(movement.path()).containsExactlyInAnyOrder(new Square(Letter.E, 3));
     }
 
     @Test
@@ -140,9 +140,9 @@ public class WhitePawnMoveTest {
         Pawn enemy = new Pawn(BLACK, new Square(Letter.E, 4));
         when(game.getPieces()).thenReturn(Arrays.asList(pawn, enemy));
         board = new Board(game);
-        move = new WhitePawnMove(board, square);
+        movement = new WhitePawnMovement(board, square);
 
-        assertThat(move.path()).containsExactlyInAnyOrder(new Square(Letter.E, 3));
+        assertThat(movement.path()).containsExactlyInAnyOrder(new Square(Letter.E, 3));
     }
 
     @Test
@@ -151,7 +151,7 @@ public class WhitePawnMoveTest {
         pawn = new Pawn(WHITE, square);
         when(game.getPieces()).thenReturn(Collections.singletonList(pawn));
         board = new Board(game);
-        move = new WhitePawnMove(board, square);
+        movement = new WhitePawnMovement(board, square);
 
         assertThat(pawn.attackMoves(board)).containsExactlyInAnyOrder(
                 new Square(Letter.D, 5),

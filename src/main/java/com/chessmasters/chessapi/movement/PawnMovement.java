@@ -1,4 +1,4 @@
-package com.chessmasters.chessapi.move;
+package com.chessmasters.chessapi.movement;
 
 import com.chessmasters.chessapi.Board;
 import com.chessmasters.chessapi.Square;
@@ -10,15 +10,15 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public abstract class PawnMove extends Move {
+public abstract class PawnMovement extends Movement {
 
     int initialNumber;
     Function<Square, Optional<Square>> moveFunction;
 
-    public PawnMove(Board board,
-                    Square square,
-                    int initialNumber,
-                    Function<Square, Optional<Square>> moveFunction) {
+    public PawnMovement(Board board,
+                        Square square,
+                        int initialNumber,
+                        Function<Square, Optional<Square>> moveFunction) {
         super(board, square);
         this.initialNumber = initialNumber;
         this.moveFunction = moveFunction;

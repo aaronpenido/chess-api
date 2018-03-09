@@ -1,4 +1,4 @@
-package com.chessmasters.chessapi.move;
+package com.chessmasters.chessapi.movement;
 
 import com.chessmasters.chessapi.Board;
 import com.chessmasters.chessapi.Game;
@@ -19,13 +19,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class BlackPawnMoveTest {
+public class BlackPawnMovementTest {
 
-    private BlackPawnMove move;
-    private Pawn pawn;
-    private Board board;
+    BlackPawnMovement movement;
+    Pawn pawn;
+    Board board;
     @Mock
-    private Game game;
+    Game game;
 
     @Test
     public void oneSquareAhead() {
@@ -33,7 +33,7 @@ public class BlackPawnMoveTest {
         pawn = new Pawn(BLACK, square);
         when(game.getPieces()).thenReturn(Collections.singletonList(pawn));
         board = new Board(game);
-        move = new BlackPawnMove(board, square);
+        movement = new BlackPawnMovement(board, square);
 
         assertThat(pawn.moves(board)).containsExactlyInAnyOrder(new Square(Letter.E, 3));
     }
@@ -44,7 +44,7 @@ public class BlackPawnMoveTest {
         pawn = new Pawn(BLACK, square);
         when(game.getPieces()).thenReturn(Collections.singletonList(pawn));
         board = new Board(game);
-        move = new BlackPawnMove(board, square);
+        movement = new BlackPawnMovement(board, square);
 
         assertThat(pawn.moves(board)).isEmpty();
     }
@@ -55,7 +55,7 @@ public class BlackPawnMoveTest {
         pawn = new Pawn(BLACK, square);
         when(game.getPieces()).thenReturn(Collections.singletonList(pawn));
         board = new Board(game);
-        move = new BlackPawnMove(board, square);
+        movement = new BlackPawnMovement(board, square);
 
         assertThat(pawn.moves(board)).contains(new Square(Letter.E, 5));
     }
@@ -66,7 +66,7 @@ public class BlackPawnMoveTest {
         pawn = new Pawn(BLACK, square);
         when(game.getPieces()).thenReturn(Collections.singletonList(pawn));
         board = new Board(game);
-        move = new BlackPawnMove(board, square);
+        movement = new BlackPawnMovement(board, square);
 
         assertThat(pawn.moves(board)).doesNotContain(new Square(Letter.E, 4));
     }
@@ -79,7 +79,7 @@ public class BlackPawnMoveTest {
         Pawn enemy = new Pawn(WHITE, enemySquare);
         when(game.getPieces()).thenReturn(Arrays.asList(pawn, enemy));
         board = new Board(game);
-        move = new BlackPawnMove(board, square);
+        movement = new BlackPawnMovement(board, square);
 
         assertThat(pawn.moves(board)).contains(enemySquare);
     }
@@ -92,7 +92,7 @@ public class BlackPawnMoveTest {
         Pawn enemy = new Pawn(WHITE, enemySquare);
         when(game.getPieces()).thenReturn(Arrays.asList(pawn, enemy));
         board = new Board(game);
-        move = new BlackPawnMove(board, square);
+        movement = new BlackPawnMovement(board, square);
 
         assertThat(pawn.moves(board)).contains(enemySquare);
     }
@@ -104,7 +104,7 @@ public class BlackPawnMoveTest {
         Pawn enemy = new Pawn(WHITE, new Square(Letter.E, 3));
         when(game.getPieces()).thenReturn(Arrays.asList(pawn, enemy));
         board = new Board(game);
-        move = new BlackPawnMove(board, square);
+        movement = new BlackPawnMovement(board, square);
 
         assertThat(pawn.moves(board)).isEmpty();
     }
@@ -116,7 +116,7 @@ public class BlackPawnMoveTest {
         Pawn friendly = new Pawn(BLACK, new Square(Letter.E, 5));
         when(game.getPieces()).thenReturn(Arrays.asList(pawn, friendly));
         board = new Board(game);
-        move = new BlackPawnMove(board, square);
+        movement = new BlackPawnMovement(board, square);
 
         assertThat(pawn.moves(board)).containsExactlyInAnyOrder(new Square(Letter.E, 6));
     }
@@ -128,7 +128,7 @@ public class BlackPawnMoveTest {
         Pawn enemy = new Pawn(WHITE, new Square(Letter.E, 5));
         when(game.getPieces()).thenReturn(Arrays.asList(pawn, enemy));
         board = new Board(game);
-        move = new BlackPawnMove(board, square);
+        movement = new BlackPawnMovement(board, square);
 
         assertThat(pawn.moves(board)).containsExactlyInAnyOrder(new Square(Letter.E, 6));
     }
@@ -139,7 +139,7 @@ public class BlackPawnMoveTest {
         pawn = new Pawn(BLACK, square);
         when(game.getPieces()).thenReturn(Collections.singletonList(pawn));
         board = new Board(game);
-        move = new BlackPawnMove(board, square);
+        movement = new BlackPawnMovement(board, square);
 
         assertThat(pawn.attackMoves(board)).containsExactlyInAnyOrder(
                 new Square(Letter.D, 3),
