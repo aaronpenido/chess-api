@@ -24,30 +24,29 @@ public class Board {
     }
 
     public void movePiece(@NotNull final Player player,
-                          @NotNull final Square from,
-                          @NotNull final Square destination) {
+                          @NotNull Move move) {
 
-        Piece pieceFrom = getPieceFromSquare(from);
-        Piece pieceTo = getPieceFromSquare(destination);
+        Piece originPiece = getPieceFromSquare(move.getOrigin());
+        Piece destinationPiece = getPieceFromSquare(move.getDestination());
 
-        if(pieceFrom == null) {
-            throw new PieceNotFoundException(from);
+        if(originPiece == null) {
+            throw new PieceNotFoundException(move.getOrigin());
         }
 
-        if(!isColorMoveValid(player, pieceFrom)) {
+        if(!isColorMoveValid(player, originPiece)) {
             throw new InvalidMoveException("It's opponent's turn");
         }
 
-        if(!isMoveValid(pieceFrom, destination)) {
+        if(!isMoveValid(originPiece, move.getDestination())) {
             throw new InvalidMoveException("Invalid move");
         }
 
-        if(pieceTo != null) {
-            removePieceFromList(pieceTo);
+        if(destinationPiece != null) {
+            removePieceFromList(destinationPiece);
         }
 
-        pieceFrom.setSquare(destination);
-        nextMoveColor = Color.opposite(pieceFrom.getColor());
+        originPiece.setSquare(move.getDestination());
+        nextMoveColor = Color.opposite(originPiece.getColor());
     }
 
     private boolean isColorMoveValid(@NotNull final Player player, @NotNull final Piece piece) {

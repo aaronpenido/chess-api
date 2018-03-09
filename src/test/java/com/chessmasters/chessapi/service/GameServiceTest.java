@@ -1,6 +1,7 @@
 package com.chessmasters.chessapi.service;
 
 import com.chessmasters.chessapi.Game;
+import com.chessmasters.chessapi.Move;
 import com.chessmasters.chessapi.Player;
 import com.chessmasters.chessapi.Square;
 import com.chessmasters.chessapi.enums.Letter;
@@ -100,7 +101,7 @@ public class GameServiceTest {
         Player player = new Player(WHITE, playerId, null);
         Square origin = new Square(Letter.E, 2);
         Square destination = new Square(Letter.E, 3);
-        GameRequest gameRequest = new GameRequest(playerId, origin, destination);
+        GameRequest gameRequest = new GameRequest(playerId, new Move(origin, destination));
 
         when(playerRepository.findOne(any(Long.class))).thenReturn(player);
         when(game.getPieces()).thenReturn(Arrays.asList(new Pawn(WHITE, origin)));
@@ -153,9 +154,9 @@ public class GameServiceTest {
     public void throwGameNotFoundExceptionWhenTryingToMovePieceOnNonExistentGame() {
         final Long gameId = 1L;
         final Long playerId = 1L;
-        Square from = new Square(Letter.E, 2);
+        Square origin = new Square(Letter.E, 2);
         Square destination = new Square(Letter.E, 3);
-        GameRequest request = new GameRequest(playerId, from, destination);
+        GameRequest request = new GameRequest(playerId, new Move(origin, destination));
 
         assertThatThrownBy(() -> service.movePiece(gameId, request))
                 .isInstanceOf(GameNotFoundException.class);

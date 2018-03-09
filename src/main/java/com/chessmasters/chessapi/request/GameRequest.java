@@ -1,33 +1,28 @@
 package com.chessmasters.chessapi.request;
 
+import com.chessmasters.chessapi.Move;
 import com.chessmasters.chessapi.Square;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class GameRequest {
 
     private final Long playerId;
-    private Square from;
-    private Square destination;
+    private Move move;
 
     public GameRequest(@JsonProperty("playerId") Long playerId) {
         this.playerId = playerId;
     }
 
-    public GameRequest(Long playerId, Square from, Square destination) {
+    public GameRequest(Long playerId, Move move) {
         this.playerId = playerId;
-        this.from = from;
-        this.destination = destination;
+        this.move = move;
     }
 
     public Long getPlayerId() {
         return playerId;
     }
 
-    public Square getFrom() {
-        return from;
-    }
-
-    public Square getDestination() {
-        return destination;
+    public Move getMove() {
+        return move;
     }
 }

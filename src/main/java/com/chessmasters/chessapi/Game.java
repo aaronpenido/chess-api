@@ -76,7 +76,7 @@ public class Game {
         setPlayersColors();
     }
 
-    public void movePiece(Player movePlayer, Square from, Square destination) {
+    public void movePiece(Player movePlayer, Move move) {
         if(pieces == null) {
             throw new GameNotStartedException(id);
         }
@@ -86,7 +86,7 @@ public class Game {
         }
 
         Board board = new Board(this);
-        board.movePiece(movePlayer, from, destination);
+        board.movePiece(movePlayer, move);
     }
 
     private void initializeKings() {

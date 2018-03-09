@@ -93,4 +93,26 @@ public class GameTest {
         assertThat(game.getPlayer2().getColor()).isNotNull();
         assertThat(game.getPlayer().getColor()).isNotEqualTo(game.getPlayer2().getColor());
     }
+
+    @Test
+    public void movePiece() {
+        Square from = new Square(Letter.E, 2);
+        Square destination = new Square(Letter.E, 4);
+
+        game.movePiece(new Player(WHITE), new Move(from, destination));
+
+        assertThat(game.getPieces()).contains(new Pawn(WHITE, destination));
+    }
+
+    @Test
+    public void throwExceptionWhenTryingToMovePieceOnNonStartedGame() {
+        Square from = new Square(Letter.E, 2);
+        Square destination = new Square(Letter.E, 3);
+        game = new Game();
+        final Long gameId = 1L;
+        ReflectionTestUtils.setField(game, "id", gameId);
+
+        assertThatThrownBy(() -> game.movePiece(new Player(WHITE), new Move(from, destination)))
+                .isInstanceOf(GameNotStartedException.class);
+    }
 }

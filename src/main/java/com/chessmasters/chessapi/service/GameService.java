@@ -42,7 +42,7 @@ public class GameService {
 
         Player player = playerById(playerId);
 
-        game.movePiece(player, gameRequest.getFrom(), gameRequest.getDestination());
+        game.movePiece(player, gameRequest.getMove());
 
         return save(game);
     }
