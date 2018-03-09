@@ -2,9 +2,9 @@ package com.chessmasters.chessapi.piece;
 
 import com.chessmasters.chessapi.*;
 import com.chessmasters.chessapi.enums.Color;
-import com.chessmasters.chessapi.piece.move.BlackPawnMove;
-import com.chessmasters.chessapi.piece.move.PawnMove;
-import com.chessmasters.chessapi.piece.move.WhitePawnMove;
+import com.chessmasters.chessapi.move.BlackPawnMove;
+import com.chessmasters.chessapi.move.PawnMove;
+import com.chessmasters.chessapi.move.WhitePawnMove;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;

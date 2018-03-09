@@ -1,4 +1,4 @@
-package com.chessmasters.chessapi.piece.move;
+package com.chessmasters.chessapi.move;
 
 import com.chessmasters.chessapi.Board;
 import com.chessmasters.chessapi.Square;

@@ -3,7 +3,7 @@ package com.chessmasters.chessapi.piece;
 import com.chessmasters.chessapi.Board;
 import com.chessmasters.chessapi.enums.Color;
 import com.chessmasters.chessapi.Square;
-import com.chessmasters.chessapi.piece.move.StraightMove;
+import com.chessmasters.chessapi.move.StraightMove;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
