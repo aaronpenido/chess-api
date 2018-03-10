@@ -8,7 +8,6 @@ import com.chessmasters.chessapi.movement.WhitePawnMovement;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Transient;
 import java.util.List;
 
 import static com.chessmasters.chessapi.enums.Color.*;
@@ -16,9 +15,6 @@ import static com.chessmasters.chessapi.enums.Color.*;
 @Entity(name = "Pawn")
 @DiscriminatorValue("Pawn")
 public class Pawn extends Piece {
-
-    @Transient
-    private PawnMovement pawnMove;
 
     public Pawn() {
     }
@@ -29,22 +25,17 @@ public class Pawn extends Piece {
 
     @Override
     public List<Square> moves(Board board) {
-        if(color.equals(WHITE)) {
-            pawnMove = new WhitePawnMovement(board, square);
-        } else {
-            pawnMove = new BlackPawnMovement(board, square);
-        }
-
-        return pawnMove.path();
+        return createPawnMove(board).path();
     }
 
     public List<Square> attackMoves(Board board) {
-        if(color.equals(WHITE)) {
-            pawnMove = new WhitePawnMovement(board, square);
-        } else {
-            pawnMove = new BlackPawnMovement(board, square);
-        }
+        return createPawnMove(board).attackMoves();
+    }
 
-        return pawnMove.attackMoves();
+    private PawnMovement createPawnMove(Board board) {
+        if(color.equals(WHITE)) {
+            return new WhitePawnMovement(board, square);
+        }
+        return new BlackPawnMovement(board, square);
     }
 }
