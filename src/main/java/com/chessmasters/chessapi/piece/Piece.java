@@ -16,6 +16,7 @@ public abstract class Piece {
     @Id
     @GeneratedValue
     private Long id;
+    @Enumerated(EnumType.STRING)
     Color color;
     @AttributeOverrides( {
             @AttributeOverride(name="letter", column = @Column(name="letter") ),

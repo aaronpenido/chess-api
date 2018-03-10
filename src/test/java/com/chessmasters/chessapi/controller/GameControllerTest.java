@@ -26,7 +26,7 @@ public class GameControllerTest {
     @Test
     public void registerGame() {
         final Long playerId = 1L;
-        GameRequest request = new GameRequest(playerId);
+        GameRequest request = new GameRequest(playerId, null);
         Player player = new Player(WHITE, playerId, null);
         Game game = new Game(player);
         when(service.registerGame(request)).thenReturn(game);
@@ -42,7 +42,7 @@ public class GameControllerTest {
         final Long playerId = 2L;
         Player player = new Player(WHITE, playerId, null);
         Game game = new Game(player);
-        GameRequest request = new GameRequest(playerId);
+        GameRequest request = new GameRequest(playerId, null);
 
         when(service.gameById(gameId)).thenReturn(game);
         when(service.startGame(gameId, request)).thenReturn(game);
@@ -58,7 +58,7 @@ public class GameControllerTest {
         final Long playerId = 1L;
         Player player = new Player(WHITE, playerId, null);
         Game game = new Game(player);
-        GameRequest request = new GameRequest(playerId);
+        GameRequest request = new GameRequest(playerId, null);
 
         when(service.gameById(gameId)).thenReturn(game);
         when(service.movePiece(gameId, request)).thenReturn(game);

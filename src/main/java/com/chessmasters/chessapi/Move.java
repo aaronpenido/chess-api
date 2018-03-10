@@ -5,6 +5,11 @@ public class Move {
     private final Square origin;
     private final Square destination;
 
+    public Move() {
+        this.origin = null;
+        this.destination = null;
+    }
+
     public Move(Square origin, Square destination) {
         this.origin = origin;
         this.destination = destination;

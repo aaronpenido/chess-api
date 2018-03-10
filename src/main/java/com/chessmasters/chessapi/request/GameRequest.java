@@ -9,11 +9,7 @@ public class GameRequest {
     private final Long playerId;
     private Move move;
 
-    public GameRequest(@JsonProperty("playerId") Long playerId) {
-        this.playerId = playerId;
-    }
-
-    public GameRequest(Long playerId, Move move) {
+    public GameRequest(@JsonProperty("playerId") Long playerId, @JsonProperty("move") Move move) {
         this.playerId = playerId;
         this.move = move;
     }

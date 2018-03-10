@@ -2,6 +2,8 @@ package com.chessmasters.chessapi;
 
 import com.chessmasters.chessapi.enums.Letter;
 import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -9,6 +11,7 @@ import java.util.Optional;
 public class Square {
 
     private int number;
+    @Enumerated(EnumType.STRING)
     private Letter letter;
 
     public Square() {

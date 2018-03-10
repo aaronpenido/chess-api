@@ -43,7 +43,7 @@ public class GameServiceTest {
     public void registerGame() {
         final Long playerId = 1L;
         Player player = new Player(WHITE, playerId, null);
-        GameRequest gameRequest = new GameRequest(playerId);
+        GameRequest gameRequest = new GameRequest(playerId, null);
 
         when(playerRepository.findOne(any(Long.class))).thenReturn(player);
         when(repository.save(any(Game.class))).thenReturn(new Game(player));
@@ -56,7 +56,7 @@ public class GameServiceTest {
     @Test
     public void saveGameOnDatabase() {
         final Long playerId = 1L;
-        GameRequest request = new GameRequest(playerId);
+        GameRequest request = new GameRequest(playerId, null);
 
         when(playerRepository.findOne(any(Long.class))).thenReturn(new Player());
         service.registerGame(request);
@@ -66,7 +66,7 @@ public class GameServiceTest {
     @Test
     public void gameContainsPlayerWithGivenPlayerId() {
         final Long playerId = 1L;
-        GameRequest gameRequest = new GameRequest(playerId);
+        GameRequest gameRequest = new GameRequest(playerId, null);
         Player player = new Player(WHITE, playerId, null);
         when(playerRepository.findOne(any(Long.class))).thenReturn(player);
         when(repository.save(any(Game.class))).thenReturn(new Game(player));
@@ -81,7 +81,7 @@ public class GameServiceTest {
         final Long gameId = 1L;
         final Long player2Id = 2L;
         Player player2 = new Player(WHITE, player2Id, null);
-        GameRequest gameRequest = new GameRequest(player2Id);
+        GameRequest gameRequest = new GameRequest(player2Id, null);
 
         when(playerRepository.findOne(any(Long.class))).thenReturn(player2);
         when(repository.findOne(any(Long.class))).thenReturn(game);
@@ -116,7 +116,7 @@ public class GameServiceTest {
     @Test
     public void throwPlayerNotFoundExceptionWhenTryingToRegisterGameWithNonExistentPlayer() {
         final Long playerId = 1L;
-        GameRequest request = new GameRequest(playerId);
+        GameRequest request = new GameRequest(playerId, null);
 
         when(playerRepository.findOne(any(Long.class))).thenReturn(null);
 
@@ -128,7 +128,7 @@ public class GameServiceTest {
     public void throwPlayerNotFoundExceptionWhenTryingToStartGameWithNonExistentPlayer() {
         final Long playerId = 1L;
         final Long gameId = 1L;
-        GameRequest request = new GameRequest(playerId);
+        GameRequest request = new GameRequest(playerId, null);
 
         when(playerRepository.findOne(any(Long.class))).thenReturn(null);
         when(repository.findOne(any(Long.class))).thenReturn(game);
@@ -141,7 +141,7 @@ public class GameServiceTest {
     public void throwGameNotFoundExceptionWhenTryingToStartNonExistentGame() {
         final Long playerId = 1L;
         final Long gameId = 1L;
-        GameRequest request = new GameRequest(playerId);
+        GameRequest request = new GameRequest(playerId, null);
 
         when(playerRepository.findOne(any(Long.class))).thenReturn(new Player());
         when(repository.findOne(any(Long.class))).thenReturn(null);
