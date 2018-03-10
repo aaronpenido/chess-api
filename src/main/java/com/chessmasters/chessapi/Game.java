@@ -28,6 +28,9 @@ public class Game {
     @MapsId
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Piece> pieces;
+    @MapsId
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Move> moves;
 
     public Game() {
         this(null);
@@ -60,9 +63,17 @@ public class Game {
         return player2;
     }
 
+    public List<Move> moves() {
+        return moves;
+    }
+
     public void start(Player player) {
         if(pieces == null) {
             pieces = new ArrayList<>();
+        }
+
+        if(moves == null) {
+            moves = new ArrayList<>();
         }
 
         initializeKings();
@@ -87,6 +98,8 @@ public class Game {
 
         Board board = new Board(this);
         board.movePiece(movePlayer, move);
+
+        this.moves.add(move);
     }
 
     private void initializeKings() {

@@ -1,9 +1,8 @@
 package com.chessmasters.chessapi;
 
 import com.chessmasters.chessapi.enums.Letter;
-import javax.persistence.Embeddable;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+
+import javax.persistence.*;
 import java.util.Objects;
 import java.util.Optional;
 

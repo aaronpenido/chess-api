@@ -115,4 +115,15 @@ public class GameTest {
         assertThatThrownBy(() -> game.movePiece(new Player(WHITE), new Move(from, destination)))
                 .isInstanceOf(GameNotStartedException.class);
     }
+
+    @Test
+    public void gameHasMoveHistory() {
+        Square from = new Square(Letter.E, 2);
+        Square destination = new Square(Letter.E, 4);
+
+        game.movePiece(new Player(WHITE), new Move(from, destination));
+
+        assertThat(game.moves()).isNotNull();
+        assertThat(game.moves().size()).isEqualTo(1);
+    }
 }

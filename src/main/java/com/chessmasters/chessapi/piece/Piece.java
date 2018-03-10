@@ -18,10 +18,7 @@ public abstract class Piece {
     private Long id;
     @Enumerated(EnumType.STRING)
     Color color;
-    @AttributeOverrides( {
-            @AttributeOverride(name="letter", column = @Column(name="letter") ),
-            @AttributeOverride(name="number", column = @Column(name="number") )
-    })
+    @Embedded
     Square square;
 
     public Piece() {
