@@ -126,4 +126,14 @@ public class GameTest {
         assertThat(game.moves()).isNotNull();
         assertThat(game.moves().size()).isEqualTo(1);
     }
+
+    @Test
+    public void moveHistoryOrderIncreasesByOne() {
+        Square from = new Square(Letter.E, 2);
+        Square destination = new Square(Letter.E, 4);
+
+        game.movePiece(new Player(WHITE), new Move(from, destination));
+
+        assertThat(game.moves().get(0).getMoveOrder()).isEqualTo(1);
+    }
 }

@@ -99,7 +99,16 @@ public class Game {
         Board board = new Board(this);
         board.movePiece(movePlayer, move);
 
+        move.setMoveOrder(generateOrder());
         this.moves.add(move);
+    }
+
+    private int generateOrder() {
+        if(moves != null) {
+            return (int) moves.stream().count() + 1;
+        }
+
+        return 0;
     }
 
     private void initializeKings() {
