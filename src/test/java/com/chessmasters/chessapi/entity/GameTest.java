@@ -1,8 +1,8 @@
-package com.chessmasters.chessapi;
+package com.chessmasters.chessapi.entity;
 
 import com.chessmasters.chessapi.enums.Letter;
 import com.chessmasters.chessapi.exception.GameNotStartedException;
-import com.chessmasters.chessapi.piece.*;
+import com.chessmasters.chessapi.entity.piece.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.test.util.ReflectionTestUtils;

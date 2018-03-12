@@ -1,24 +1,22 @@
 package com.chessmasters.chessapi.service;
 
-import com.chessmasters.chessapi.Game;
-import com.chessmasters.chessapi.Move;
-import com.chessmasters.chessapi.Player;
-import com.chessmasters.chessapi.Square;
+import com.chessmasters.chessapi.entity.Game;
+import com.chessmasters.chessapi.entity.Move;
+import com.chessmasters.chessapi.entity.Player;
+import com.chessmasters.chessapi.entity.Square;
 import com.chessmasters.chessapi.enums.Letter;
 import com.chessmasters.chessapi.exception.GameNotFoundException;
 import com.chessmasters.chessapi.exception.PlayerNotFoundException;
-import com.chessmasters.chessapi.piece.*;
+import com.chessmasters.chessapi.entity.piece.*;
 import com.chessmasters.chessapi.repository.GameRepository;
 import com.chessmasters.chessapi.repository.PlayerRepository;
 import com.chessmasters.chessapi.request.GameRequest;
-import com.chessmasters.chessapi.response.GameResponse;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import static com.chessmasters.chessapi.enums.Color.WHITE;

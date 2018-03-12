@@ -1,6 +1,6 @@
 package com.chessmasters.chessapi.repository;
 
-import com.chessmasters.chessapi.Game;
+import com.chessmasters.chessapi.entity.Game;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

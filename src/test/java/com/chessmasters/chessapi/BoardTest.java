@@ -1,8 +1,12 @@
 package com.chessmasters.chessapi;
 
+import com.chessmasters.chessapi.entity.Game;
+import com.chessmasters.chessapi.entity.Move;
+import com.chessmasters.chessapi.entity.Player;
+import com.chessmasters.chessapi.entity.Square;
 import com.chessmasters.chessapi.enums.Letter;
 import com.chessmasters.chessapi.exception.InvalidMoveException;
-import com.chessmasters.chessapi.piece.*;
+import com.chessmasters.chessapi.entity.piece.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;

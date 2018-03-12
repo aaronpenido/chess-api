@@ -1,11 +1,11 @@
 package com.chessmasters.chessapi.movement;
 
 import com.chessmasters.chessapi.Board;
-import com.chessmasters.chessapi.Game;
-import com.chessmasters.chessapi.Square;
-import com.chessmasters.chessapi.piece.King;
-import com.chessmasters.chessapi.piece.Pawn;
-import com.chessmasters.chessapi.piece.Piece;
+import com.chessmasters.chessapi.entity.Game;
+import com.chessmasters.chessapi.entity.Square;
+import com.chessmasters.chessapi.entity.piece.King;
+import com.chessmasters.chessapi.entity.piece.Pawn;
+import com.chessmasters.chessapi.entity.piece.Piece;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

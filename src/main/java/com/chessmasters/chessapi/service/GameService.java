@@ -1,7 +1,7 @@
 package com.chessmasters.chessapi.service;
 
-import com.chessmasters.chessapi.Game;
-import com.chessmasters.chessapi.Player;
+import com.chessmasters.chessapi.entity.Game;
+import com.chessmasters.chessapi.entity.Player;
 import com.chessmasters.chessapi.exception.GameNotFoundException;
 import com.chessmasters.chessapi.exception.PlayerNotFoundException;
 import com.chessmasters.chessapi.repository.GameRepository;

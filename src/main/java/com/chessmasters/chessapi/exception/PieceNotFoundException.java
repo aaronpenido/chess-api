@@ -1,6 +1,6 @@
 package com.chessmasters.chessapi.exception;
 
-import com.chessmasters.chessapi.Square;
+import com.chessmasters.chessapi.entity.Square;
 
 public class PieceNotFoundException extends RuntimeException {
 

@@ -1,9 +1,13 @@
 package com.chessmasters.chessapi;
 
+import com.chessmasters.chessapi.entity.Game;
+import com.chessmasters.chessapi.entity.Move;
+import com.chessmasters.chessapi.entity.Player;
+import com.chessmasters.chessapi.entity.Square;
 import com.chessmasters.chessapi.enums.Color;
 import com.chessmasters.chessapi.exception.InvalidMoveException;
 import com.chessmasters.chessapi.exception.PieceNotFoundException;
-import com.chessmasters.chessapi.piece.Piece;
+import com.chessmasters.chessapi.entity.piece.Piece;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;

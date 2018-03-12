@@ -1,7 +1,6 @@
 package com.chessmasters.chessapi.request;
 
-import com.chessmasters.chessapi.Move;
-import com.chessmasters.chessapi.Square;
+import com.chessmasters.chessapi.entity.Move;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class GameRequest {

@@ -1,4 +1,6 @@
-package com.chessmasters.chessapi;
+package com.chessmasters.chessapi.entity;
+
+import com.chessmasters.chessapi.entity.Square;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;

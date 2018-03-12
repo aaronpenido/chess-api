@@ -1,6 +1,6 @@
 package com.chessmasters.chessapi.response;
 
-import com.chessmasters.chessapi.Player;
+import com.chessmasters.chessapi.entity.Player;
 
 public class PlayerResponse {
 

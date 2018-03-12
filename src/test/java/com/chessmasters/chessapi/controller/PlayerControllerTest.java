@@ -1,6 +1,6 @@
 package com.chessmasters.chessapi.controller;
 
-import com.chessmasters.chessapi.Player;
+import com.chessmasters.chessapi.entity.Player;
 import com.chessmasters.chessapi.request.PlayerRequest;
 import com.chessmasters.chessapi.response.PlayerResponse;
 import com.chessmasters.chessapi.service.PlayerService;

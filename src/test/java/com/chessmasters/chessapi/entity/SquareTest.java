@@ -1,5 +1,6 @@
-package com.chessmasters.chessapi;
+package com.chessmasters.chessapi.entity;
 
+import com.chessmasters.chessapi.entity.Square;
 import com.chessmasters.chessapi.enums.Letter;
 import org.junit.Test;
 import java.util.Optional;

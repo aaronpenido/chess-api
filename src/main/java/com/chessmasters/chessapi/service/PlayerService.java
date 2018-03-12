@@ -1,6 +1,6 @@
 package com.chessmasters.chessapi.service;
 
-import com.chessmasters.chessapi.Player;
+import com.chessmasters.chessapi.entity.Player;
 import com.chessmasters.chessapi.repository.PlayerRepository;
 import com.chessmasters.chessapi.request.PlayerRequest;
 import org.springframework.stereotype.Service;

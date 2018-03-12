@@ -1,8 +1,8 @@
 package com.chessmasters.chessapi.response;
 
-import com.chessmasters.chessapi.Game;
-import com.chessmasters.chessapi.Move;
-import com.chessmasters.chessapi.piece.Piece;
+import com.chessmasters.chessapi.entity.Game;
+import com.chessmasters.chessapi.entity.Move;
+import com.chessmasters.chessapi.entity.piece.Piece;
 
 import java.util.List;
 

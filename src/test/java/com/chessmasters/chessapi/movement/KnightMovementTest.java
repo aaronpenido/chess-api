@@ -1,10 +1,10 @@
 package com.chessmasters.chessapi.movement;
 
 import com.chessmasters.chessapi.Board;
-import com.chessmasters.chessapi.Game;
+import com.chessmasters.chessapi.entity.Game;
 import com.chessmasters.chessapi.enums.Letter;
-import com.chessmasters.chessapi.Square;
-import com.chessmasters.chessapi.piece.Knight;
+import com.chessmasters.chessapi.entity.Square;
+import com.chessmasters.chessapi.entity.piece.Knight;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
