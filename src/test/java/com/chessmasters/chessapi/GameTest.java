@@ -96,32 +96,32 @@ public class GameTest {
 
     @Test
     public void movePiece() {
-        Square from = new Square(Letter.E, 2);
+        Pawn pawn = new Pawn(WHITE, new Square(Letter.E, 2));
         Square destination = new Square(Letter.E, 4);
 
-        game.movePiece(new Player(WHITE), new Move(from, destination));
+        game.movePiece(new Player(WHITE), new Move(pawn, destination));
 
-        assertThat(game.getPieces()).contains(new Pawn(WHITE, destination));
+        assertThat(game.getPieces()).contains(pawn);
     }
 
     @Test
     public void throwExceptionWhenTryingToMovePieceOnNonStartedGame() {
-        Square from = new Square(Letter.E, 2);
         Square destination = new Square(Letter.E, 3);
         game = new Game();
         final Long gameId = 1L;
         ReflectionTestUtils.setField(game, "id", gameId);
 
-        assertThatThrownBy(() -> game.movePiece(new Player(WHITE), new Move(from, destination)))
+        assertThatThrownBy(() -> game.movePiece(new Player(WHITE),
+                new Move(new Pawn(WHITE, new Square(Letter.E, 2)), destination)))
                 .isInstanceOf(GameNotStartedException.class);
     }
 
     @Test
     public void gameHasMoveHistory() {
-        Square from = new Square(Letter.E, 2);
         Square destination = new Square(Letter.E, 4);
 
-        game.movePiece(new Player(WHITE), new Move(from, destination));
+        game.movePiece(new Player(WHITE),
+                new Move(new Pawn(WHITE, new Square(Letter.E, 2)), destination));
 
         assertThat(game.moves()).isNotNull();
         assertThat(game.moves().size()).isEqualTo(1);
@@ -129,10 +129,10 @@ public class GameTest {
 
     @Test
     public void moveHistoryOrderIncreasesByOne() {
-        Square from = new Square(Letter.E, 2);
         Square destination = new Square(Letter.E, 4);
 
-        game.movePiece(new Player(WHITE), new Move(from, destination));
+        game.movePiece(new Player(WHITE), new Move(
+                new Pawn(WHITE, new Square(Letter.E, 2)), destination));
 
         assertThat(game.moves().get(0).getMoveOrder()).isEqualTo(1);
     }

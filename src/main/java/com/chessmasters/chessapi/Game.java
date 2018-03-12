@@ -87,6 +87,7 @@ public class Game {
         setPlayersColors();
     }
 
+    //TODO: Put @JSONIgnore in all not necessary fields
     public void movePiece(Player movePlayer, Move move) {
         if(pieces == null) {
             throw new GameNotStartedException(id);
@@ -97,7 +98,7 @@ public class Game {
         }
 
         Board board = new Board(this);
-        board.movePiece(movePlayer, move);
+        pieces = board.movePiece(movePlayer, move);
 
         move.setMoveOrder(generateOrder());
         this.moves.add(move);

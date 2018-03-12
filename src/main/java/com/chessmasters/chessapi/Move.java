@@ -1,12 +1,13 @@
 package com.chessmasters.chessapi;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
+import com.chessmasters.chessapi.piece.Piece;
+
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Move {
@@ -14,31 +15,23 @@ public class Move {
     @Id
     @GeneratedValue
     private Long id;
+    @MapsId
+    @OneToOne
+    private Piece piece;
     @Embedded
-    private Square origin;
-    @AttributeOverrides( {
-            @AttributeOverride(name="letter", column = @Column(name="destinationletter") ),
-            @AttributeOverride(name="number", column = @Column(name="destinationnumber") )
-    })
     private Square destination;
     private int moveOrder;
 
     public Move() {
     }
 
-    public Move(Square origin, Square destination) {
-        this.origin = origin;
+    public Move(Piece piece, Square destination) {
+        this.piece = piece;
         this.destination = destination;
     }
 
-    public Move(Square origin, Square destination, int moveOrder) {
-        this.origin = origin;
-        this.destination = destination;
-        this.moveOrder = moveOrder;
-    }
-
-    public Square getOrigin() {
-        return origin;
+    public Piece getPiece() {
+        return piece;
     }
 
     public Square getDestination() {

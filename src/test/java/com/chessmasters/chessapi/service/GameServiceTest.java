@@ -98,13 +98,13 @@ public class GameServiceTest {
     @Test
     public void movePiece() {
         final Long playerId = 1L;
+        final Pawn pawn = new Pawn(WHITE, new Square(Letter.E, 2));
         Player player = new Player(WHITE, playerId, null);
-        Square origin = new Square(Letter.E, 2);
         Square destination = new Square(Letter.E, 3);
-        GameRequest gameRequest = new GameRequest(playerId, new Move(origin, destination));
+        GameRequest gameRequest = new GameRequest(playerId, new Move(pawn, destination));
 
         when(playerRepository.findOne(any(Long.class))).thenReturn(player);
-        when(game.getPieces()).thenReturn(Arrays.asList(new Pawn(WHITE, origin)));
+        when(game.getPieces()).thenReturn(Arrays.asList(pawn));
         when(repository.findOne(any(Long.class))).thenReturn(game);
         when(repository.save(any(Game.class))).thenReturn(game);
 
@@ -154,9 +154,9 @@ public class GameServiceTest {
     public void throwGameNotFoundExceptionWhenTryingToMovePieceOnNonExistentGame() {
         final Long gameId = 1L;
         final Long playerId = 1L;
-        Square origin = new Square(Letter.E, 2);
         Square destination = new Square(Letter.E, 3);
-        GameRequest request = new GameRequest(playerId, new Move(origin, destination));
+        GameRequest request = new GameRequest(playerId,
+                new Move(new Pawn(WHITE, new Square(Letter.E, 2)), destination));
 
         assertThatThrownBy(() -> service.movePiece(gameId, request))
                 .isInstanceOf(GameNotFoundException.class);

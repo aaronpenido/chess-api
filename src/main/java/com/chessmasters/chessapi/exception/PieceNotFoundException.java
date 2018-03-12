@@ -4,7 +4,7 @@ import com.chessmasters.chessapi.Square;
 
 public class PieceNotFoundException extends RuntimeException {
 
-    public PieceNotFoundException(Square square) {
-        super(String.format("Piece in square %s was not found", square));
+    public PieceNotFoundException() {
+        super("Piece in square was not found");
     }
 }

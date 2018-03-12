@@ -23,14 +23,14 @@ public class Board {
         return pieces;
     }
 
-    public void movePiece(@NotNull final Player player,
+    public List<Piece> movePiece(@NotNull final Player player,
                           @NotNull Move move) {
 
-        Piece originPiece = getPieceFromSquare(move.getOrigin());
+        Piece originPiece = move.getPiece();
         Piece destinationPiece = getPieceFromSquare(move.getDestination());
 
         if(originPiece == null) {
-            throw new PieceNotFoundException(move.getOrigin());
+            throw new PieceNotFoundException();
         }
 
         if(!isColorMoveValid(player, originPiece)) {
@@ -45,8 +45,12 @@ public class Board {
             removePieceFromList(destinationPiece);
         }
 
+        removePieceFromList(originPiece);
         originPiece.setSquare(move.getDestination());
+        pieces.add(originPiece);
         nextMoveColor = Color.opposite(originPiece.getColor());
+
+        return pieces;
     }
 
     private boolean isColorMoveValid(@NotNull final Player player, @NotNull final Piece piece) {
