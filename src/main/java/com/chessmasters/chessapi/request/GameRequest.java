@@ -1,14 +1,14 @@
 package com.chessmasters.chessapi.request;
 
-import com.chessmasters.chessapi.entity.Move;
+import com.chessmasters.chessapi.model.GameMove;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class GameRequest {
 
     private final Long playerId;
-    private Move move;
+    private GameMove move;
 
-    public GameRequest(@JsonProperty("playerId") Long playerId, @JsonProperty("move") Move move) {
+    public GameRequest(@JsonProperty("playerId") Long playerId, @JsonProperty("move") GameMove move) {
         this.playerId = playerId;
         this.move = move;
     }
@@ -17,7 +17,7 @@ public class GameRequest {
         return playerId;
     }
 
-    public Move getMove() {
+    public GameMove getMove() {
         return move;
     }
 }

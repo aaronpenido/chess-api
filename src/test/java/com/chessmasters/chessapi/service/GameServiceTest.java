@@ -1,13 +1,13 @@
 package com.chessmasters.chessapi.service;
 
 import com.chessmasters.chessapi.entity.Game;
-import com.chessmasters.chessapi.entity.Move;
 import com.chessmasters.chessapi.entity.Player;
 import com.chessmasters.chessapi.entity.Square;
+import com.chessmasters.chessapi.entity.piece.Pawn;
 import com.chessmasters.chessapi.enums.Letter;
 import com.chessmasters.chessapi.exception.GameNotFoundException;
 import com.chessmasters.chessapi.exception.PlayerNotFoundException;
-import com.chessmasters.chessapi.entity.piece.*;
+import com.chessmasters.chessapi.model.GameMove;
 import com.chessmasters.chessapi.repository.GameRepository;
 import com.chessmasters.chessapi.repository.PlayerRepository;
 import com.chessmasters.chessapi.request.GameRequest;
@@ -99,7 +99,7 @@ public class GameServiceTest {
         Player player = new Player(WHITE, playerId, null);
         Square origin = new Square(Letter.E, 2);
         Square destination = new Square(Letter.E, 3);
-        GameRequest gameRequest = new GameRequest(playerId, new Move(origin, destination));
+        GameRequest gameRequest = new GameRequest(playerId, new GameMove(origin, destination));
 
         when(playerRepository.findOne(any(Long.class))).thenReturn(player);
         when(game.getPieces()).thenReturn(Arrays.asList(new Pawn(WHITE, origin)));
@@ -154,7 +154,7 @@ public class GameServiceTest {
         final Long playerId = 1L;
         Square origin = new Square(Letter.E, 2);
         Square destination = new Square(Letter.E, 3);
-        GameRequest request = new GameRequest(playerId, new Move(origin, destination));
+        GameRequest request = new GameRequest(playerId, new GameMove(origin, destination));
 
         assertThatThrownBy(() -> service.movePiece(gameId, request))
                 .isInstanceOf(GameNotFoundException.class);

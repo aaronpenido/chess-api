@@ -1,21 +1,24 @@
 package com.chessmasters.chessapi.model;
 
 import com.chessmasters.chessapi.entity.Game;
-import com.chessmasters.chessapi.entity.Move;
 import com.chessmasters.chessapi.entity.Player;
 import com.chessmasters.chessapi.entity.Square;
+import com.chessmasters.chessapi.entity.piece.Knight;
+import com.chessmasters.chessapi.entity.piece.Pawn;
+import com.chessmasters.chessapi.entity.piece.Piece;
+import com.chessmasters.chessapi.entity.piece.Rook;
 import com.chessmasters.chessapi.enums.Letter;
 import com.chessmasters.chessapi.exception.InvalidMoveException;
-import com.chessmasters.chessapi.entity.piece.*;
-import com.chessmasters.chessapi.model.Board;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
 import java.util.Arrays;
 import java.util.Collections;
 
-import static com.chessmasters.chessapi.enums.Color.*;
+import static com.chessmasters.chessapi.enums.Color.BLACK;
+import static com.chessmasters.chessapi.enums.Color.WHITE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
@@ -35,7 +38,7 @@ public class BoardTest {
         when(game.getPieces()).thenReturn(Collections.singletonList(new Pawn(WHITE, origin)));
         board = new Board(game);
 
-        assertThatThrownBy(() -> board.movePiece(whitePlayer, new Move(origin, destination)))
+        assertThatThrownBy(() -> board.movePiece(whitePlayer, new GameMove(origin, destination)))
                 .isInstanceOf(InvalidMoveException.class);
     }
 
@@ -46,7 +49,7 @@ public class BoardTest {
         when(game.getPieces()).thenReturn(Collections.singletonList(new Pawn(WHITE, origin)));
         board = new Board(game);
 
-        board.movePiece(whitePlayer, new Move(origin, destination));
+        board.movePiece(whitePlayer, new GameMove(origin, destination));
 
         Piece piece = board.getPieceFromSquare(origin);
 
@@ -62,7 +65,7 @@ public class BoardTest {
                 new Rook(BLACK, destination)));
         board = new Board(game);
 
-        board.movePiece(whitePlayer, new Move(origin, destination));
+        board.movePiece(whitePlayer, new GameMove(origin, destination));
 
         assertThat(board.getPieces().size()).isEqualTo(1);
     }
@@ -76,7 +79,7 @@ public class BoardTest {
                 new Pawn(BLACK, destination)));
         board = new Board(game);
 
-        assertThatThrownBy(() -> board.movePiece(whitePlayer, new Move(origin, destination)))
+        assertThatThrownBy(() -> board.movePiece(whitePlayer, new GameMove(origin, destination)))
                 .isInstanceOf(InvalidMoveException.class);
     }
 
@@ -89,7 +92,7 @@ public class BoardTest {
                 new Rook(WHITE, destination)));
         board = new Board(game);
 
-        assertThatThrownBy(() -> board.movePiece(whitePlayer, new Move(origin, destination)))
+        assertThatThrownBy(() -> board.movePiece(whitePlayer, new GameMove(origin, destination)))
                 .isInstanceOf(InvalidMoveException.class);
     }
 
@@ -103,7 +106,7 @@ public class BoardTest {
                 new Rook(WHITE, between)));
         board = new Board(game);
 
-        assertThatThrownBy(() -> board.movePiece(whitePlayer, new Move(origin, destination)))
+        assertThatThrownBy(() -> board.movePiece(whitePlayer, new GameMove(origin, destination)))
                 .isInstanceOf(InvalidMoveException.class);
     }
 
@@ -117,7 +120,7 @@ public class BoardTest {
                 new Pawn(WHITE, between)));
         board = new Board(game);
 
-        assertThatThrownBy(() -> board.movePiece(whitePlayer, new Move(origin, destination)))
+        assertThatThrownBy(() -> board.movePiece(whitePlayer, new GameMove(origin, destination)))
                 .isInstanceOf(InvalidMoveException.class);
     }
 
@@ -131,7 +134,7 @@ public class BoardTest {
                 new Pawn(WHITE, between)));
         board = new Board(game);
 
-        board.movePiece(whitePlayer, new Move(origin, destination));
+        board.movePiece(whitePlayer, new GameMove(origin, destination));
 
         Piece knight = board.getPieceFromSquare(destination);
 
@@ -146,9 +149,9 @@ public class BoardTest {
         when(game.getPieces()).thenReturn(Collections.singletonList(new Pawn(WHITE, origin)));
         board = new Board(game);
 
-        board.movePiece(whitePlayer, new Move(origin, destination));
+        board.movePiece(whitePlayer, new GameMove(origin, destination));
 
-        assertThatThrownBy(() -> board.movePiece(whitePlayer, new Move(destination, secondDestination)))
+        assertThatThrownBy(() -> board.movePiece(whitePlayer, new GameMove(destination, secondDestination)))
                 .isInstanceOf(InvalidMoveException.class);
     }
 
@@ -159,12 +162,12 @@ public class BoardTest {
         when(game.getPieces()).thenReturn(Collections.singletonList(new Pawn(WHITE, origin)));
         board = new Board(game);
 
-        board.movePiece(whitePlayer, new Move(origin, destination));
+        board.movePiece(whitePlayer, new GameMove(origin, destination));
 
         Square nextMoveFrom = destination;
         Square nextMoveDestination = new Square(Letter.E, 4);
 
-        assertThatThrownBy(() -> board.movePiece(new Player(BLACK), new Move(nextMoveFrom, nextMoveDestination)))
+        assertThatThrownBy(() -> board.movePiece(new Player(BLACK), new GameMove(nextMoveFrom, nextMoveDestination)))
                 .isInstanceOf(InvalidMoveException.class)
                 .hasMessageContaining("It's opponent's turn");
     }

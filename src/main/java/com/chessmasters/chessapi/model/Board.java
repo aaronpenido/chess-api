@@ -1,13 +1,13 @@
 package com.chessmasters.chessapi.model;
 
 import com.chessmasters.chessapi.entity.Game;
-import com.chessmasters.chessapi.entity.Move;
 import com.chessmasters.chessapi.entity.Player;
 import com.chessmasters.chessapi.entity.Square;
+import com.chessmasters.chessapi.entity.piece.Piece;
 import com.chessmasters.chessapi.enums.Color;
 import com.chessmasters.chessapi.exception.InvalidMoveException;
 import com.chessmasters.chessapi.exception.PieceNotFoundException;
-import com.chessmasters.chessapi.entity.piece.Piece;
+
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +18,10 @@ public class Board {
 
     private Color nextMoveColor = Color.WHITE;
     private List<Piece> pieces;
+    private Game game;
 
     public Board(Game game) {
+        this.game = game;
         this.pieces = game.getPieces();
     }
 
@@ -28,8 +30,7 @@ public class Board {
     }
 
     public void movePiece(@NotNull final Player player,
-                          @NotNull Move move) {
-
+                          @NotNull GameMove move) {
         Piece originPiece = getPieceFromSquare(move.getOrigin());
         Piece destinationPiece = getPieceFromSquare(move.getDestination());
 

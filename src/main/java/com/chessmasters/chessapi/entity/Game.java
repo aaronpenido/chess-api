@@ -1,18 +1,17 @@
 package com.chessmasters.chessapi.entity;
 
-import com.chessmasters.chessapi.model.Board;
+import com.chessmasters.chessapi.entity.piece.*;
 import com.chessmasters.chessapi.enums.Color;
 import com.chessmasters.chessapi.enums.Letter;
-import com.chessmasters.chessapi.exception.GameNotStartedException;
-import com.chessmasters.chessapi.exception.PlayerNotFoundException;
-import com.chessmasters.chessapi.entity.piece.*;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import static com.chessmasters.chessapi.enums.Color.*;
+import static com.chessmasters.chessapi.enums.Color.BLACK;
+import static com.chessmasters.chessapi.enums.Color.WHITE;
 
 @Entity
 public class Game {
@@ -86,30 +85,6 @@ public class Game {
 
         player2 = player;
         setPlayersColors();
-    }
-
-    public void movePiece(Player movePlayer, Move move) {
-        if(pieces == null) {
-            throw new GameNotStartedException(id);
-        }
-
-        if(movePlayer == null) {
-            throw new PlayerNotFoundException();
-        }
-
-        Board board = new Board(this);
-        board.movePiece(movePlayer, move);
-
-        move.setMoveOrder(generateOrder());
-        this.moves.add(move);
-    }
-
-    private int generateOrder() {
-        if(moves != null) {
-            return (int) moves.stream().count() + 1;
-        }
-
-        return 0;
     }
 
     private void initializeKings() {
