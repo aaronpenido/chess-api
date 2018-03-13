@@ -1,4 +1,4 @@
-package com.chessmasters.chessapi;
+package com.chessmasters.chessapi.model;
 
 import com.chessmasters.chessapi.entity.Game;
 import com.chessmasters.chessapi.entity.Move;

@@ -1,8 +1,8 @@
 package com.chessmasters.chessapi.entity.piece;
 
-import com.chessmasters.chessapi.*;
 import com.chessmasters.chessapi.entity.Square;
 import com.chessmasters.chessapi.enums.Color;
+import com.chessmasters.chessapi.model.Board;
 import com.chessmasters.chessapi.movement.BlackPawnMovement;
 import com.chessmasters.chessapi.movement.PawnMovement;
 import com.chessmasters.chessapi.movement.WhitePawnMovement;

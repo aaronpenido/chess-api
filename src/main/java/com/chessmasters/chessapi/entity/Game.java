@@ -1,6 +1,6 @@
 package com.chessmasters.chessapi.entity;
 
-import com.chessmasters.chessapi.Board;
+import com.chessmasters.chessapi.model.Board;
 import com.chessmasters.chessapi.enums.Color;
 import com.chessmasters.chessapi.enums.Letter;
 import com.chessmasters.chessapi.exception.GameNotStartedException;

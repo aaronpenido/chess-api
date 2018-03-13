@@ -1,6 +1,6 @@
 package com.chessmasters.chessapi.movement;
 
-import com.chessmasters.chessapi.Board;
+import com.chessmasters.chessapi.model.Board;
 import com.chessmasters.chessapi.entity.Square;
 
 public class WhitePawnMovement extends PawnMovement {

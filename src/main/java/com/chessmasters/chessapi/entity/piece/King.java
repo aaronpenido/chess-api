@@ -1,6 +1,6 @@
 package com.chessmasters.chessapi.entity.piece;
 
-import com.chessmasters.chessapi.Board;
+import com.chessmasters.chessapi.model.Board;
 import com.chessmasters.chessapi.enums.Color;
 import com.chessmasters.chessapi.entity.Square;
 import com.chessmasters.chessapi.movement.KingMovement;
