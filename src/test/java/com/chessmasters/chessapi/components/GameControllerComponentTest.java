@@ -1,9 +1,7 @@
 package com.chessmasters.chessapi.components;
 
-import com.chessmasters.chessapi.entities.Game;
 import com.chessmasters.chessapi.entities.Player;
 import com.chessmasters.chessapi.enums.GameStatus;
-import com.chessmasters.chessapi.repositories.GameRepository;
 import com.chessmasters.chessapi.repositories.PlayerRepository;
 import com.chessmasters.chessapi.request.GameRequest;
 import org.junit.Test;
@@ -19,8 +17,6 @@ import static org.hamcrest.CoreMatchers.is;
 @RunWith(SpringRunner.class)
 public class GameControllerComponentTest extends BaseComponentTest {
 
-    @Autowired
-    private GameRepository gameRepository;
     @Autowired
     private PlayerRepository playerRepository;
 
@@ -44,10 +40,6 @@ public class GameControllerComponentTest extends BaseComponentTest {
 
     @Test
     public void getGames() {
-        final GameStatus expectedStatus = GameStatus.CREATED;
-        Game game = new Game(new Player(), expectedStatus);
-        gameRepository.save(game);
-
         given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
         .get("/games").then()

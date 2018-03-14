@@ -12,8 +12,8 @@ public class Game {
     private Long id;
     @Enumerated(EnumType.STRING)
     private GameStatus status;
-    @MapsId
     @OneToOne
+    @JoinColumn(name = "player_id", referencedColumnName = "id")
     private Player player;
 
     public Game() {
