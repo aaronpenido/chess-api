@@ -1,6 +1,7 @@
 package com.chessmasters.chessapi.services;
 
 import com.chessmasters.chessapi.entities.Player;
+import com.chessmasters.chessapi.exceptions.PlayerNotFoundException;
 import com.chessmasters.chessapi.models.PlayerModel;
 import com.chessmasters.chessapi.repositories.PlayerRepository;
 import com.chessmasters.chessapi.request.PlayerRequest;
@@ -12,6 +13,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -52,5 +54,25 @@ public class PlayerServiceTest {
     public void getAllPlayersFromDatabase() {
         service.getPlayers();
         verify(playerRepository).findAll();
+    }
+
+    @Test
+    public void getPlayerById() {
+        final Long id = 1L;
+
+        when(playerRepository.findOne(any(Long.class))).thenReturn(new Player());
+
+        Player player = service.getById(id);
+
+        assertThat(player).isNotNull();
+    }
+
+    @Test
+    public void getByIdThrowExceptionWhenNotFound() {
+        final Long id = 1L;
+
+        when(playerRepository.findOne(id)).thenReturn(null);
+        assertThatThrownBy(() -> service.getById(id))
+                .isInstanceOf(PlayerNotFoundException.class);
     }
 }

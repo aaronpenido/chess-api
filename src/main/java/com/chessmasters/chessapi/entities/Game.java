@@ -12,11 +12,15 @@ public class Game {
     private Long id;
     @Enumerated(EnumType.STRING)
     private GameStatus status;
+    @MapsId
+    @OneToOne
+    private Player player;
 
     public Game() {
     }
 
-    public Game(GameStatus status) {
+    public Game(Player player, GameStatus status) {
+        this.player = player;
         this.status = status;
     }
 
@@ -26,5 +30,9 @@ public class Game {
 
     public GameStatus getStatus() {
         return status;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }

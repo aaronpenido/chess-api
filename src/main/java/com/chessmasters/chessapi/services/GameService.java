@@ -1,6 +1,7 @@
 package com.chessmasters.chessapi.services;
 
 import com.chessmasters.chessapi.entities.Game;
+import com.chessmasters.chessapi.entities.Player;
 import com.chessmasters.chessapi.enums.GameStatus;
 import com.chessmasters.chessapi.models.GameModel;
 import com.chessmasters.chessapi.repositories.GameRepository;
@@ -13,14 +14,17 @@ import java.util.stream.Collectors;
 @Service
 public class GameService {
 
-    private final GameRepository repository;
+    private final GameRepository gameRepository;
+    private final PlayerService playerService;
 
-    public GameService(GameRepository repository) {
-        this.repository = repository;
+    public GameService(GameRepository gameRepository, PlayerService playerService) {
+        this.gameRepository = gameRepository;
+        this.playerService = playerService;
     }
 
     public GameModel createGame(GameRequest gameRequest) {
-        Game game = repository.save(new Game(GameStatus.CREATED));
+        Player player = playerService.getById(gameRequest.getPlayerId());
+        Game game = gameRepository.save(new Game(player, GameStatus.CREATED));
 
         if(game != null) {
             return new GameModel(game);
@@ -30,7 +34,7 @@ public class GameService {
     }
 
     public List<GameModel> getGames() {
-        List<Game> games = repository.findAll();
+        List<Game> games = gameRepository.findAll();
 
         return games
                 .stream()

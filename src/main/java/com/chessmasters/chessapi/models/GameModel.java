@@ -7,6 +7,7 @@ public class GameModel {
 
     private Long id;
     private GameStatus status;
+    private Long playerId;
 
     public GameModel() {
     }
@@ -14,6 +15,7 @@ public class GameModel {
     public GameModel(Game game) {
         this.id = game.getId();
         this.status = game.getStatus();
+        this.playerId = game.getPlayer().getId();
     }
 
     public Long getId() {
@@ -22,5 +24,9 @@ public class GameModel {
 
     public GameStatus getStatus() {
         return status;
+    }
+
+    public Long getPlayerId() {
+        return playerId;
     }
 }

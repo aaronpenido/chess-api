@@ -21,9 +21,11 @@ public class GameServiceTest {
     private GameService service;
     @Mock
     private GameRepository gameRepository;
+    @Mock
+    private PlayerService playerService;
 
     @Test
-    public void createGameWithIdEqualsToOne() {
+    public void createGame() {
         final Long playerId = 1L;
         GameRequest gameRequest = new GameRequest(playerId);
 

@@ -1,6 +1,7 @@
 package com.chessmasters.chessapi.controllers;
 
 import com.chessmasters.chessapi.entities.Game;
+import com.chessmasters.chessapi.entities.Player;
 import com.chessmasters.chessapi.enums.GameStatus;
 import com.chessmasters.chessapi.models.GameModel;
 import com.chessmasters.chessapi.request.GameRequest;
@@ -30,8 +31,9 @@ public class GameControllerTest {
     public void createGame() {
         final Long playerId = 1L;
         GameRequest request = new GameRequest(playerId);
+        GameModel gameModel = new GameModel(new Game(new Player(), GameStatus.CREATED));
 
-        when(gameService.createGame(request)).thenReturn(new GameModel(new Game(GameStatus.CREATED)));
+        when(gameService.createGame(request)).thenReturn(gameModel);
 
         GameResponse response = controller.createGame(request);
 

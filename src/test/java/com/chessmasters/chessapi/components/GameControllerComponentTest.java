@@ -1,8 +1,10 @@
 package com.chessmasters.chessapi.components;
 
 import com.chessmasters.chessapi.entities.Game;
+import com.chessmasters.chessapi.entities.Player;
 import com.chessmasters.chessapi.enums.GameStatus;
 import com.chessmasters.chessapi.repositories.GameRepository;
+import com.chessmasters.chessapi.repositories.PlayerRepository;
 import com.chessmasters.chessapi.request.GameRequest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,12 +21,14 @@ public class GameControllerComponentTest extends BaseComponentTest {
 
     @Autowired
     private GameRepository gameRepository;
+    @Autowired
+    private PlayerRepository playerRepository;
 
     @Test
     public void createGame() {
-        final int expectedId = 1;
         final GameStatus expectedStatus = GameStatus.CREATED;
-        final Long playerId = 1L;
+        Player player = new Player("Player name");
+        final Long playerId = playerRepository.save(player).getId();
 
         GameRequest gameRequest = new GameRequest(playerId);
 
@@ -33,7 +37,7 @@ public class GameControllerComponentTest extends BaseComponentTest {
                 .body(gameRequest)
         .post("/games").then()
                 .statusCode(HttpStatus.CREATED.value())
-                .body("id", is(expectedId))
+                .body("id", is(playerId.intValue()))
                 .body("status", is(String.valueOf(expectedStatus)));
 
     }
@@ -41,7 +45,7 @@ public class GameControllerComponentTest extends BaseComponentTest {
     @Test
     public void getGames() {
         final GameStatus expectedStatus = GameStatus.CREATED;
-        Game game = new Game(expectedStatus);
+        Game game = new Game(new Player(), expectedStatus);
         gameRepository.save(game);
 
         given()
