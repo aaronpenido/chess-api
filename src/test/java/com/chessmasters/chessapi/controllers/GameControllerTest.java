@@ -8,6 +8,8 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -25,5 +27,17 @@ public class GameControllerTest {
 
         assertThat(response).isNotNull();
         assertThat(response.getStatus()).isEqualTo(GameStatus.CREATED);
+    }
+
+    @Test
+    public void listGames() {
+        final Long gameId = 1L;
+        GameStatus gameStatus = GameStatus.CREATED;
+
+        List<GameResponse> responseList = controller.listGames();
+
+        assertThat(responseList).isNotEmpty();
+        assertThat(responseList.get(0).getId()).isEqualTo(gameId);
+        assertThat(responseList.get(0).getStatus()).isEqualTo(gameStatus);
     }
 }

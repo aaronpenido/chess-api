@@ -9,13 +9,14 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 
 @RunWith(SpringRunner.class)
 public class GameControllerComponentTest extends BaseComponentTest {
 
     @Test
-    public void registerGame() {
+    public void createGameHasStatusCreated() {
         final Long playerId = 1L;
         final String expectedStatus = String.valueOf(GameStatus.CREATED);
 
@@ -27,6 +28,17 @@ public class GameControllerComponentTest extends BaseComponentTest {
         .post("/games").then()
                 .statusCode(HttpStatus.CREATED.value())
                 .body("status", is(expectedStatus));
+
+    }
+
+    @Test
+    public void getGames() {
+        final int expectedId = 1;
+        given()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .get("/games").then()
+                .statusCode(HttpStatus.OK.value())
+                .body("id", hasItem(expectedId));
 
     }
 }

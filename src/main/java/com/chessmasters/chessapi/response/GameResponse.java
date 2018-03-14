@@ -10,8 +10,13 @@ public class GameResponse {
     public GameResponse() {
     }
 
-    public GameResponse(GameStatus status) {
+    public GameResponse(Long id, GameStatus status) {
+        this.id = id;
         this.status = status;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public GameStatus getStatus() {
