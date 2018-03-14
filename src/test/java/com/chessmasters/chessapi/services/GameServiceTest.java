@@ -43,9 +43,6 @@ public class GameServiceTest {
 
     @Test
     public void getAllGamesFromDatabase() {
-        final Long playerId = 1L;
-        GameRequest request = new GameRequest(playerId);
-
         service.getGames();
         verify(gameRepository).findAll();
     }
