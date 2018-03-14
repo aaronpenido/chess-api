@@ -37,4 +37,12 @@ public class GameController {
 
         return responseList;
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping(value = "/games/{id}/start",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public GameResponse startGame(@PathVariable Long id, @RequestBody GameRequest request) {
+        return new GameResponse(gameService.startGame(id, request));
+    }
 }

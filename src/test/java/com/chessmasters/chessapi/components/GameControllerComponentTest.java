@@ -1,7 +1,9 @@
 package com.chessmasters.chessapi.components;
 
+import com.chessmasters.chessapi.entities.Game;
 import com.chessmasters.chessapi.entities.Player;
 import com.chessmasters.chessapi.enums.GameStatus;
+import com.chessmasters.chessapi.repositories.GameRepository;
 import com.chessmasters.chessapi.repositories.PlayerRepository;
 import com.chessmasters.chessapi.request.GameRequest;
 import org.junit.Test;
@@ -19,13 +21,14 @@ public class GameControllerComponentTest extends BaseComponentTest {
 
     @Autowired
     private PlayerRepository playerRepository;
+    @Autowired
+    private GameRepository gameRepository;
 
     @Test
     public void createGame() {
         final GameStatus expectedStatus = GameStatus.CREATED;
         Player player = new Player("Player name");
         final Long playerId = playerRepository.save(player).getId();
-
         GameRequest gameRequest = new GameRequest(playerId);
 
         given()
@@ -45,5 +48,22 @@ public class GameControllerComponentTest extends BaseComponentTest {
         .get("/games").then()
                 .statusCode(HttpStatus.OK.value());
 
+    }
+
+    @Test
+    public void startGame() {
+        final GameStatus expectedStatus = GameStatus.STARTED;
+        final Player player = playerRepository.save(new Player("Player name"));
+        final Game game = gameRepository.save(new Game(player, GameStatus.CREATED));
+        final String path = String.format("/games/%s/start", game.getId());
+
+        GameRequest gameRequest = new GameRequest(player.getId());
+
+        given()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(gameRequest)
+        .put(path).then()
+                .statusCode(HttpStatus.OK.value())
+                .body("status", is(String.valueOf(expectedStatus)));
     }
 }

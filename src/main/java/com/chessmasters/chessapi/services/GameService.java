@@ -3,6 +3,7 @@ package com.chessmasters.chessapi.services;
 import com.chessmasters.chessapi.entities.Game;
 import com.chessmasters.chessapi.entities.Player;
 import com.chessmasters.chessapi.enums.GameStatus;
+import com.chessmasters.chessapi.exceptions.GameNotFoundException;
 import com.chessmasters.chessapi.models.GameModel;
 import com.chessmasters.chessapi.repositories.GameRepository;
 import com.chessmasters.chessapi.request.GameRequest;
@@ -40,5 +41,18 @@ public class GameService {
                 .stream()
                 .map(GameModel::new)
                 .collect(Collectors.toList());
+    }
+
+    public GameModel startGame(Long gameId, GameRequest gameRequest) {
+        Game game = gameRepository.findOne(gameId);
+
+        if(game == null) {
+            throw new GameNotFoundException(gameId);
+        }
+
+        game.setStatus(GameStatus.STARTED);
+        game = gameRepository.save(game);
+
+        return new GameModel(game);
     }
 }
