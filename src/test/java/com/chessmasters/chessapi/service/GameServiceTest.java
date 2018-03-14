@@ -35,7 +35,8 @@ public class GameServiceTest {
     private GameRepository repository;
     @Mock
     private PlayerRepository playerRepository;
-    @Mock Game game;
+    @Mock
+    private Game game;
 
     @Test
     public void registerGame() {

@@ -1,12 +1,8 @@
 package com.chessmasters.chessapi.entity;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import com.chessmasters.chessapi.entity.piece.Piece;
+
+import javax.persistence.*;
 
 @Entity
 public class Move {
@@ -22,6 +18,8 @@ public class Move {
     })
     private Square destination;
     private int moveOrder;
+    @Transient
+    private Piece piece;
 
     public Move() {
     }
@@ -35,6 +33,10 @@ public class Move {
         this.origin = origin;
         this.destination = destination;
         this.moveOrder = moveOrder;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public Square getOrigin() {
@@ -51,5 +53,13 @@ public class Move {
 
     public void setMoveOrder(int moveOrder) {
         this.moveOrder = moveOrder;
+    }
+
+    public Piece getPiece() {
+        return piece;
+    }
+
+    public void setPiece(Piece piece) {
+        this.piece = piece;
     }
 }

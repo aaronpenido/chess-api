@@ -29,7 +29,7 @@ public class Board {
         return pieces;
     }
 
-    public void movePiece(@NotNull final Player player,
+    public Piece movePiece(@NotNull final Player player,
                           @NotNull GameMove move) {
         Piece originPiece = getPieceFromSquare(move.getOrigin());
         Piece destinationPiece = getPieceFromSquare(move.getDestination());
@@ -52,6 +52,8 @@ public class Board {
 
         originPiece.setSquare(move.getDestination());
         nextMoveColor = Color.opposite(originPiece.getColor());
+
+        return originPiece;
     }
 
     private boolean isColorMoveValid(@NotNull final Player player, @NotNull final Piece piece) {

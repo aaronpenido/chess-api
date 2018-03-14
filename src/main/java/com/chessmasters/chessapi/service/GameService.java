@@ -3,10 +3,12 @@ package com.chessmasters.chessapi.service;
 import com.chessmasters.chessapi.entity.Game;
 import com.chessmasters.chessapi.entity.Move;
 import com.chessmasters.chessapi.entity.Player;
+import com.chessmasters.chessapi.entity.piece.Piece;
 import com.chessmasters.chessapi.exception.GameNotFoundException;
 import com.chessmasters.chessapi.exception.GameNotStartedException;
 import com.chessmasters.chessapi.exception.PlayerNotFoundException;
 import com.chessmasters.chessapi.model.Board;
+import com.chessmasters.chessapi.model.GameMove;
 import com.chessmasters.chessapi.repository.GameRepository;
 import com.chessmasters.chessapi.repository.PlayerRepository;
 import com.chessmasters.chessapi.request.GameRequest;
@@ -19,7 +21,6 @@ public class GameService {
 
     private final GameRepository repository;
     private final PlayerRepository playerRepository;
-
     public GameService(GameRepository repository, PlayerRepository playerRepository) {
         this.repository = repository;
         this.playerRepository = playerRepository;
@@ -50,12 +51,12 @@ public class GameService {
         Player player = playerById(gameRequest.getPlayerId());
 
         Board board = new Board(game);
-        board.movePiece(player, gameRequest.getMove());
+        Piece piece = board.movePiece(player, gameRequest.getMove());
 
         game.setPieces(board.getPieces());
 
-        Move move = new Move(gameRequest.getMove().getOrigin(), gameRequest.getMove().getDestination());
-        move.setMoveOrder(generateMoveOrder(game.moves()));
+        int moveOrder = generateMoveOrder(game.moves());
+        Move move = createMove(gameRequest.getMove(), moveOrder, piece);
         game.moves().add(move);
 
         return save(game);
@@ -82,6 +83,14 @@ public class GameService {
         }
 
         return player;
+    }
+
+    private Move createMove(GameMove gameMove, int order, Piece piece) {
+        Move move = new Move(gameMove.getOrigin(), gameMove.getDestination());
+        move.setMoveOrder(order);
+        move.setPiece(piece);
+
+        return move;
     }
 
     private int generateMoveOrder(List<Move> moves) {
