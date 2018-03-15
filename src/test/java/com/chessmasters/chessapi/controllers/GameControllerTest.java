@@ -48,4 +48,17 @@ public class GameControllerTest {
 
         assertThat(responseList).isNotNull();
     }
+
+    @Test
+    public void startGame() {
+        final Long gameId = 1L;
+        final Long playerId = 1L;
+        GameRequest request = new GameRequest(playerId);
+        GameModel gameModel = new GameModel(new Game(new Player(), GameStatus.CREATED));
+        when(gameService.startGame(gameId, request)).thenReturn(gameModel);
+
+        GameResponse response = controller.startGame(gameId, request);
+
+        assertThat(response).isNotNull();
+    }
 }
