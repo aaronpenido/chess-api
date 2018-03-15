@@ -15,6 +15,9 @@ public class Game {
     @OneToOne
     @JoinColumn(name = "player_id", referencedColumnName = "id")
     private Player player;
+    @OneToOne
+    @JoinColumn(name = "player2_id", referencedColumnName = "id")
+    private Player player2;
 
     public Game() {
     }
@@ -36,7 +39,15 @@ public class Game {
         return player;
     }
 
+    public Player getPlayer2() {
+        return player2;
+    }
+
     public void setStatus(GameStatus status) {
         this.status = status;
+    }
+
+    public void setPlayer2(Player player2) {
+        this.player2 = player2;
     }
 }

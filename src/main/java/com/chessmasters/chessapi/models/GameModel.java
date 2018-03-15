@@ -8,6 +8,7 @@ public class GameModel {
     private Long id;
     private GameStatus status;
     private Long playerId;
+    private Long player2Id;
 
     public GameModel() {
     }
@@ -16,6 +17,9 @@ public class GameModel {
         this.id = game.getId();
         this.status = game.getStatus();
         this.playerId = game.getPlayer().getId();
+        if(game.getPlayer2() != null) {
+            this.player2Id = game.getPlayer2().getId();
+        }
     }
 
     public Long getId() {
@@ -28,5 +32,9 @@ public class GameModel {
 
     public Long getPlayerId() {
         return playerId;
+    }
+
+    public Long getPlayer2Id() {
+        return player2Id;
     }
 }

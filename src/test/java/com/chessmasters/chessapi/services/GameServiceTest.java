@@ -31,6 +31,10 @@ public class GameServiceTest {
     public void createGame() {
         final Long playerId = 1L;
         GameRequest gameRequest = new GameRequest(playerId);
+        Player player = new Player();
+
+        when(playerService.getById(playerId)).thenReturn(player);
+        when(gameRepository.save(any(Game.class))).thenReturn(new Game(player, GameStatus.CREATED));
 
         GameModel game = service.createGame(gameRequest);
 
@@ -41,8 +45,13 @@ public class GameServiceTest {
     public void saveGameOnDatabase() {
         final Long playerId = 1L;
         GameRequest request = new GameRequest(playerId);
+        Player player = new Player();
+
+        when(playerService.getById(playerId)).thenReturn(player);
+        when(gameRepository.save(any(Game.class))).thenReturn(new Game(player, GameStatus.CREATED));
 
         service.createGame(request);
+
         verify(gameRepository).save(any(Game.class));
     }
 
@@ -56,8 +65,10 @@ public class GameServiceTest {
     public void startGameUpdatesGameStatusToStarted() {
         final Long gameId = 1L;
         final Long playerId = 1L;
+        Player player = new Player();
         GameRequest gameRequest = new GameRequest(playerId);
-        Game game = new Game(new Player(), GameStatus.CREATED);
+        Game game = new Game(player, GameStatus.CREATED);
+        when(playerService.getById(playerId)).thenReturn(player);
         when(gameRepository.findOne(any(Long.class))).thenReturn(game);
         when(gameRepository.save(any(Game.class))).thenReturn(game);
 

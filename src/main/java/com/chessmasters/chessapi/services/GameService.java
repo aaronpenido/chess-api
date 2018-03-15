@@ -4,6 +4,7 @@ import com.chessmasters.chessapi.entities.Game;
 import com.chessmasters.chessapi.entities.Player;
 import com.chessmasters.chessapi.enums.GameStatus;
 import com.chessmasters.chessapi.exceptions.GameNotFoundException;
+import com.chessmasters.chessapi.exceptions.PlayerNotFoundException;
 import com.chessmasters.chessapi.models.GameModel;
 import com.chessmasters.chessapi.repositories.GameRepository;
 import com.chessmasters.chessapi.request.GameRequest;
@@ -24,14 +25,15 @@ public class GameService {
     }
 
     public GameModel createGame(GameRequest gameRequest) {
-        Player player = playerService.getById(gameRequest.getPlayerId());
+        Player player = getPlayerFromDatabase(gameRequest.getPlayerId());
+
         Game game = gameRepository.save(new Game(player, GameStatus.CREATED));
 
-        if(game != null) {
-            return new GameModel(game);
+        if(game == null) {
+            throw new RuntimeException("An error occurred when trying to create a game.");
         }
 
-        return new GameModel();
+        return new GameModel(game);
     }
 
     public List<GameModel> getGames() {
@@ -50,9 +52,22 @@ public class GameService {
             throw new GameNotFoundException(gameId);
         }
 
+        Player player2 = getPlayerFromDatabase(gameRequest.getPlayerId());
+
         game.setStatus(GameStatus.STARTED);
+        game.setPlayer2(player2);
         game = gameRepository.save(game);
 
         return new GameModel(game);
+    }
+
+    private Player getPlayerFromDatabase(Long playerId) {
+        Player player = playerService.getById(playerId);
+
+        if(player == null) {
+            throw new PlayerNotFoundException(playerId);
+        }
+
+        return player;
     }
 }
