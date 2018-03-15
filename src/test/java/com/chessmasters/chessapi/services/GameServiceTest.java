@@ -3,6 +3,8 @@ package com.chessmasters.chessapi.services;
 import com.chessmasters.chessapi.entities.Game;
 import com.chessmasters.chessapi.entities.Player;
 import com.chessmasters.chessapi.enums.GameStatus;
+import com.chessmasters.chessapi.exceptions.GameNotFoundException;
+import com.chessmasters.chessapi.exceptions.GameStartedException;
 import com.chessmasters.chessapi.models.GameModel;
 import com.chessmasters.chessapi.repositories.GameRepository;
 import com.chessmasters.chessapi.request.GameRequest;
@@ -11,8 +13,10 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -76,5 +80,39 @@ public class GameServiceTest {
 
         assertThat(gameModel).isNotNull();
         assertThat(gameModel.getStatus()).isEqualTo(GameStatus.STARTED);
+    }
+
+    @Test
+    public void throwRuntimeExceptionWhenErrorOccurredOnSaveGame() {
+        GameRequest request = new GameRequest();
+
+        when(gameRepository.save(any(Game.class))).thenReturn(null);
+
+        assertThatThrownBy(() -> service.createGame(request))
+                .isInstanceOf(RuntimeException.class);
+    }
+
+    @Test
+    public void throwGameNotFoundExceptionWhenTryingToStartNonExistentGame() {
+        final Long gameId = 1L;
+        GameRequest request = new GameRequest();
+
+        when(gameRepository.findOne(any(Long.class))).thenReturn(null);
+
+        assertThatThrownBy(() -> service.startGame(gameId, request))
+                .isInstanceOf(GameNotFoundException.class);
+    }
+
+    @Test
+    public void throwGameIsStartedExceptionWhenTryingToStartAgain() {
+        final Long gameId = 1L;
+        GameRequest request = new GameRequest();
+        Game game = new Game(new Player(), GameStatus.STARTED);
+        ReflectionTestUtils.setField(game, "id", gameId);
+        when(playerService.getById(any(Long.class))).thenReturn(new Player());
+        when(gameRepository.findOne(any(Long.class))).thenReturn(game);
+
+        assertThatThrownBy(() -> service.startGame(gameId, request))
+                .isInstanceOf(GameStartedException.class);
     }
 }
