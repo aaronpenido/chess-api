@@ -1,5 +1,8 @@
 package com.chessmasters.chessapi.controllers;
 
+import com.chessmasters.chessapi.entities.Game;
+import com.chessmasters.chessapi.entities.Move;
+import com.chessmasters.chessapi.models.MoveModel;
 import com.chessmasters.chessapi.response.MoveResponse;
 import com.chessmasters.chessapi.services.MoveService;
 import org.junit.Test;
@@ -21,6 +24,19 @@ public class MoveControllerTest {
     private MoveController controller;
     @Mock
     private MoveService moveService;
+
+    @Test
+    public void createMove() {
+        final Long gameId = 1L;
+        final int moveOrder = 1;
+        final Game game = new Game();
+
+        when(moveService.createMove(gameId)).thenReturn(new MoveModel(new Move(game, moveOrder)));
+
+        MoveResponse response = controller.createMove(gameId);
+
+        assertThat(response).isNotNull();
+    }
 
     @Test
     public void listMoves() {

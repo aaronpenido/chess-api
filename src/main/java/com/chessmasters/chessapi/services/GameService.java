@@ -46,11 +46,7 @@ public class GameService {
     }
 
     public GameModel startGame(Long gameId, GameRequest gameRequest) {
-        Game game = gameRepository.findOne(gameId);
-
-        if(game == null) {
-            throw new GameNotFoundException(gameId);
-        }
+        Game game = getById(gameId);
 
         if(game.getStatus().equals(GameStatus.STARTED)) {
             throw new GameStartedException(gameId);
@@ -63,5 +59,15 @@ public class GameService {
         game = gameRepository.save(game);
 
         return new GameModel(game);
+    }
+
+    public Game getById(Long gameId) {
+        Game game = gameRepository.findOne(gameId);
+
+        if(game == null) {
+            throw new GameNotFoundException(gameId);
+        }
+
+        return game;
     }
 }

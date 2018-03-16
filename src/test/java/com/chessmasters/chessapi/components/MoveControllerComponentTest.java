@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
+import static org.hamcrest.CoreMatchers.is;
 
 @RunWith(SpringRunner.class)
 public class MoveControllerComponentTest extends BaseComponentTest {
@@ -23,6 +24,23 @@ public class MoveControllerComponentTest extends BaseComponentTest {
     private GameRepository gameRepository;
 
     @Test
+    public void createMove() {
+        final int expectedOrder = 1;
+        final Player player = playerRepository.save(new Player("Player name"));
+        Game game = gameRepository.save(new Game(player, GameStatus.CREATED));
+        final int gameId = game.getId().intValue();
+        final String path = String.format("/games/%s/moves", gameId);
+
+        given()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .post(path).then()
+                .statusCode(HttpStatus.CREATED.value())
+                .body("gameId", is(gameId))
+                .body("order", is(expectedOrder));
+
+    }
+
+    @Test
     public void listMoves() {
         final Player player = playerRepository.save(new Player("Player name"));
         Game game = gameRepository.save(new Game(player, GameStatus.CREATED));
@@ -30,7 +48,7 @@ public class MoveControllerComponentTest extends BaseComponentTest {
 
         given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .get(path).then()
+        .get(path).then()
                 .statusCode(HttpStatus.OK.value());
     }
 }

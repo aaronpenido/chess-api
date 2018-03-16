@@ -13,6 +13,9 @@ public class Move {
     private Game game;
     private int moveOrder;
 
+    public Move() {
+    }
+
     public Move(Game game, int moveOrder) {
         this.game = game;
         this.moveOrder = moveOrder;
