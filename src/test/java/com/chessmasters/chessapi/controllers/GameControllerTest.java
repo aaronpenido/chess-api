@@ -12,8 +12,9 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,22 +32,33 @@ public class GameControllerTest {
     public void createGame() {
         final Long playerId = 1L;
         GameRequest request = new GameRequest(playerId);
-        GameModel gameModel = new GameModel(new Game(new Player(), GameStatus.CREATED));
+        GameModel gameModel = createGameModel(GameStatus.CREATED);
 
         when(gameService.createGame(request)).thenReturn(gameModel);
 
         GameResponse response = controller.createGame(request);
 
         assertThat(response).isNotNull();
+        assertThat(response.getId()).isEqualTo(gameModel.getId());
+        assertThat(response.getStatus()).isEqualTo(gameModel.getStatus());
+        assertThat(response.getPlayerId()).isEqualTo(playerId);
+        assertThat(response.getPlayer2Id()).isNull();
     }
 
     @Test
     public void listGames() {
-        when(gameService.getGames()).thenReturn(new ArrayList<>());
+        GameModel gameModel = createGameModel(GameStatus.CREATED);
+        when(gameService.getGames()).thenReturn(Collections.singletonList(gameModel));
 
         List<GameResponse> responseList = controller.listGames();
 
-        assertThat(responseList).isNotNull();
+        assertThat(responseList).isNotEmpty();
+
+        final GameResponse response = responseList.get(0);
+        assertThat(response.getId()).isEqualTo(gameModel.getId());
+        assertThat(response.getPlayerId()).isEqualTo(gameModel.getPlayerId());
+        assertThat(response.getStatus()).isEqualTo(gameModel.getStatus());
+        assertThat(response.getPlayer2Id()).isNull();
     }
 
     @Test
@@ -54,11 +66,27 @@ public class GameControllerTest {
         final Long gameId = 1L;
         final Long playerId = 1L;
         GameRequest request = new GameRequest(playerId);
-        GameModel gameModel = new GameModel(new Game(new Player(), GameStatus.CREATED));
+        GameModel gameModel = createGameModel(GameStatus.STARTED);
+        ReflectionTestUtils.setField(gameModel, "player2Id", playerId);
         when(gameService.startGame(gameId, request)).thenReturn(gameModel);
 
         GameResponse response = controller.startGame(gameId, request);
 
         assertThat(response).isNotNull();
+        assertThat(response.getId()).isEqualTo(gameModel.getId());
+        assertThat(response.getStatus()).isEqualTo(gameModel.getStatus());
+        assertThat(response.getPlayerId()).isEqualTo(playerId);
+        assertThat(response.getPlayer2Id()).isEqualTo(gameModel.getPlayerId());
+    }
+
+    private GameModel createGameModel(GameStatus gameStatus) {
+        final Long gameId = 1L;
+        final Long playerId = 1L;
+
+        final Player player = new Player();
+        final Game game = new Game(player, gameStatus);
+        ReflectionTestUtils.setField(player, "id", playerId);
+        ReflectionTestUtils.setField(game, "id", gameId);
+        return new GameModel(game);
     }
 }

@@ -33,16 +33,23 @@ public class GameServiceTest {
 
     @Test
     public void createGame() {
+        final Long gameId = 1L;
         final Long playerId = 1L;
-        GameRequest gameRequest = new GameRequest(playerId);
         Player player = new Player();
+        ReflectionTestUtils.setField(player, "id", playerId);
+        final Game game = new Game(player, GameStatus.CREATED);
+        ReflectionTestUtils.setField(game, "id", gameId);
+        GameRequest gameRequest = new GameRequest(playerId);
 
         when(playerService.getById(playerId)).thenReturn(player);
-        when(gameRepository.save(any(Game.class))).thenReturn(new Game(player, GameStatus.CREATED));
+        when(gameRepository.save(any(Game.class))).thenReturn(game);
 
-        GameModel game = service.createGame(gameRequest);
+        GameModel gameModel = service.createGame(gameRequest);
 
-        assertThat(game).isNotNull();
+        assertThat(gameModel).isNotNull();
+        assertThat(gameModel.getId()).isEqualTo(game.getId());
+        assertThat(gameModel.getPlayerId()).isEqualTo(game.getPlayer().getId());
+        assertThat(gameModel.getStatus()).isEqualTo(game.getStatus());
     }
 
     @Test
@@ -72,6 +79,7 @@ public class GameServiceTest {
         Player player = new Player();
         GameRequest gameRequest = new GameRequest(playerId);
         Game game = new Game(player, GameStatus.CREATED);
+
         when(playerService.getById(playerId)).thenReturn(player);
         when(gameRepository.findOne(any(Long.class))).thenReturn(game);
         when(gameRepository.save(any(Game.class))).thenReturn(game);
