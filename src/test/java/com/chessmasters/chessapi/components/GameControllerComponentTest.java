@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 
 @RunWith(SpringRunner.class)
@@ -43,21 +44,26 @@ public class GameControllerComponentTest extends BaseComponentTest {
 
     @Test
     public void getGames() {
+        final GameStatus expectedStatus = GameStatus.CREATED;
+        Game game = createGameFromDatabase();
+        int expectedId = game.getId().intValue();
+
         given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
         .get("/games").then()
-                .statusCode(HttpStatus.OK.value());
+                .statusCode(HttpStatus.OK.value())
+                .body("status", hasItem(String.valueOf(expectedStatus)))
+                .body("id", hasItem(expectedId));
 
     }
 
     @Test
     public void startGame() {
         final GameStatus expectedStatus = GameStatus.STARTED;
-        final Player player = playerRepository.save(new Player("Player name"));
-        final Game game = gameRepository.save(new Game(player, GameStatus.CREATED));
+        final Game game = createGameFromDatabase();
         final String path = String.format("/games/%s/start", game.getId());
 
-        GameRequest gameRequest = new GameRequest(player.getId());
+        GameRequest gameRequest = new GameRequest(game.getPlayer().getId());
 
         given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -65,5 +71,21 @@ public class GameControllerComponentTest extends BaseComponentTest {
         .put(path).then()
                 .statusCode(HttpStatus.OK.value())
                 .body("status", is(String.valueOf(expectedStatus)));
+    }
+
+    @Test
+    public void listMoves() {
+        final Game game = createGameFromDatabase();
+        final String path = String.format("/games/%s/moves", game.getId());
+
+        given()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .get(path).then()
+                .statusCode(HttpStatus.OK.value());
+    }
+
+    private Game createGameFromDatabase() {
+        final Player player = playerRepository.save(new Player("Player name"));
+        return gameRepository.save(new Game(player, GameStatus.CREATED));
     }
 }
