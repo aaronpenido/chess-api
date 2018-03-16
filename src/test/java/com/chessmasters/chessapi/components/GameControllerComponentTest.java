@@ -73,17 +73,6 @@ public class GameControllerComponentTest extends BaseComponentTest {
                 .body("status", is(String.valueOf(expectedStatus)));
     }
 
-    @Test
-    public void listMoves() {
-        final Game game = createGameFromDatabase();
-        final String path = String.format("/games/%s/moves", game.getId());
-
-        given()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-        .get(path).then()
-                .statusCode(HttpStatus.OK.value());
-    }
-
     private Game createGameFromDatabase() {
         final Player player = playerRepository.save(new Player("Player name"));
         return gameRepository.save(new Game(player, GameStatus.CREATED));
