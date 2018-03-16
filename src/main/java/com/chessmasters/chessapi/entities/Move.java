@@ -11,9 +11,11 @@ public class Move {
     @ManyToOne
     @JoinColumn(name="game_id")
     private Game game;
+    private int moveOrder;
 
-    public Move(Game game) {
+    public Move(Game game, int moveOrder) {
         this.game = game;
+        this.moveOrder = moveOrder;
     }
 
     public Long getId() {
@@ -22,5 +24,9 @@ public class Move {
 
     public Game getGame() {
         return game;
+    }
+
+    public int getMoveOrder() {
+        return moveOrder;
     }
 }
