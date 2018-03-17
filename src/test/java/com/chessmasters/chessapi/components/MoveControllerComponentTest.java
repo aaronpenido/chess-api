@@ -3,8 +3,10 @@ package com.chessmasters.chessapi.components;
 import com.chessmasters.chessapi.entities.Game;
 import com.chessmasters.chessapi.entities.Player;
 import com.chessmasters.chessapi.enums.GameStatus;
+import com.chessmasters.chessapi.models.SquareModel;
 import com.chessmasters.chessapi.repositories.GameRepository;
 import com.chessmasters.chessapi.repositories.PlayerRepository;
+import com.chessmasters.chessapi.request.MoveRequest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +27,17 @@ public class MoveControllerComponentTest extends BaseComponentTest {
 
     @Test
     public void createMove() {
+        final SquareModel expectedDestination = new SquareModel();
+        final MoveRequest moveRequest = new MoveRequest(expectedDestination);
         final int expectedOrder = 1;
         final Player player = playerRepository.save(new Player("Player name"));
-        Game game = gameRepository.save(new Game(player, GameStatus.CREATED));
+        final Game game = gameRepository.save(new Game(player, GameStatus.CREATED));
         final int gameId = game.getId().intValue();
         final String path = String.format("/games/%s/moves", gameId);
 
         given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(moveRequest)
         .post(path).then()
                 .statusCode(HttpStatus.CREATED.value())
                 .body("gameId", is(gameId))

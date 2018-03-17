@@ -5,6 +5,7 @@ import com.chessmasters.chessapi.entities.Move;
 import com.chessmasters.chessapi.entities.Square;
 import com.chessmasters.chessapi.models.MoveModel;
 import com.chessmasters.chessapi.repositories.MoveRepository;
+import com.chessmasters.chessapi.request.MoveRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -23,9 +24,11 @@ public class MoveService {
         this.gameService = gameService;
     }
 
-    public MoveModel createMove(Long gameId) {
+    public MoveModel createMove(Long gameId, MoveRequest request) {
         Game game = gameService.getById(gameId);
-        Square destination = new Square();
+        final Square destination = new Square(
+                request.getDestination().getNumber(),
+                request.getDestination().getLetter());
 
         Move move = new Move(game, destination, generateMoveOrder(gameId));
 

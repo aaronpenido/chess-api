@@ -1,5 +1,6 @@
 package com.chessmasters.chessapi.controllers;
 
+import com.chessmasters.chessapi.request.MoveRequest;
 import com.chessmasters.chessapi.response.MoveResponse;
 import com.chessmasters.chessapi.services.MoveService;
 import org.springframework.http.HttpStatus;
@@ -22,8 +23,8 @@ public class MoveController {
     @PostMapping(value = "/games/{gameId}/moves",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public MoveResponse createMove(@PathVariable Long gameId) {
-        return new MoveResponse(moveService.createMove(gameId));
+    public MoveResponse createMove(@PathVariable Long gameId, @RequestBody MoveRequest request) {
+        return new MoveResponse(moveService.createMove(gameId, request));
     }
 
     @ResponseStatus(HttpStatus.OK)

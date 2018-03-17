@@ -3,11 +3,14 @@ package com.chessmasters.chessapi.entities;
 import com.chessmasters.chessapi.enums.Letter;
 
 import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 @Embeddable
 public class Square {
 
     private int number;
+    @Enumerated(EnumType.STRING)
     private Letter letter;
 
     public Square() {
