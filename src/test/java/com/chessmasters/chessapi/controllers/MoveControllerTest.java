@@ -2,7 +2,9 @@ package com.chessmasters.chessapi.controllers;
 
 import com.chessmasters.chessapi.entities.Game;
 import com.chessmasters.chessapi.entities.Move;
+import com.chessmasters.chessapi.entities.Player;
 import com.chessmasters.chessapi.entities.Square;
+import com.chessmasters.chessapi.enums.GameStatus;
 import com.chessmasters.chessapi.models.MoveModel;
 import com.chessmasters.chessapi.models.Pawn;
 import com.chessmasters.chessapi.models.PieceModel;
@@ -35,7 +37,7 @@ public class MoveControllerTest {
     public void createMove() {
         final Long gameId = 1L;
         final int moveOrder = 1;
-        final Game game = new Game();
+        Game game = new Game(new Player(), GameStatus.STARTED);
         ReflectionTestUtils.setField(game, "id", gameId);
         final Square destination = new Square();
         final Move move = new Move(game, destination, moveOrder);

@@ -34,7 +34,7 @@ public class MoveControllerComponentTest extends BaseComponentTest {
         final MoveRequest moveRequest = new MoveRequest(pawn, expectedDestination);
         final int expectedOrder = 1;
         final Player player = playerRepository.save(new Player("Player name"));
-        final Game game = gameRepository.save(new Game(player, GameStatus.CREATED));
+        final Game game = gameRepository.save(new Game(player, GameStatus.STARTED));
         final int gameId = game.getId().intValue();
         final String path = String.format("/games/%s/moves", gameId);
 

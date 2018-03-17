@@ -2,7 +2,10 @@ package com.chessmasters.chessapi.services;
 
 import com.chessmasters.chessapi.entities.Game;
 import com.chessmasters.chessapi.entities.Move;
+import com.chessmasters.chessapi.entities.Player;
 import com.chessmasters.chessapi.entities.Square;
+import com.chessmasters.chessapi.enums.GameStatus;
+import com.chessmasters.chessapi.exceptions.GameNotStartedException;
 import com.chessmasters.chessapi.models.MoveModel;
 import com.chessmasters.chessapi.models.Pawn;
 import com.chessmasters.chessapi.models.PieceModel;
@@ -20,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -38,7 +42,7 @@ public class MoveServiceTest {
     public void createMove() {
         final int expectedOrder = 1;
         final Long gameId = 1L;
-        Game game = new Game();
+        Game game = new Game(new Player(), GameStatus.STARTED);
         ReflectionTestUtils.setField(game, "id", gameId);
         Square destination = new Square();
         SquareModel expectedDestination = new SquareModel(destination);
@@ -61,7 +65,7 @@ public class MoveServiceTest {
         final Long gameId = 1L;
         final int moveOrder = 1;
         final int expectedMoveOrder = 2;
-        Game game = new Game();
+        Game game = new Game(new Player(), GameStatus.STARTED);
         Square destination = new Square();
         PieceModel pawn = new Pawn();
         final MoveRequest request = new MoveRequest(pawn, new SquareModel(destination));
@@ -79,9 +83,23 @@ public class MoveServiceTest {
     }
 
     @Test
+    public void throwGameNotStartedExceptionWhenTryingToMovePieceOnNonStartedGame() {
+        final Long gameId = 1L;
+        Game game = new Game(new Player(), GameStatus.CREATED);
+        Square destination = new Square();
+        PieceModel pawn = new Pawn();
+        MoveRequest request = new MoveRequest(pawn, new SquareModel(destination));
+
+        when(gameService.getById(gameId)).thenReturn(game);
+
+        assertThatThrownBy(() -> service.createMove(gameId, request))
+                .isInstanceOf(GameNotStartedException.class);
+    }
+
+    @Test
     public void saveMoveOnDatabase() {
         final Long gameId = 1L;
-        Game game = new Game();
+        Game game = new Game(new Player(), GameStatus.STARTED);
         PieceModel pawn = new Pawn();
         final MoveRequest request = new MoveRequest(pawn, new SquareModel());
 
