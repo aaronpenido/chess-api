@@ -4,6 +4,8 @@ import com.chessmasters.chessapi.entities.Game;
 import com.chessmasters.chessapi.entities.Move;
 import com.chessmasters.chessapi.entities.Square;
 import com.chessmasters.chessapi.models.MoveModel;
+import com.chessmasters.chessapi.models.Pawn;
+import com.chessmasters.chessapi.models.PieceModel;
 import com.chessmasters.chessapi.models.SquareModel;
 import com.chessmasters.chessapi.request.MoveRequest;
 import com.chessmasters.chessapi.response.MoveResponse;
@@ -38,7 +40,8 @@ public class MoveControllerTest {
         final Square destination = new Square();
         final Move move = new Move(game, destination, moveOrder);
         final SquareModel expectedDestination = new SquareModel(destination);
-        final MoveRequest request = new MoveRequest(expectedDestination);
+        PieceModel pawn = new Pawn();
+        final MoveRequest request = new MoveRequest(pawn, expectedDestination);
 
         when(moveService.createMove(gameId, request)).thenReturn(new MoveModel(move));
 

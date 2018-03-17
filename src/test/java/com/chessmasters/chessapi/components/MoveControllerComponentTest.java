@@ -3,6 +3,8 @@ package com.chessmasters.chessapi.components;
 import com.chessmasters.chessapi.entities.Game;
 import com.chessmasters.chessapi.entities.Player;
 import com.chessmasters.chessapi.enums.GameStatus;
+import com.chessmasters.chessapi.models.Pawn;
+import com.chessmasters.chessapi.models.PieceModel;
 import com.chessmasters.chessapi.models.SquareModel;
 import com.chessmasters.chessapi.repositories.GameRepository;
 import com.chessmasters.chessapi.repositories.PlayerRepository;
@@ -28,7 +30,8 @@ public class MoveControllerComponentTest extends BaseComponentTest {
     @Test
     public void createMove() {
         final SquareModel expectedDestination = new SquareModel();
-        final MoveRequest moveRequest = new MoveRequest(expectedDestination);
+        PieceModel pawn = new Pawn();
+        final MoveRequest moveRequest = new MoveRequest(pawn, expectedDestination);
         final int expectedOrder = 1;
         final Player player = playerRepository.save(new Player("Player name"));
         final Game game = gameRepository.save(new Game(player, GameStatus.CREATED));

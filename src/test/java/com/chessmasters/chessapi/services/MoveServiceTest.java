@@ -4,6 +4,8 @@ import com.chessmasters.chessapi.entities.Game;
 import com.chessmasters.chessapi.entities.Move;
 import com.chessmasters.chessapi.entities.Square;
 import com.chessmasters.chessapi.models.MoveModel;
+import com.chessmasters.chessapi.models.Pawn;
+import com.chessmasters.chessapi.models.PieceModel;
 import com.chessmasters.chessapi.models.SquareModel;
 import com.chessmasters.chessapi.repositories.MoveRepository;
 import com.chessmasters.chessapi.request.MoveRequest;
@@ -40,7 +42,8 @@ public class MoveServiceTest {
         ReflectionTestUtils.setField(game, "id", gameId);
         Square destination = new Square();
         SquareModel expectedDestination = new SquareModel(destination);
-        MoveRequest request = new MoveRequest(expectedDestination);
+        PieceModel pawn = new Pawn();
+        final MoveRequest request = new MoveRequest(pawn, expectedDestination);
 
         when(gameService.getById(gameId)).thenReturn(game);
         when(moveRepository.save(any(Move.class))).thenReturn(new Move(game, destination, expectedOrder));
@@ -54,10 +57,33 @@ public class MoveServiceTest {
     }
 
     @Test
+    public void createMoveHasOrderIncreasedByOne() {
+        final Long gameId = 1L;
+        final int moveOrder = 1;
+        final int expectedMoveOrder = 2;
+        Game game = new Game();
+        Square destination = new Square();
+        PieceModel pawn = new Pawn();
+        final MoveRequest request = new MoveRequest(pawn, new SquareModel(destination));
+        List<Move> moves = new ArrayList<>();
+        moves.add(new Move(game, destination, moveOrder));
+
+        when(gameService.getById(gameId)).thenReturn(game);
+        when(moveRepository.findByGameId(gameId)).thenReturn(moves);
+        when(moveRepository.save(any(Move.class))).thenReturn(new Move(game, destination, expectedMoveOrder));
+
+        MoveModel moveModel = service.createMove(gameId, request);
+
+        assertThat(moveModel).isNotNull();
+        assertThat(moveModel.getOrder()).isEqualTo(expectedMoveOrder);
+    }
+
+    @Test
     public void saveMoveOnDatabase() {
         final Long gameId = 1L;
         Game game = new Game();
-        MoveRequest request = new MoveRequest(new SquareModel());
+        PieceModel pawn = new Pawn();
+        final MoveRequest request = new MoveRequest(pawn, new SquareModel());
 
         when(gameService.getById(gameId)).thenReturn(game);
         when(moveRepository.save(any(Move.class))).thenReturn(new Move());
@@ -74,26 +100,5 @@ public class MoveServiceTest {
         service.getMoves(gameId);
 
         verify(moveRepository).findByGameId(gameId);
-    }
-
-    @Test
-    public void createMoveHasOrderIncreasedByOne() {
-        final Long gameId = 1L;
-        final int moveOrder = 1;
-        final int expectedMoveOrder = 2;
-        Game game = new Game();
-        Square destination = new Square();
-        MoveRequest request = new MoveRequest(new SquareModel(destination));
-        List<Move> moves = new ArrayList<>();
-        moves.add(new Move(game, destination, moveOrder));
-
-        when(gameService.getById(gameId)).thenReturn(game);
-        when(moveRepository.findByGameId(gameId)).thenReturn(moves);
-        when(moveRepository.save(any(Move.class))).thenReturn(new Move(game, destination, expectedMoveOrder));
-
-        MoveModel moveModel = service.createMove(gameId, request);
-
-        assertThat(moveModel).isNotNull();
-        assertThat(moveModel.getOrder()).isEqualTo(expectedMoveOrder);
     }
 }
