@@ -2,6 +2,7 @@ package com.chessmasters.chessapi.controllers;
 
 import com.chessmasters.chessapi.entities.Game;
 import com.chessmasters.chessapi.entities.Move;
+import com.chessmasters.chessapi.entities.Square;
 import com.chessmasters.chessapi.models.MoveModel;
 import com.chessmasters.chessapi.response.MoveResponse;
 import com.chessmasters.chessapi.services.MoveService;
@@ -30,12 +31,15 @@ public class MoveControllerTest {
         final Long gameId = 1L;
         final int moveOrder = 1;
         final Game game = new Game();
+        final Square destination = new Square();
+        final Move move = new Move(game, destination, moveOrder);
 
-        when(moveService.createMove(gameId)).thenReturn(new MoveModel(new Move(game, moveOrder)));
+        when(moveService.createMove(gameId)).thenReturn(new MoveModel(move));
 
         MoveResponse response = controller.createMove(gameId);
 
         assertThat(response).isNotNull();
+        assertThat(response.getOrder()).isEqualTo(moveOrder);
     }
 
     @Test

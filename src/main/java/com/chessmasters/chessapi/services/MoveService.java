@@ -2,6 +2,7 @@ package com.chessmasters.chessapi.services;
 
 import com.chessmasters.chessapi.entities.Game;
 import com.chessmasters.chessapi.entities.Move;
+import com.chessmasters.chessapi.entities.Square;
 import com.chessmasters.chessapi.models.MoveModel;
 import com.chessmasters.chessapi.repositories.MoveRepository;
 import org.springframework.stereotype.Service;
@@ -24,8 +25,9 @@ public class MoveService {
 
     public MoveModel createMove(Long gameId) {
         Game game = gameService.getById(gameId);
+        Square destination = new Square();
 
-        Move move = new Move(game, generateMoveOrder(gameId));
+        Move move = new Move(game, destination, generateMoveOrder(gameId));
 
         return new MoveModel(moveRepository.save(move));
     }

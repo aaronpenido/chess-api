@@ -2,6 +2,7 @@ package com.chessmasters.chessapi.services;
 
 import com.chessmasters.chessapi.entities.Game;
 import com.chessmasters.chessapi.entities.Move;
+import com.chessmasters.chessapi.entities.Square;
 import com.chessmasters.chessapi.models.MoveModel;
 import com.chessmasters.chessapi.repositories.MoveRepository;
 import org.junit.Test;
@@ -70,11 +71,12 @@ public class MoveServiceTest {
         final int expectedMoveOrder = 2;
         Game game = new Game();
         List<Move> moves = new ArrayList<>();
-        moves.add(new Move(game, moveOrder));
+        Square destination = new Square();
+        moves.add(new Move(game, destination, moveOrder));
 
         when(gameService.getById(gameId)).thenReturn(game);
         when(moveRepository.findByGameId(gameId)).thenReturn(moves);
-        when(moveRepository.save(any(Move.class))).thenReturn(new Move(game, expectedMoveOrder));
+        when(moveRepository.save(any(Move.class))).thenReturn(new Move(game, destination, expectedMoveOrder));
 
         MoveModel moveModel = service.createMove(gameId);
 
