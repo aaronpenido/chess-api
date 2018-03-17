@@ -19,9 +19,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Matchers.any;
@@ -40,46 +37,28 @@ public class MoveServiceTest {
 
     @Test
     public void createMove() {
-        final int expectedOrder = 1;
         final Long gameId = 1L;
-        Game game = new Game(new Player(), GameStatus.STARTED);
-        ReflectionTestUtils.setField(game, "id", gameId);
-        Square destination = new Square();
-        SquareModel expectedDestination = new SquareModel(destination);
-        PieceModel pawn = new Pawn();
-        final MoveRequest request = new MoveRequest(pawn, expectedDestination);
+        final int expectedOrder = 1;
 
-        when(gameService.getById(gameId)).thenReturn(game);
-        when(moveRepository.save(any(Move.class))).thenReturn(new Move(game, destination, expectedOrder));
-
+        MoveRequest request = createMoveRequest(gameId, expectedOrder);
         MoveModel moveModel = service.createMove(gameId, request);
 
         assertThat(moveModel).isNotNull();
         assertThat(moveModel.getGameId()).isEqualTo(gameId);
         assertThat(moveModel.getOrder()).isEqualTo(expectedOrder);
-        assertThat(moveModel.getDestination()).isEqualTo(expectedDestination);
+        assertThat(moveModel.getDestination()).isEqualTo(request.getDestination());
     }
 
     @Test
     public void createMoveHasOrderIncreasedByOne() {
         final Long gameId = 1L;
-        final int moveOrder = 1;
-        final int expectedMoveOrder = 2;
-        Game game = new Game(new Player(), GameStatus.STARTED);
-        Square destination = new Square();
-        PieceModel pawn = new Pawn();
-        final MoveRequest request = new MoveRequest(pawn, new SquareModel(destination));
-        List<Move> moves = new ArrayList<>();
-        moves.add(new Move(game, destination, moveOrder));
+        final int increasedMoveOrder = 2;
 
-        when(gameService.getById(gameId)).thenReturn(game);
-        when(moveRepository.findByGameId(gameId)).thenReturn(moves);
-        when(moveRepository.save(any(Move.class))).thenReturn(new Move(game, destination, expectedMoveOrder));
-
+        MoveRequest request = createMoveRequest(gameId, increasedMoveOrder);
         MoveModel moveModel = service.createMove(gameId, request);
 
         assertThat(moveModel).isNotNull();
-        assertThat(moveModel.getOrder()).isEqualTo(expectedMoveOrder);
+        assertThat(moveModel.getOrder()).isEqualTo(increasedMoveOrder);
     }
 
     @Test
@@ -118,5 +97,19 @@ public class MoveServiceTest {
         service.getMoves(gameId);
 
         verify(moveRepository).findByGameId(gameId);
+    }
+
+    private MoveRequest createMoveRequest(final Long gameId, final int order) {
+        Game game = new Game(new Player(), GameStatus.STARTED);
+        ReflectionTestUtils.setField(game, "id", gameId);
+        Square destination = new Square();
+        SquareModel expectedDestination = new SquareModel(destination);
+        PieceModel pawn = new Pawn();
+        final Move move = new Move(game, destination, order);
+
+        when(gameService.getById(gameId)).thenReturn(game);
+        when(moveRepository.save(any(Move.class))).thenReturn(move);
+
+        return new MoveRequest(pawn, expectedDestination);
     }
 }
