@@ -39,8 +39,8 @@ public class MoveServiceTest {
     public void createMove() {
         final Long gameId = 1L;
         final int expectedOrder = 1;
-
         MoveRequest request = createMoveRequest(gameId, expectedOrder);
+
         MoveModel moveModel = service.createMove(gameId, request);
 
         assertThat(moveModel).isNotNull();

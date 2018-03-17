@@ -37,21 +37,13 @@ public class MoveControllerTest {
     public void createMove() {
         final Long gameId = 1L;
         final int moveOrder = 1;
-        Game game = new Game(new Player(), GameStatus.STARTED);
-        ReflectionTestUtils.setField(game, "id", gameId);
-        final Square destination = new Square();
-        final Move move = new Move(game, destination, moveOrder);
-        final SquareModel expectedDestination = new SquareModel(destination);
-        PieceModel pawn = new Pawn();
-        final MoveRequest request = new MoveRequest(pawn, expectedDestination);
-
-        when(moveService.createMove(gameId, request)).thenReturn(new MoveModel(move));
+        MoveRequest request = createMoveRequest(gameId, moveOrder);
 
         MoveResponse response = controller.createMove(gameId, request);
 
         assertThat(response).isNotNull();
         assertThat(response.getGameId()).isEqualTo(gameId);
-        assertThat(response.getDestination()).isEqualTo(expectedDestination);
+        assertThat(response.getDestination()).isEqualTo(request.getDestination());
         assertThat(response.getOrder()).isEqualTo(moveOrder);
     }
 
@@ -64,5 +56,19 @@ public class MoveControllerTest {
         List<MoveResponse> responseList = controller.listMoves(gameId);
 
         assertThat(responseList).isNotNull();
+    }
+
+    private MoveRequest createMoveRequest(final Long gameId, final int moveOrder) {
+        Game game = new Game(new Player(), GameStatus.STARTED);
+        ReflectionTestUtils.setField(game, "id", gameId);
+        final Square destination = new Square();
+        final Move move = new Move(game, destination, moveOrder);
+        final SquareModel expectedDestination = new SquareModel(destination);
+        PieceModel pawn = new Pawn();
+        MoveRequest request = new MoveRequest(pawn, expectedDestination);
+
+        when(moveService.createMove(gameId, request)).thenReturn(new MoveModel(move));
+
+        return request;
     }
 }
