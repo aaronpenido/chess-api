@@ -28,7 +28,6 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('io.rest-assured:json-path:3.0.6')
 	compile('io.rest-assured:xml-path:3.0.6')
-	compile group: 'org.modelmapper', name: 'modelmapper', version: '0.7.5'
 	runtime('org.springframework.boot:spring-boot-devtools')
 	runtime('com.h2database:h2')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
