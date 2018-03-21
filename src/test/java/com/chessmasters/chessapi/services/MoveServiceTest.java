@@ -66,7 +66,7 @@ public class MoveServiceTest {
         final Long gameId = 1L;
         Game game = new Game(new Player(), GameStatus.CREATED);
         Square destination = new Square();
-        PieceModel pawn = new Pawn();
+        PieceModel pawn = new Pawn(new SquareModel(new Square()), "White");
         MoveRequest request = new MoveRequest(pawn, new SquareModel(destination));
 
         when(gameService.getById(gameId)).thenReturn(game);
@@ -79,7 +79,7 @@ public class MoveServiceTest {
     public void saveMoveOnDatabase() {
         final Long gameId = 1L;
         Game game = new Game(new Player(), GameStatus.STARTED);
-        PieceModel pawn = new Pawn();
+        PieceModel pawn = new Pawn(new SquareModel(new Square()), "White");
         final MoveRequest request = new MoveRequest(pawn, new SquareModel());
 
         when(gameService.getById(gameId)).thenReturn(game);
@@ -104,8 +104,8 @@ public class MoveServiceTest {
         ReflectionTestUtils.setField(game, "id", gameId);
         Square destination = new Square();
         SquareModel expectedDestination = new SquareModel(destination);
-        PieceModel pawn = new Pawn();
-        final Move move = new Move(game, destination, order);
+        PieceModel pawn = new Pawn(expectedDestination, "White");
+        final Move move = new Move(game, null, destination, order);
 
         when(gameService.getById(gameId)).thenReturn(game);
         when(moveRepository.save(any(Move.class))).thenReturn(move);

@@ -62,9 +62,9 @@ public class MoveControllerTest {
         Game game = new Game(new Player(), GameStatus.STARTED);
         ReflectionTestUtils.setField(game, "id", gameId);
         final Square destination = new Square();
-        final Move move = new Move(game, destination, moveOrder);
+        final Move move = new Move(game, null, destination, moveOrder);
         final SquareModel expectedDestination = new SquareModel(destination);
-        PieceModel pawn = new Pawn();
+        PieceModel pawn = new Pawn(expectedDestination, "White");
         MoveRequest request = new MoveRequest(pawn, expectedDestination);
 
         when(moveService.createMove(gameId, request)).thenReturn(new MoveModel(move));

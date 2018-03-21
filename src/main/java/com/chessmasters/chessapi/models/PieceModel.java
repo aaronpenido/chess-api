@@ -10,7 +10,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
         include = As.PROPERTY,
         property = "type")
 @JsonSubTypes({
-        @Type(value = Pawn.class)
+        @Type(value = Pawn.class),
+        @Type(value = Knight.class)
 })
 public abstract class PieceModel {
 
