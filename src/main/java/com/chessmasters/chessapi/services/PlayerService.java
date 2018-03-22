@@ -26,7 +26,7 @@ public class PlayerService {
             return new PlayerModel(player);
         }
 
-        return new PlayerModel();
+        return null;
     }
 
     public List<PlayerModel> getPlayers() {

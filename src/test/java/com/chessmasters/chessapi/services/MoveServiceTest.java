@@ -77,9 +77,10 @@ public class MoveServiceTest {
     public void saveMoveOnDatabase() {
         final Long gameId = 1L;
         Game game = new Game(new Player(), GameStatus.STARTED);
-        Piece piece = new Piece("White", new Square(), "Pawn");
+        final Square square = new Square();
+        Piece piece = new Piece("White", square, "Pawn");
         PieceModel pawn = new Pawn(piece);
-        final MoveRequest request = new MoveRequest(pawn, new SquareModel());
+        final MoveRequest request = new MoveRequest(pawn, new SquareModel(square));
 
         when(gameService.getById(gameId)).thenReturn(game);
         when(moveRepository.save(any(Move.class))).thenReturn(new Move());
