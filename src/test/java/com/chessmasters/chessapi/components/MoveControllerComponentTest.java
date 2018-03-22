@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static com.chessmasters.chessapi.enums.Color.WHITE;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.hamcrest.CoreMatchers.is;
 
@@ -34,7 +35,7 @@ public class MoveControllerComponentTest extends BaseComponentTest {
     public void createMove() {
         final SquareEntity destination = new SquareEntity(1, Letter.A);
         final Square expectedDestination = new Square(destination);
-        final PieceEntity piece = new PieceEntity("White", destination, "Pawn");
+        final PieceEntity piece = new PieceEntity(WHITE, destination, "Pawn");
         Piece pawn = new Pawn(piece);
         final MoveRequest moveRequest = new MoveRequest(pawn, expectedDestination);
         final int expectedOrder = 1;

@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import static com.chessmasters.chessapi.enums.Color.WHITE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Matchers.any;
@@ -63,7 +64,7 @@ public class MoveServiceTest {
         final Long gameId = 1L;
         GameEntity game = new GameEntity(new PlayerEntity(), GameStatus.CREATED);
         SquareEntity destination = new SquareEntity();
-        PieceEntity piece = new PieceEntity("White", new SquareEntity(), "Pawn");
+        PieceEntity piece = new PieceEntity(WHITE, new SquareEntity(), "Pawn");
         Piece pawn = new Pawn(piece);
         MoveRequest request = new MoveRequest(pawn, new Square(destination));
 
@@ -78,7 +79,7 @@ public class MoveServiceTest {
         final Long gameId = 1L;
         GameEntity game = new GameEntity(new PlayerEntity(), GameStatus.STARTED);
         final SquareEntity square = new SquareEntity();
-        PieceEntity piece = new PieceEntity("White", square, "Pawn");
+        PieceEntity piece = new PieceEntity(WHITE, square, "Pawn");
         Piece pawn = new Pawn(piece);
         final MoveRequest request = new MoveRequest(pawn, new Square(square));
 
@@ -104,7 +105,7 @@ public class MoveServiceTest {
         ReflectionTestUtils.setField(game, "id", gameId);
         SquareEntity destination = new SquareEntity();
         Square expectedDestination = new Square(destination);
-         PieceEntity piece = new PieceEntity("White", destination, "Pawn");
+         PieceEntity piece = new PieceEntity(WHITE, destination, "Pawn");
         Piece pawn = new Pawn(piece);
         final MoveEntity move = new MoveEntity(game, null, destination, order);
 

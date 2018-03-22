@@ -1,12 +1,17 @@
 package com.chessmasters.chessapi.entities;
 
+import com.chessmasters.chessapi.enums.Color;
+
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 @Embeddable
 public class PieceEntity {
 
-    private String color;
+    @Enumerated(EnumType.STRING)
+    private Color color;
     @Embedded
     private SquareEntity square;
     private String type;
@@ -14,13 +19,13 @@ public class PieceEntity {
     public PieceEntity() {
     }
 
-    public PieceEntity(String color, SquareEntity square, String type) {
+    public PieceEntity(Color color, SquareEntity square, String type) {
         this.color = color;
         this.square = square;
         this.type = type;
     }
 
-    public String getColor() {
+    public Color getColor() {
         return color;
     }
 

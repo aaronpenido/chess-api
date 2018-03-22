@@ -1,6 +1,7 @@
 package com.chessmasters.chessapi.models;
 
 import com.chessmasters.chessapi.entities.PieceEntity;
+import com.chessmasters.chessapi.enums.Color;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -18,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 public abstract class Piece {
 
     private Square square;
-    private String color;
+    private Color color;
     private String type;
 
     public Piece(PieceEntity pieceEntity) {
@@ -33,7 +34,7 @@ public abstract class Piece {
         return square;
     }
 
-    public String getColor() {
+    public Color getColor() {
         return color;
     }
 

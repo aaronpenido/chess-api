@@ -19,6 +19,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.chessmasters.chessapi.enums.Color.WHITE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -61,7 +62,7 @@ public class MoveControllerTest {
         final SquareEntity destination = new SquareEntity();
         final MoveEntity move = new MoveEntity(game, null, destination, moveOrder);
         final Square expectedDestination = new Square(destination);
-        final PieceEntity piece = new PieceEntity("White", destination, "Pawn");
+        final PieceEntity piece = new PieceEntity(WHITE, destination, "Pawn");
         Piece pawn = new Pawn(piece);
         MoveRequest request = new MoveRequest(pawn, expectedDestination);
 
