@@ -1,9 +1,6 @@
 package com.chessmasters.chessapi.services;
 
-import com.chessmasters.chessapi.entities.Game;
-import com.chessmasters.chessapi.entities.Move;
-import com.chessmasters.chessapi.entities.Player;
-import com.chessmasters.chessapi.entities.Square;
+import com.chessmasters.chessapi.entities.*;
 import com.chessmasters.chessapi.enums.GameStatus;
 import com.chessmasters.chessapi.exceptions.GameNotStartedException;
 import com.chessmasters.chessapi.models.MoveModel;
@@ -66,7 +63,8 @@ public class MoveServiceTest {
         final Long gameId = 1L;
         Game game = new Game(new Player(), GameStatus.CREATED);
         Square destination = new Square();
-        PieceModel pawn = new Pawn(new SquareModel(new Square()), "White");
+        Piece piece = new Piece("White", new Square(), "Pawn");
+        PieceModel pawn = new Pawn(piece);
         MoveRequest request = new MoveRequest(pawn, new SquareModel(destination));
 
         when(gameService.getById(gameId)).thenReturn(game);
@@ -79,7 +77,8 @@ public class MoveServiceTest {
     public void saveMoveOnDatabase() {
         final Long gameId = 1L;
         Game game = new Game(new Player(), GameStatus.STARTED);
-        PieceModel pawn = new Pawn(new SquareModel(new Square()), "White");
+        Piece piece = new Piece("White", new Square(), "Pawn");
+        PieceModel pawn = new Pawn(piece);
         final MoveRequest request = new MoveRequest(pawn, new SquareModel());
 
         when(gameService.getById(gameId)).thenReturn(game);
@@ -104,7 +103,8 @@ public class MoveServiceTest {
         ReflectionTestUtils.setField(game, "id", gameId);
         Square destination = new Square();
         SquareModel expectedDestination = new SquareModel(destination);
-        PieceModel pawn = new Pawn(expectedDestination, "White");
+         Piece piece = new Piece("White", destination, "Pawn");
+        PieceModel pawn = new Pawn(piece);
         final Move move = new Move(game, null, destination, order);
 
         when(gameService.getById(gameId)).thenReturn(game);

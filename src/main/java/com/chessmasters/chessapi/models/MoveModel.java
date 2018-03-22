@@ -13,7 +13,7 @@ public class MoveModel {
 
         if(move.getGame() != null) {
             this.gameId = move.getGame().getId();
-            //this.pieceModel = move.
+            this.pieceModel = new Pawn(move.getPiece());
             this.order = move.getMoveOrder();
             this.destination = new SquareModel(move.getDestination());
         }

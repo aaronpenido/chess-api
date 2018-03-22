@@ -38,7 +38,7 @@ public class MoveService {
                 request.getDestination().getNumber(),
                 request.getDestination().getLetter());
 
-        Piece piece = new Piece(request.getPieceModel().getColor(), destination, "Pawn");
+        Piece piece = new Piece(request.getPieceModel().getColor(), destination, request.getPieceModel().getType());
         Move move = new Move(game, piece, destination, generateMoveOrder(gameId));
 
         return new MoveModel(moveRepository.save(move));

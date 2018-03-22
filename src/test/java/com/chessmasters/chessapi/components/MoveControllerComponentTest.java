@@ -1,6 +1,7 @@
 package com.chessmasters.chessapi.components;
 
 import com.chessmasters.chessapi.entities.Game;
+import com.chessmasters.chessapi.entities.Piece;
 import com.chessmasters.chessapi.entities.Player;
 import com.chessmasters.chessapi.entities.Square;
 import com.chessmasters.chessapi.enums.GameStatus;
@@ -31,11 +32,14 @@ public class MoveControllerComponentTest extends BaseComponentTest {
 
     @Test
     public void createMove() {
-        final SquareModel expectedDestination = new SquareModel(new Square(1, Letter.A));
-        PieceModel pawn = new Pawn(expectedDestination, "White");
+        final Square destination = new Square(1, Letter.A);
+        final SquareModel expectedDestination = new SquareModel(destination);
+        final Piece piece = new Piece("White", destination, "Pawn");
+        PieceModel pawn = new Pawn(piece);
         final MoveRequest moveRequest = new MoveRequest(pawn, expectedDestination);
         final int expectedOrder = 1;
-        final Player player = playerRepository.save(new Player("Player name"));
+        final String playerName = "Player name";
+        final Player player = playerRepository.save(new Player(playerName));
         final Game game = gameRepository.save(new Game(player, GameStatus.STARTED));
         final int gameId = game.getId().intValue();
         final String path = String.format("/games/%s/moves", gameId);
@@ -52,7 +56,8 @@ public class MoveControllerComponentTest extends BaseComponentTest {
 
     @Test
     public void listMoves() {
-        final Player player = playerRepository.save(new Player("Player name"));
+        final String name = "Player name";
+        final Player player = playerRepository.save(new Player(name));
         Game game = gameRepository.save(new Game(player, GameStatus.CREATED));
         final String path = String.format("/games/%s/moves", game.getId());
 

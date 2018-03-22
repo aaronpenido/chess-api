@@ -1,9 +1,6 @@
 package com.chessmasters.chessapi.controllers;
 
-import com.chessmasters.chessapi.entities.Game;
-import com.chessmasters.chessapi.entities.Move;
-import com.chessmasters.chessapi.entities.Player;
-import com.chessmasters.chessapi.entities.Square;
+import com.chessmasters.chessapi.entities.*;
 import com.chessmasters.chessapi.enums.GameStatus;
 import com.chessmasters.chessapi.models.MoveModel;
 import com.chessmasters.chessapi.models.Pawn;
@@ -64,7 +61,8 @@ public class MoveControllerTest {
         final Square destination = new Square();
         final Move move = new Move(game, null, destination, moveOrder);
         final SquareModel expectedDestination = new SquareModel(destination);
-        PieceModel pawn = new Pawn(expectedDestination, "White");
+        final Piece piece = new Piece("White", destination, "Pawn");
+        PieceModel pawn = new Pawn(piece);
         MoveRequest request = new MoveRequest(pawn, expectedDestination);
 
         when(moveService.createMove(gameId, request)).thenReturn(new MoveModel(move));
