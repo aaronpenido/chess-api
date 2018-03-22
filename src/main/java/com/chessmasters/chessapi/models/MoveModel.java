@@ -1,6 +1,6 @@
 package com.chessmasters.chessapi.models;
 
-import com.chessmasters.chessapi.entities.Move;
+import com.chessmasters.chessapi.entities.MoveEntity;
 
 public class MoveModel {
 
@@ -9,7 +9,7 @@ public class MoveModel {
     private SquareModel destination;
     private int order;
 
-    public MoveModel(Move move) {
+    public MoveModel(MoveEntity move) {
 
         if(move.getGame() != null) {
             this.gameId = move.getGame().getId();

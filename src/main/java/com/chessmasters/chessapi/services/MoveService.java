@@ -1,9 +1,9 @@
 package com.chessmasters.chessapi.services;
 
-import com.chessmasters.chessapi.entities.Game;
-import com.chessmasters.chessapi.entities.Move;
-import com.chessmasters.chessapi.entities.Piece;
-import com.chessmasters.chessapi.entities.Square;
+import com.chessmasters.chessapi.entities.GameEntity;
+import com.chessmasters.chessapi.entities.MoveEntity;
+import com.chessmasters.chessapi.entities.PieceEntity;
+import com.chessmasters.chessapi.entities.SquareEntity;
 import com.chessmasters.chessapi.enums.GameStatus;
 import com.chessmasters.chessapi.exceptions.GameNotStartedException;
 import com.chessmasters.chessapi.models.MoveModel;
@@ -28,24 +28,24 @@ public class MoveService {
     }
 
     public MoveModel createMove(Long gameId, MoveRequest request) {
-        Game game = gameService.getById(gameId);
+        GameEntity game = gameService.getById(gameId);
 
         if(!game.getStatus().equals(GameStatus.STARTED)) {
             throw new GameNotStartedException(gameId);
         }
 
-        final Square destination = new Square(
+        final SquareEntity destination = new SquareEntity(
                 request.getDestination().getNumber(),
                 request.getDestination().getLetter());
 
-        Piece piece = new Piece(request.getPieceModel().getColor(), destination, request.getPieceModel().getType());
-        Move move = new Move(game, piece, destination, generateMoveOrder(gameId));
+        PieceEntity piece = new PieceEntity(request.getPieceModel().getColor(), destination, request.getPieceModel().getType());
+        MoveEntity move = new MoveEntity(game, piece, destination, generateMoveOrder(gameId));
 
         return new MoveModel(moveRepository.save(move));
     }
 
     public List<MoveModel> getMoves(Long gameId) {
-        List<Move> moves = moveRepository.findByGameId(gameId);
+        List<MoveEntity> moves = moveRepository.findByGameId(gameId);
 
         return moves
                 .stream()

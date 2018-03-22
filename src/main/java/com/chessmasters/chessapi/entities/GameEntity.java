@@ -4,8 +4,8 @@ import com.chessmasters.chessapi.enums.GameStatus;
 
 import javax.persistence.*;
 
-@Entity
-public class Game {
+@Entity(name = "Game")
+public class GameEntity {
 
     @Id
     @GeneratedValue
@@ -14,15 +14,15 @@ public class Game {
     private GameStatus status;
     @OneToOne
     @JoinColumn(name = "player_id", referencedColumnName = "id")
-    private Player player;
+    private PlayerEntity player;
     @OneToOne
     @JoinColumn(name = "player2_id", referencedColumnName = "id")
-    private Player player2;
+    private PlayerEntity player2;
 
-    public Game() {
+    public GameEntity() {
     }
 
-    public Game(Player player, GameStatus status) {
+    public GameEntity(PlayerEntity player, GameStatus status) {
         this.player = player;
         this.status = status;
     }
@@ -35,11 +35,11 @@ public class Game {
         return status;
     }
 
-    public Player getPlayer() {
+    public PlayerEntity getPlayer() {
         return player;
     }
 
-    public Player getPlayer2() {
+    public PlayerEntity getPlayer2() {
         return player2;
     }
 
@@ -47,7 +47,7 @@ public class Game {
         this.status = status;
     }
 
-    public void setPlayer2(Player player2) {
+    public void setPlayer2(PlayerEntity player2) {
         this.player2 = player2;
     }
 }

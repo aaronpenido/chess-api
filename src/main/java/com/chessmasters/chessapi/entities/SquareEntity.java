@@ -7,16 +7,16 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
 @Embeddable
-public class Square {
+public class SquareEntity {
 
     private int number;
     @Enumerated(EnumType.STRING)
     private Letter letter;
 
-    public Square() {
+    public SquareEntity() {
     }
 
-    public Square(int number, Letter letter) {
+    public SquareEntity(int number, Letter letter) {
         this.number = number;
         this.letter = letter;
     }

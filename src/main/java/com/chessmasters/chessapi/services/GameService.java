@@ -1,7 +1,7 @@
 package com.chessmasters.chessapi.services;
 
-import com.chessmasters.chessapi.entities.Game;
-import com.chessmasters.chessapi.entities.Player;
+import com.chessmasters.chessapi.entities.GameEntity;
+import com.chessmasters.chessapi.entities.PlayerEntity;
 import com.chessmasters.chessapi.enums.GameStatus;
 import com.chessmasters.chessapi.exceptions.GameNotFoundException;
 import com.chessmasters.chessapi.exceptions.GameStartedException;
@@ -25,9 +25,9 @@ public class GameService {
     }
 
     public GameModel createGame(GameRequest gameRequest) {
-        Player player = playerService.getById(gameRequest.getPlayerId());
+        PlayerEntity player = playerService.getById(gameRequest.getPlayerId());
 
-        Game game = gameRepository.save(new Game(player, GameStatus.CREATED));
+        GameEntity game = gameRepository.save(new GameEntity(player, GameStatus.CREATED));
 
         if(game == null) {
             throw new RuntimeException("An error occurred when trying to create a game.");
@@ -37,7 +37,7 @@ public class GameService {
     }
 
     public List<GameModel> getGames() {
-        List<Game> games = gameRepository.findAll();
+        List<GameEntity> games = gameRepository.findAll();
 
         return games
                 .stream()
@@ -46,13 +46,13 @@ public class GameService {
     }
 
     public GameModel startGame(Long gameId, GameRequest gameRequest) {
-        Game game = getById(gameId);
+        GameEntity game = getById(gameId);
 
         if(game.getStatus().equals(GameStatus.STARTED)) {
             throw new GameStartedException(gameId);
         }
 
-        Player player2 = playerService.getById(gameRequest.getPlayerId());
+        PlayerEntity player2 = playerService.getById(gameRequest.getPlayerId());
 
         game.setStatus(GameStatus.STARTED);
         game.setPlayer2(player2);
@@ -61,8 +61,8 @@ public class GameService {
         return new GameModel(game);
     }
 
-    public Game getById(Long gameId) {
-        Game game = gameRepository.findOne(gameId);
+    public GameEntity getById(Long gameId) {
+        GameEntity game = gameRepository.findOne(gameId);
 
         if(game == null) {
             throw new GameNotFoundException(gameId);

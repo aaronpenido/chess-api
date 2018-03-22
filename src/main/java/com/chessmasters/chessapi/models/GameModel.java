@@ -1,6 +1,6 @@
 package com.chessmasters.chessapi.models;
 
-import com.chessmasters.chessapi.entities.Game;
+import com.chessmasters.chessapi.entities.GameEntity;
 import com.chessmasters.chessapi.enums.GameStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -11,7 +11,7 @@ public class GameModel {
     private Long playerId;
     private Long player2Id;
 
-    public GameModel(@JsonProperty("game") Game game) {
+    public GameModel(@JsonProperty("game") GameEntity game) {
         this.id = game.getId();
         this.status = game.getStatus();
         this.playerId = game.getPlayer().getId();

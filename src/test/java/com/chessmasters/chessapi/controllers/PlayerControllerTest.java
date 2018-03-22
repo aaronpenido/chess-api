@@ -1,6 +1,6 @@
 package com.chessmasters.chessapi.controllers;
 
-import com.chessmasters.chessapi.entities.Player;
+import com.chessmasters.chessapi.entities.PlayerEntity;
 import com.chessmasters.chessapi.models.PlayerModel;
 import com.chessmasters.chessapi.request.PlayerRequest;
 import com.chessmasters.chessapi.response.PlayerResponse;
@@ -28,7 +28,7 @@ public class PlayerControllerTest {
         final String name = "Player Name";
         PlayerRequest playerRequest = new PlayerRequest(name);
 
-        Player player = new Player(name);
+        PlayerEntity player = new PlayerEntity(name);
         when(service.createPlayer(playerRequest)).thenReturn(new PlayerModel(player));
 
         PlayerResponse playerResponse = controller.createPlayer(playerRequest);

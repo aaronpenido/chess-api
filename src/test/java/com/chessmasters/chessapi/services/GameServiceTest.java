@@ -1,7 +1,7 @@
 package com.chessmasters.chessapi.services;
 
-import com.chessmasters.chessapi.entities.Game;
-import com.chessmasters.chessapi.entities.Player;
+import com.chessmasters.chessapi.entities.GameEntity;
+import com.chessmasters.chessapi.entities.PlayerEntity;
 import com.chessmasters.chessapi.enums.GameStatus;
 import com.chessmasters.chessapi.exceptions.GameNotFoundException;
 import com.chessmasters.chessapi.exceptions.GameStartedException;
@@ -35,14 +35,14 @@ public class GameServiceTest {
     public void createGame() {
         final Long gameId = 1L;
         final Long playerId = 1L;
-        Player player = new Player();
+        PlayerEntity player = new PlayerEntity();
         ReflectionTestUtils.setField(player, "id", playerId);
-        final Game game = new Game(player, GameStatus.CREATED);
+        final GameEntity game = new GameEntity(player, GameStatus.CREATED);
         ReflectionTestUtils.setField(game, "id", gameId);
         GameRequest gameRequest = new GameRequest(playerId);
 
         when(playerService.getById(playerId)).thenReturn(player);
-        when(gameRepository.save(any(Game.class))).thenReturn(game);
+        when(gameRepository.save(any(GameEntity.class))).thenReturn(game);
 
         GameModel gameModel = service.createGame(gameRequest);
 
@@ -56,14 +56,14 @@ public class GameServiceTest {
     public void saveGameOnDatabase() {
         final Long playerId = 1L;
         GameRequest request = new GameRequest(playerId);
-        Player player = new Player();
+        PlayerEntity player = new PlayerEntity();
 
         when(playerService.getById(playerId)).thenReturn(player);
-        when(gameRepository.save(any(Game.class))).thenReturn(new Game(player, GameStatus.CREATED));
+        when(gameRepository.save(any(GameEntity.class))).thenReturn(new GameEntity(player, GameStatus.CREATED));
 
         service.createGame(request);
 
-        verify(gameRepository).save(any(Game.class));
+        verify(gameRepository).save(any(GameEntity.class));
     }
 
     @Test
@@ -76,13 +76,13 @@ public class GameServiceTest {
     public void startGameUpdatesGameStatusToStarted() {
         final Long gameId = 1L;
         final Long playerId = 1L;
-        Player player = new Player();
+        PlayerEntity player = new PlayerEntity();
         GameRequest gameRequest = new GameRequest(playerId);
-        Game game = new Game(player, GameStatus.CREATED);
+        GameEntity game = new GameEntity(player, GameStatus.CREATED);
 
         when(playerService.getById(playerId)).thenReturn(player);
         when(gameRepository.findOne(any(Long.class))).thenReturn(game);
-        when(gameRepository.save(any(Game.class))).thenReturn(game);
+        when(gameRepository.save(any(GameEntity.class))).thenReturn(game);
 
         GameModel gameModel = service.startGame(gameId, gameRequest);
 
@@ -94,7 +94,7 @@ public class GameServiceTest {
     public void throwRuntimeExceptionWhenErrorOccurredOnSaveGame() {
         GameRequest request = new GameRequest();
 
-        when(gameRepository.save(any(Game.class))).thenReturn(null);
+        when(gameRepository.save(any(GameEntity.class))).thenReturn(null);
 
         assertThatThrownBy(() -> service.createGame(request))
                 .isInstanceOf(RuntimeException.class);
@@ -115,9 +115,9 @@ public class GameServiceTest {
     public void throwGameIsStartedExceptionWhenTryingToStartAgain() {
         final Long gameId = 1L;
         GameRequest request = new GameRequest();
-        Game game = new Game(new Player(), GameStatus.STARTED);
+        GameEntity game = new GameEntity(new PlayerEntity(), GameStatus.STARTED);
         ReflectionTestUtils.setField(game, "id", gameId);
-        when(playerService.getById(any(Long.class))).thenReturn(new Player());
+        when(playerService.getById(any(Long.class))).thenReturn(new PlayerEntity());
         when(gameRepository.findOne(any(Long.class))).thenReturn(game);
 
         assertThatThrownBy(() -> service.startGame(gameId, request))

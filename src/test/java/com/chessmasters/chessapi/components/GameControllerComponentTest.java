@@ -1,7 +1,7 @@
 package com.chessmasters.chessapi.components;
 
-import com.chessmasters.chessapi.entities.Game;
-import com.chessmasters.chessapi.entities.Player;
+import com.chessmasters.chessapi.entities.GameEntity;
+import com.chessmasters.chessapi.entities.PlayerEntity;
 import com.chessmasters.chessapi.enums.GameStatus;
 import com.chessmasters.chessapi.repositories.GameRepository;
 import com.chessmasters.chessapi.repositories.PlayerRepository;
@@ -28,7 +28,7 @@ public class GameControllerComponentTest extends BaseComponentTest {
     @Test
     public void createGame() {
         final GameStatus expectedStatus = GameStatus.CREATED;
-        Player player = new Player("Player name");
+        PlayerEntity player = new PlayerEntity("Player name");
         final Long playerId = playerRepository.save(player).getId();
         GameRequest gameRequest = new GameRequest(playerId);
 
@@ -45,7 +45,7 @@ public class GameControllerComponentTest extends BaseComponentTest {
     @Test
     public void getGames() {
         final GameStatus expectedStatus = GameStatus.CREATED;
-        Game game = createGameFromDatabase();
+        GameEntity game = createGameFromDatabase();
         int expectedId = game.getId().intValue();
 
         given()
@@ -60,7 +60,7 @@ public class GameControllerComponentTest extends BaseComponentTest {
     @Test
     public void startGame() {
         final GameStatus expectedStatus = GameStatus.STARTED;
-        final Game game = createGameFromDatabase();
+        final GameEntity game = createGameFromDatabase();
         final String path = String.format("/games/%s/start", game.getId());
 
         GameRequest gameRequest = new GameRequest(game.getPlayer().getId());
@@ -73,8 +73,8 @@ public class GameControllerComponentTest extends BaseComponentTest {
                 .body("status", is(String.valueOf(expectedStatus)));
     }
 
-    private Game createGameFromDatabase() {
-        final Player player = playerRepository.save(new Player("Player name"));
-        return gameRepository.save(new Game(player, GameStatus.CREATED));
+    private GameEntity createGameFromDatabase() {
+        final PlayerEntity player = playerRepository.save(new PlayerEntity("Player name"));
+        return gameRepository.save(new GameEntity(player, GameStatus.CREATED));
     }
 }

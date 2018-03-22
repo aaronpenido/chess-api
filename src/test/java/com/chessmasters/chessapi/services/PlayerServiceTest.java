@@ -1,6 +1,6 @@
 package com.chessmasters.chessapi.services;
 
-import com.chessmasters.chessapi.entities.Player;
+import com.chessmasters.chessapi.entities.PlayerEntity;
 import com.chessmasters.chessapi.exceptions.PlayerNotFoundException;
 import com.chessmasters.chessapi.models.PlayerModel;
 import com.chessmasters.chessapi.repositories.PlayerRepository;
@@ -31,9 +31,9 @@ public class PlayerServiceTest {
         final Long id = 1L;
         final String name = "Player Name";
         PlayerRequest request = new PlayerRequest(name);
-        Player expectedPlayer = new Player(name);
+        PlayerEntity expectedPlayer = new PlayerEntity(name);
         ReflectionTestUtils.setField(expectedPlayer, "id", id);
-        when(playerRepository.save(any(Player.class))).thenReturn(expectedPlayer);
+        when(playerRepository.save(any(PlayerEntity.class))).thenReturn(expectedPlayer);
 
         PlayerModel player = service.createPlayer(request);
 
@@ -47,7 +47,7 @@ public class PlayerServiceTest {
         PlayerRequest request = new PlayerRequest(name);
 
         service.createPlayer(request);
-        verify(playerRepository).save(any(Player.class));
+        verify(playerRepository).save(any(PlayerEntity.class));
     }
 
     @Test
@@ -60,9 +60,9 @@ public class PlayerServiceTest {
     public void getPlayerById() {
         final Long id = 1L;
 
-        when(playerRepository.findOne(any(Long.class))).thenReturn(new Player());
+        when(playerRepository.findOne(any(Long.class))).thenReturn(new PlayerEntity());
 
-        Player player = service.getById(id);
+        PlayerEntity player = service.getById(id);
 
         assertThat(player).isNotNull();
     }

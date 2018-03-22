@@ -1,6 +1,6 @@
 package com.chessmasters.chessapi.services;
 
-import com.chessmasters.chessapi.entities.Player;
+import com.chessmasters.chessapi.entities.PlayerEntity;
 import com.chessmasters.chessapi.exceptions.PlayerNotFoundException;
 import com.chessmasters.chessapi.models.PlayerModel;
 import com.chessmasters.chessapi.repositories.PlayerRepository;
@@ -20,7 +20,7 @@ public class PlayerService {
     }
 
     public PlayerModel createPlayer(PlayerRequest playerRequest) {
-        Player player = repository.save(new Player(playerRequest.getName()));
+        PlayerEntity player = repository.save(new PlayerEntity(playerRequest.getName()));
 
         if(player != null) {
             return new PlayerModel(player);
@@ -30,7 +30,7 @@ public class PlayerService {
     }
 
     public List<PlayerModel> getPlayers() {
-        List<Player> players = repository.findAll();
+        List<PlayerEntity> players = repository.findAll();
 
         return players
                 .stream()
@@ -38,8 +38,8 @@ public class PlayerService {
                 .collect(Collectors.toList());
     }
 
-    public Player getById(Long playerId) {
-        Player player = repository.findOne(playerId);
+    public PlayerEntity getById(Long playerId) {
+        PlayerEntity player = repository.findOne(playerId);
 
         if(player == null) {
             throw new PlayerNotFoundException(playerId);

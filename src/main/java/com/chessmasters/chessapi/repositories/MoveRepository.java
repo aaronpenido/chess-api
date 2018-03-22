@@ -1,12 +1,12 @@
 package com.chessmasters.chessapi.repositories;
 
-import com.chessmasters.chessapi.entities.Move;
+import com.chessmasters.chessapi.entities.MoveEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface MoveRepository extends JpaRepository<Move, Long>  {
-    List<Move> findByGameId(Long gameId);
+public interface MoveRepository extends JpaRepository<MoveEntity, Long>  {
+    List<MoveEntity> findByGameId(Long gameId);
 }

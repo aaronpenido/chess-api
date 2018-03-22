@@ -2,28 +2,28 @@ package com.chessmasters.chessapi.entities;
 
 import javax.persistence.*;
 
-@Entity
-public class Move {
+@Entity(name = "Move")
+public class MoveEntity {
 
     @Id
     @GeneratedValue
     private Long id;
     @ManyToOne
     @JoinColumn(name="game_id")
-    private Game game;
+    private GameEntity game;
     @Embedded
-    private Piece piece;
+    private PieceEntity piece;
     @AttributeOverrides( {
             @AttributeOverride(name="letter", column = @Column(name="destinationletter") ),
             @AttributeOverride(name="number", column = @Column(name="destinationnumber") )
     })
-    private Square destination;
+    private SquareEntity destination;
     private int moveOrder;
 
-    public Move() {
+    public MoveEntity() {
     }
 
-    public Move(Game game, Piece piece, Square destination, int moveOrder) {
+    public MoveEntity(GameEntity game, PieceEntity piece, SquareEntity destination, int moveOrder) {
         this.game = game;
         this.piece = piece;
         this.destination = destination;
@@ -34,15 +34,15 @@ public class Move {
         return id;
     }
 
-    public Game getGame() {
+    public GameEntity getGame() {
         return game;
     }
 
-    public Piece getPiece() {
+    public PieceEntity getPiece() {
         return piece;
     }
 
-    public Square getDestination() {
+    public SquareEntity getDestination() {
         return destination;
     }
 

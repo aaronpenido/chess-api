@@ -61,9 +61,9 @@ public class MoveServiceTest {
     @Test
     public void throwGameNotStartedExceptionWhenTryingToMovePieceOnNonStartedGame() {
         final Long gameId = 1L;
-        Game game = new Game(new Player(), GameStatus.CREATED);
-        Square destination = new Square();
-        Piece piece = new Piece("White", new Square(), "Pawn");
+        GameEntity game = new GameEntity(new PlayerEntity(), GameStatus.CREATED);
+        SquareEntity destination = new SquareEntity();
+        PieceEntity piece = new PieceEntity("White", new SquareEntity(), "Pawn");
         PieceModel pawn = new Pawn(piece);
         MoveRequest request = new MoveRequest(pawn, new SquareModel(destination));
 
@@ -76,18 +76,18 @@ public class MoveServiceTest {
     @Test
     public void saveMoveOnDatabase() {
         final Long gameId = 1L;
-        Game game = new Game(new Player(), GameStatus.STARTED);
-        final Square square = new Square();
-        Piece piece = new Piece("White", square, "Pawn");
+        GameEntity game = new GameEntity(new PlayerEntity(), GameStatus.STARTED);
+        final SquareEntity square = new SquareEntity();
+        PieceEntity piece = new PieceEntity("White", square, "Pawn");
         PieceModel pawn = new Pawn(piece);
         final MoveRequest request = new MoveRequest(pawn, new SquareModel(square));
 
         when(gameService.getById(gameId)).thenReturn(game);
-        when(moveRepository.save(any(Move.class))).thenReturn(new Move());
+        when(moveRepository.save(any(MoveEntity.class))).thenReturn(new MoveEntity());
 
         service.createMove(gameId, request);
 
-        verify(moveRepository).save(any(Move.class));
+        verify(moveRepository).save(any(MoveEntity.class));
     }
 
     @Test
@@ -100,16 +100,16 @@ public class MoveServiceTest {
     }
 
     private MoveRequest createMoveRequest(final Long gameId, final int order) {
-        Game game = new Game(new Player(), GameStatus.STARTED);
+        GameEntity game = new GameEntity(new PlayerEntity(), GameStatus.STARTED);
         ReflectionTestUtils.setField(game, "id", gameId);
-        Square destination = new Square();
+        SquareEntity destination = new SquareEntity();
         SquareModel expectedDestination = new SquareModel(destination);
-         Piece piece = new Piece("White", destination, "Pawn");
+         PieceEntity piece = new PieceEntity("White", destination, "Pawn");
         PieceModel pawn = new Pawn(piece);
-        final Move move = new Move(game, null, destination, order);
+        final MoveEntity move = new MoveEntity(game, null, destination, order);
 
         when(gameService.getById(gameId)).thenReturn(game);
-        when(moveRepository.save(any(Move.class))).thenReturn(move);
+        when(moveRepository.save(any(MoveEntity.class))).thenReturn(move);
 
         return new MoveRequest(pawn, expectedDestination);
     }

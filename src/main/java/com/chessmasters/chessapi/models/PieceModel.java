@@ -1,6 +1,6 @@
 package com.chessmasters.chessapi.models;
 
-import com.chessmasters.chessapi.entities.Piece;
+import com.chessmasters.chessapi.entities.PieceEntity;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -24,7 +24,7 @@ public abstract class PieceModel {
     public PieceModel() {
     }
 
-    public PieceModel(Piece piece) {
+    public PieceModel(PieceEntity piece) {
         if(piece != null) {
             this.square = new SquareModel(piece.getSquare());
             this.color = piece.getColor();

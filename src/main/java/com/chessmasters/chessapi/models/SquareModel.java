@@ -1,6 +1,6 @@
 package com.chessmasters.chessapi.models;
 
-import com.chessmasters.chessapi.entities.Square;
+import com.chessmasters.chessapi.entities.SquareEntity;
 import com.chessmasters.chessapi.enums.Letter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -11,7 +11,7 @@ public class SquareModel {
     private int number;
     private Letter letter;
 
-    public SquareModel(@JsonProperty("square") Square square) {
+    public SquareModel(@JsonProperty("square") SquareEntity square) {
         if(square != null) {
             this.number = square.getNumber();
             this.letter = square.getLetter();

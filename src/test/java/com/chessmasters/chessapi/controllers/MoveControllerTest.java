@@ -56,12 +56,12 @@ public class MoveControllerTest {
     }
 
     private MoveRequest createMoveRequest(final Long gameId, final int moveOrder) {
-        Game game = new Game(new Player(), GameStatus.STARTED);
+        GameEntity game = new GameEntity(new PlayerEntity(), GameStatus.STARTED);
         ReflectionTestUtils.setField(game, "id", gameId);
-        final Square destination = new Square();
-        final Move move = new Move(game, null, destination, moveOrder);
+        final SquareEntity destination = new SquareEntity();
+        final MoveEntity move = new MoveEntity(game, null, destination, moveOrder);
         final SquareModel expectedDestination = new SquareModel(destination);
-        final Piece piece = new Piece("White", destination, "Pawn");
+        final PieceEntity piece = new PieceEntity("White", destination, "Pawn");
         PieceModel pawn = new Pawn(piece);
         MoveRequest request = new MoveRequest(pawn, expectedDestination);
 

@@ -1,6 +1,6 @@
 package com.chessmasters.chessapi.components;
 
-import com.chessmasters.chessapi.entities.Player;
+import com.chessmasters.chessapi.entities.PlayerEntity;
 import com.chessmasters.chessapi.repositories.PlayerRepository;
 import com.chessmasters.chessapi.request.GameRequest;
 import org.junit.Test;
@@ -34,7 +34,7 @@ public class PlayerControllerComponentTest extends BaseComponentTest {
     @Test
     public void getPlayers() {
         final String name = "Player name";
-        playerRepository.save(new Player(name));
+        playerRepository.save(new PlayerEntity(name));
 
         given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)

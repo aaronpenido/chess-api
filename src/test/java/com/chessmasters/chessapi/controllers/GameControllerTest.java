@@ -1,7 +1,7 @@
 package com.chessmasters.chessapi.controllers;
 
-import com.chessmasters.chessapi.entities.Game;
-import com.chessmasters.chessapi.entities.Player;
+import com.chessmasters.chessapi.entities.GameEntity;
+import com.chessmasters.chessapi.entities.PlayerEntity;
 import com.chessmasters.chessapi.enums.GameStatus;
 import com.chessmasters.chessapi.models.GameModel;
 import com.chessmasters.chessapi.request.GameRequest;
@@ -83,8 +83,8 @@ public class GameControllerTest {
         final Long gameId = 1L;
         final Long playerId = 1L;
 
-        final Player player = new Player();
-        final Game game = new Game(player, gameStatus);
+        final PlayerEntity player = new PlayerEntity();
+        final GameEntity game = new GameEntity(player, gameStatus);
         ReflectionTestUtils.setField(player, "id", playerId);
         ReflectionTestUtils.setField(game, "id", gameId);
         return new GameModel(game);
