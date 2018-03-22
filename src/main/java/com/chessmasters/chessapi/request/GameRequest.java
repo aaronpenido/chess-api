@@ -1,13 +1,12 @@
 package com.chessmasters.chessapi.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class GameRequest {
 
     private Long playerId;
 
-    public GameRequest() {
-    }
-
-    public GameRequest(Long playerId) {
+    public GameRequest(@JsonProperty("playerId") Long playerId) {
         this.playerId = playerId;
     }
 

@@ -2,17 +2,15 @@ package com.chessmasters.chessapi.request;
 
 import com.chessmasters.chessapi.models.Piece;
 import com.chessmasters.chessapi.models.Square;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class MoveRequest {
 
     private Square destination;
     private Piece pieceModel;
 
-    public MoveRequest() {
-    }
-
-    public MoveRequest(Piece pieceModel, Square destination) {
-        this.pieceModel = pieceModel;
+    public MoveRequest(@JsonProperty("piece") Piece piece, @JsonProperty("destination") Square destination) {
+        this.pieceModel = piece;
         this.destination = destination;
     }
 

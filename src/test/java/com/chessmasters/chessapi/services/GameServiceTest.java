@@ -92,7 +92,8 @@ public class GameServiceTest {
 
     @Test
     public void throwRuntimeExceptionWhenErrorOccurredOnSaveGame() {
-        GameRequest request = new GameRequest();
+        Long playerId = 1L;
+        GameRequest request = new GameRequest(playerId);
 
         when(gameRepository.save(any(GameEntity.class))).thenReturn(null);
 
@@ -103,7 +104,8 @@ public class GameServiceTest {
     @Test
     public void throwGameNotFoundExceptionWhenTryingToStartNonExistentGame() {
         final Long gameId = 1L;
-        GameRequest request = new GameRequest();
+        Long playerId = 1L;
+        GameRequest request = new GameRequest(playerId);
 
         when(gameRepository.findOne(any(Long.class))).thenReturn(null);
 
@@ -114,7 +116,8 @@ public class GameServiceTest {
     @Test
     public void throwGameIsStartedExceptionWhenTryingToStartAgain() {
         final Long gameId = 1L;
-        GameRequest request = new GameRequest();
+        Long playerId = 1L;
+        GameRequest request = new GameRequest(playerId);
         GameEntity game = new GameEntity(new PlayerEntity(), GameStatus.STARTED);
         ReflectionTestUtils.setField(game, "id", gameId);
         when(playerService.getById(any(Long.class))).thenReturn(new PlayerEntity());

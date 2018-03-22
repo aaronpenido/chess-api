@@ -3,6 +3,7 @@ package com.chessmasters.chessapi.response;
 import com.chessmasters.chessapi.models.Move;
 import com.chessmasters.chessapi.models.Piece;
 import com.chessmasters.chessapi.models.Square;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class MoveResponse {
 
@@ -11,11 +12,11 @@ public class MoveResponse {
     private int order;
     private Square destination;
 
-    public MoveResponse(Move moveModel) {
-        this.gameId = moveModel.getGameId();
-        this.pieceModel = moveModel.getPieceModel();
-        this.destination = moveModel.getDestination();
-        this.order = moveModel.getOrder();
+    public MoveResponse(@JsonProperty("move") Move move) {
+        this.gameId = move.getGameId();
+        this.pieceModel = move.getPieceModel();
+        this.destination = move.getDestination();
+        this.order = move.getOrder();
     }
 
     public Long getGameId() {
