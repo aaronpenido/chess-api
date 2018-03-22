@@ -1,13 +1,13 @@
 package com.chessmasters.chessapi.response;
 
-import com.chessmasters.chessapi.models.PlayerModel;
+import com.chessmasters.chessapi.models.Player;
 
 public class PlayerResponse {
 
     private final String name;
     private final Long id;
 
-    public PlayerResponse(PlayerModel playerModel) {
+    public PlayerResponse(Player playerModel) {
         this.id = playerModel.getId();
         this.name = playerModel.getName();
     }

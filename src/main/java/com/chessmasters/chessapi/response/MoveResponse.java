@@ -1,17 +1,17 @@
 package com.chessmasters.chessapi.response;
 
-import com.chessmasters.chessapi.models.MoveModel;
-import com.chessmasters.chessapi.models.PieceModel;
-import com.chessmasters.chessapi.models.SquareModel;
+import com.chessmasters.chessapi.models.Move;
+import com.chessmasters.chessapi.models.Piece;
+import com.chessmasters.chessapi.models.Square;
 
 public class MoveResponse {
 
     private Long gameId;
-    private PieceModel pieceModel;
+    private Piece pieceModel;
     private int order;
-    private SquareModel destination;
+    private Square destination;
 
-    public MoveResponse(MoveModel moveModel) {
+    public MoveResponse(Move moveModel) {
         this.gameId = moveModel.getGameId();
         this.pieceModel = moveModel.getPieceModel();
         this.destination = moveModel.getDestination();
@@ -22,11 +22,11 @@ public class MoveResponse {
         return gameId;
     }
 
-    public PieceModel getPieceModel() {
+    public Piece getPieceModel() {
         return pieceModel;
     }
 
-    public SquareModel getDestination() {
+    public Square getDestination() {
         return destination;
     }
 

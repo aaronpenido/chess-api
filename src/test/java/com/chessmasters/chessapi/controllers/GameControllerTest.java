@@ -3,7 +3,7 @@ package com.chessmasters.chessapi.controllers;
 import com.chessmasters.chessapi.entities.GameEntity;
 import com.chessmasters.chessapi.entities.PlayerEntity;
 import com.chessmasters.chessapi.enums.GameStatus;
-import com.chessmasters.chessapi.models.GameModel;
+import com.chessmasters.chessapi.models.Game;
 import com.chessmasters.chessapi.request.GameRequest;
 import com.chessmasters.chessapi.response.GameResponse;
 import com.chessmasters.chessapi.services.GameService;
@@ -32,7 +32,7 @@ public class GameControllerTest {
     public void createGame() {
         final Long playerId = 1L;
         GameRequest request = new GameRequest(playerId);
-        GameModel gameModel = createGameModel(GameStatus.CREATED);
+        Game gameModel = createGameModel(GameStatus.CREATED);
 
         when(gameService.createGame(request)).thenReturn(gameModel);
 
@@ -47,7 +47,7 @@ public class GameControllerTest {
 
     @Test
     public void listGames() {
-        GameModel gameModel = createGameModel(GameStatus.CREATED);
+        Game gameModel = createGameModel(GameStatus.CREATED);
         when(gameService.getGames()).thenReturn(Collections.singletonList(gameModel));
 
         List<GameResponse> responseList = controller.listGames();
@@ -66,7 +66,7 @@ public class GameControllerTest {
         final Long gameId = 1L;
         final Long playerId = 1L;
         GameRequest request = new GameRequest(playerId);
-        GameModel gameModel = createGameModel(GameStatus.STARTED);
+        Game gameModel = createGameModel(GameStatus.STARTED);
         ReflectionTestUtils.setField(gameModel, "player2Id", playerId);
         when(gameService.startGame(gameId, request)).thenReturn(gameModel);
 
@@ -79,7 +79,7 @@ public class GameControllerTest {
         assertThat(response.getPlayer2Id()).isEqualTo(gameModel.getPlayerId());
     }
 
-    private GameModel createGameModel(GameStatus gameStatus) {
+    private Game createGameModel(GameStatus gameStatus) {
         final Long gameId = 1L;
         final Long playerId = 1L;
 
@@ -87,6 +87,6 @@ public class GameControllerTest {
         final GameEntity game = new GameEntity(player, gameStatus);
         ReflectionTestUtils.setField(player, "id", playerId);
         ReflectionTestUtils.setField(game, "id", gameId);
-        return new GameModel(game);
+        return new Game(game);
     }
 }

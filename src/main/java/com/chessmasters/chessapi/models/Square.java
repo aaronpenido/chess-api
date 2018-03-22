@@ -6,15 +6,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Objects;
 
-public class SquareModel {
+public class Square {
 
     private int number;
     private Letter letter;
 
-    public SquareModel(@JsonProperty("square") SquareEntity square) {
-        if(square != null) {
-            this.number = square.getNumber();
-            this.letter = square.getLetter();
+    public Square(@JsonProperty("squareEntity") SquareEntity squareEntity) {
+        if(squareEntity != null) {
+            this.number = squareEntity.getNumber();
+            this.letter = squareEntity.getLetter();
         }
     }
 
@@ -30,7 +30,7 @@ public class SquareModel {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SquareModel that = (SquareModel) o;
+        Square that = (Square) o;
         return number == that.number &&
                 letter == that.letter;
     }

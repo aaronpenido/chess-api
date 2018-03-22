@@ -1,26 +1,26 @@
 package com.chessmasters.chessapi.request;
 
-import com.chessmasters.chessapi.models.PieceModel;
-import com.chessmasters.chessapi.models.SquareModel;
+import com.chessmasters.chessapi.models.Piece;
+import com.chessmasters.chessapi.models.Square;
 
 public class MoveRequest {
 
-    private SquareModel destination;
-    private PieceModel pieceModel;
+    private Square destination;
+    private Piece pieceModel;
 
     public MoveRequest() {
     }
 
-    public MoveRequest(PieceModel pieceModel, SquareModel destination) {
+    public MoveRequest(Piece pieceModel, Square destination) {
         this.pieceModel = pieceModel;
         this.destination = destination;
     }
 
-    public SquareModel getDestination() {
+    public Square getDestination() {
         return destination;
     }
 
-    public PieceModel getPieceModel() {
+    public Piece getPieceModel() {
         return pieceModel;
     }
 }

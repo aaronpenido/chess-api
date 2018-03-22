@@ -3,14 +3,14 @@ package com.chessmasters.chessapi.models;
 import com.chessmasters.chessapi.entities.PlayerEntity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class PlayerModel {
+public class Player {
 
     private Long id;
     private String name;
 
-    public PlayerModel(@JsonProperty("player") PlayerEntity player) {
-        this.id = player.getId();
-        this.name = player.getName();
+    public Player(@JsonProperty("playerEntity") PlayerEntity playerEntity) {
+        this.id = playerEntity.getId();
+        this.name = playerEntity.getName();
     }
 
     public Long getId() {

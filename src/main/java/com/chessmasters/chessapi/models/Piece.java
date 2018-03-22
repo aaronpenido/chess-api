@@ -15,24 +15,24 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
         @Type(value = Pawn.class),
         @Type(value = Knight.class)
 })
-public abstract class PieceModel {
+public abstract class Piece {
 
-    private SquareModel square;
+    private Square square;
     private String color;
     private String type;
 
-    public PieceModel() {
+    public Piece() {
     }
 
-    public PieceModel(PieceEntity piece) {
-        if(piece != null) {
-            this.square = new SquareModel(piece.getSquare());
-            this.color = piece.getColor();
-            this.type = piece.getType();
+    public Piece(PieceEntity pieceEntity) {
+        if(pieceEntity != null) {
+            this.square = new Square(pieceEntity.getSquare());
+            this.color = pieceEntity.getColor();
+            this.type = pieceEntity.getType();
         }
     }
 
-    public SquareModel getSquare() {
+    public Square getSquare() {
         return square;
     }
 

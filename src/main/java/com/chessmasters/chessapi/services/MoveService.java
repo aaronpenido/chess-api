@@ -6,7 +6,7 @@ import com.chessmasters.chessapi.entities.PieceEntity;
 import com.chessmasters.chessapi.entities.SquareEntity;
 import com.chessmasters.chessapi.enums.GameStatus;
 import com.chessmasters.chessapi.exceptions.GameNotStartedException;
-import com.chessmasters.chessapi.models.MoveModel;
+import com.chessmasters.chessapi.models.Move;
 import com.chessmasters.chessapi.repositories.MoveRepository;
 import com.chessmasters.chessapi.request.MoveRequest;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ public class MoveService {
         this.gameService = gameService;
     }
 
-    public MoveModel createMove(Long gameId, MoveRequest request) {
+    public Move createMove(Long gameId, MoveRequest request) {
         GameEntity game = gameService.getById(gameId);
 
         if(!game.getStatus().equals(GameStatus.STARTED)) {
@@ -41,22 +41,22 @@ public class MoveService {
         PieceEntity piece = new PieceEntity(request.getPieceModel().getColor(), destination, request.getPieceModel().getType());
         MoveEntity move = new MoveEntity(game, piece, destination, generateMoveOrder(gameId));
 
-        return new MoveModel(moveRepository.save(move));
+        return new Move(moveRepository.save(move));
     }
 
-    public List<MoveModel> getMoves(Long gameId) {
+    public List<Move> getMoves(Long gameId) {
         List<MoveEntity> moves = moveRepository.findByGameId(gameId);
 
         return moves
                 .stream()
-                .map(MoveModel::new)
+                .map(Move::new)
                 .collect(Collectors.toList());
     }
 
     private int generateMoveOrder(Long gameId) {
         int order = 1;
 
-        Optional<MoveModel> moveModel = getMoves(gameId)
+        Optional<Move> moveModel = getMoves(gameId)
                 .stream()
                 .max(Comparator.comparingInt(m -> m.getOrder()));
 

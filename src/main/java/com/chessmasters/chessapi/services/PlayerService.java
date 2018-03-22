@@ -2,7 +2,7 @@ package com.chessmasters.chessapi.services;
 
 import com.chessmasters.chessapi.entities.PlayerEntity;
 import com.chessmasters.chessapi.exceptions.PlayerNotFoundException;
-import com.chessmasters.chessapi.models.PlayerModel;
+import com.chessmasters.chessapi.models.Player;
 import com.chessmasters.chessapi.repositories.PlayerRepository;
 import com.chessmasters.chessapi.request.PlayerRequest;
 import org.springframework.stereotype.Service;
@@ -19,22 +19,22 @@ public class PlayerService {
         this.repository = repository;
     }
 
-    public PlayerModel createPlayer(PlayerRequest playerRequest) {
+    public Player createPlayer(PlayerRequest playerRequest) {
         PlayerEntity player = repository.save(new PlayerEntity(playerRequest.getName()));
 
         if(player != null) {
-            return new PlayerModel(player);
+            return new Player(player);
         }
 
         return null;
     }
 
-    public List<PlayerModel> getPlayers() {
+    public List<Player> getPlayers() {
         List<PlayerEntity> players = repository.findAll();
 
         return players
                 .stream()
-                .map(PlayerModel::new)
+                .map(Player::new)
                 .collect(Collectors.toList());
     }
 

@@ -1,7 +1,7 @@
 package com.chessmasters.chessapi.response;
 
 import com.chessmasters.chessapi.enums.GameStatus;
-import com.chessmasters.chessapi.models.GameModel;
+import com.chessmasters.chessapi.models.Game;
 
 public class GameResponse {
 
@@ -13,7 +13,7 @@ public class GameResponse {
     public GameResponse() {
     }
 
-    public GameResponse(GameModel gameModel) {
+    public GameResponse(Game gameModel) {
         this.id = gameModel.getId();
         this.status = gameModel.getStatus();
         this.playerId = gameModel.getPlayerId();

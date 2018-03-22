@@ -7,8 +7,8 @@ import com.chessmasters.chessapi.entities.SquareEntity;
 import com.chessmasters.chessapi.enums.GameStatus;
 import com.chessmasters.chessapi.enums.Letter;
 import com.chessmasters.chessapi.models.Pawn;
-import com.chessmasters.chessapi.models.PieceModel;
-import com.chessmasters.chessapi.models.SquareModel;
+import com.chessmasters.chessapi.models.Piece;
+import com.chessmasters.chessapi.models.Square;
 import com.chessmasters.chessapi.repositories.GameRepository;
 import com.chessmasters.chessapi.repositories.PlayerRepository;
 import com.chessmasters.chessapi.request.MoveRequest;
@@ -33,9 +33,9 @@ public class MoveControllerComponentTest extends BaseComponentTest {
     @Test
     public void createMove() {
         final SquareEntity destination = new SquareEntity(1, Letter.A);
-        final SquareModel expectedDestination = new SquareModel(destination);
+        final Square expectedDestination = new Square(destination);
         final PieceEntity piece = new PieceEntity("White", destination, "Pawn");
-        PieceModel pawn = new Pawn(piece);
+        Piece pawn = new Pawn(piece);
         final MoveRequest moveRequest = new MoveRequest(pawn, expectedDestination);
         final int expectedOrder = 1;
         final String playerName = "Player name";

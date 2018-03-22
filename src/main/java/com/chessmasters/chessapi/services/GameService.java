@@ -5,7 +5,7 @@ import com.chessmasters.chessapi.entities.PlayerEntity;
 import com.chessmasters.chessapi.enums.GameStatus;
 import com.chessmasters.chessapi.exceptions.GameNotFoundException;
 import com.chessmasters.chessapi.exceptions.GameStartedException;
-import com.chessmasters.chessapi.models.GameModel;
+import com.chessmasters.chessapi.models.Game;
 import com.chessmasters.chessapi.repositories.GameRepository;
 import com.chessmasters.chessapi.request.GameRequest;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class GameService {
         this.playerService = playerService;
     }
 
-    public GameModel createGame(GameRequest gameRequest) {
+    public Game createGame(GameRequest gameRequest) {
         PlayerEntity player = playerService.getById(gameRequest.getPlayerId());
 
         GameEntity game = gameRepository.save(new GameEntity(player, GameStatus.CREATED));
@@ -33,19 +33,19 @@ public class GameService {
             throw new RuntimeException("An error occurred when trying to create a game.");
         }
 
-        return new GameModel(game);
+        return new Game(game);
     }
 
-    public List<GameModel> getGames() {
+    public List<Game> getGames() {
         List<GameEntity> games = gameRepository.findAll();
 
         return games
                 .stream()
-                .map(GameModel::new)
+                .map(Game::new)
                 .collect(Collectors.toList());
     }
 
-    public GameModel startGame(Long gameId, GameRequest gameRequest) {
+    public Game startGame(Long gameId, GameRequest gameRequest) {
         GameEntity game = getById(gameId);
 
         if(game.getStatus().equals(GameStatus.STARTED)) {
@@ -58,7 +58,7 @@ public class GameService {
         game.setPlayer2(player2);
         game = gameRepository.save(game);
 
-        return new GameModel(game);
+        return new Game(game);
     }
 
     public GameEntity getById(Long gameId) {

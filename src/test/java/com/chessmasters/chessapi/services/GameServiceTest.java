@@ -5,7 +5,7 @@ import com.chessmasters.chessapi.entities.PlayerEntity;
 import com.chessmasters.chessapi.enums.GameStatus;
 import com.chessmasters.chessapi.exceptions.GameNotFoundException;
 import com.chessmasters.chessapi.exceptions.GameStartedException;
-import com.chessmasters.chessapi.models.GameModel;
+import com.chessmasters.chessapi.models.Game;
 import com.chessmasters.chessapi.repositories.GameRepository;
 import com.chessmasters.chessapi.request.GameRequest;
 import org.junit.Test;
@@ -44,7 +44,7 @@ public class GameServiceTest {
         when(playerService.getById(playerId)).thenReturn(player);
         when(gameRepository.save(any(GameEntity.class))).thenReturn(game);
 
-        GameModel gameModel = service.createGame(gameRequest);
+        Game gameModel = service.createGame(gameRequest);
 
         assertThat(gameModel).isNotNull();
         assertThat(gameModel.getId()).isEqualTo(game.getId());
@@ -84,7 +84,7 @@ public class GameServiceTest {
         when(gameRepository.findOne(any(Long.class))).thenReturn(game);
         when(gameRepository.save(any(GameEntity.class))).thenReturn(game);
 
-        GameModel gameModel = service.startGame(gameId, gameRequest);
+        Game gameModel = service.startGame(gameId, gameRequest);
 
         assertThat(gameModel).isNotNull();
         assertThat(gameModel.getStatus()).isEqualTo(GameStatus.STARTED);

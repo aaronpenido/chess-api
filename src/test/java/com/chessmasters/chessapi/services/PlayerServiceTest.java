@@ -2,7 +2,7 @@ package com.chessmasters.chessapi.services;
 
 import com.chessmasters.chessapi.entities.PlayerEntity;
 import com.chessmasters.chessapi.exceptions.PlayerNotFoundException;
-import com.chessmasters.chessapi.models.PlayerModel;
+import com.chessmasters.chessapi.models.Player;
 import com.chessmasters.chessapi.repositories.PlayerRepository;
 import com.chessmasters.chessapi.request.PlayerRequest;
 import org.junit.Test;
@@ -35,7 +35,7 @@ public class PlayerServiceTest {
         ReflectionTestUtils.setField(expectedPlayer, "id", id);
         when(playerRepository.save(any(PlayerEntity.class))).thenReturn(expectedPlayer);
 
-        PlayerModel player = service.createPlayer(request);
+        Player player = service.createPlayer(request);
 
         assertThat(player.getId()).isEqualTo(id);
         assertThat(player.getName()).isEqualTo(name);

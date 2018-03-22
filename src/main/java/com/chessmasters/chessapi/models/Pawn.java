@@ -4,10 +4,10 @@ import com.chessmasters.chessapi.entities.PieceEntity;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Pawn extends PieceModel {
+public class Pawn extends Piece {
 
     @JsonCreator
-    public Pawn(@JsonProperty("piece") PieceEntity piece) {
-        super(piece);
+    public Pawn(@JsonProperty("pieceEntity") PieceEntity pieceEntity) {
+        super(pieceEntity);
     }
 }

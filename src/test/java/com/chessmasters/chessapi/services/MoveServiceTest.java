@@ -3,10 +3,10 @@ package com.chessmasters.chessapi.services;
 import com.chessmasters.chessapi.entities.*;
 import com.chessmasters.chessapi.enums.GameStatus;
 import com.chessmasters.chessapi.exceptions.GameNotStartedException;
-import com.chessmasters.chessapi.models.MoveModel;
+import com.chessmasters.chessapi.models.Move;
 import com.chessmasters.chessapi.models.Pawn;
-import com.chessmasters.chessapi.models.PieceModel;
-import com.chessmasters.chessapi.models.SquareModel;
+import com.chessmasters.chessapi.models.Piece;
+import com.chessmasters.chessapi.models.Square;
 import com.chessmasters.chessapi.repositories.MoveRepository;
 import com.chessmasters.chessapi.request.MoveRequest;
 import org.junit.Test;
@@ -38,7 +38,7 @@ public class MoveServiceTest {
         final int expectedOrder = 1;
         MoveRequest request = createMoveRequest(gameId, expectedOrder);
 
-        MoveModel moveModel = service.createMove(gameId, request);
+        Move moveModel = service.createMove(gameId, request);
 
         assertThat(moveModel).isNotNull();
         assertThat(moveModel.getGameId()).isEqualTo(gameId);
@@ -52,7 +52,7 @@ public class MoveServiceTest {
         final int increasedMoveOrder = 2;
 
         MoveRequest request = createMoveRequest(gameId, increasedMoveOrder);
-        MoveModel moveModel = service.createMove(gameId, request);
+        Move moveModel = service.createMove(gameId, request);
 
         assertThat(moveModel).isNotNull();
         assertThat(moveModel.getOrder()).isEqualTo(increasedMoveOrder);
@@ -64,8 +64,8 @@ public class MoveServiceTest {
         GameEntity game = new GameEntity(new PlayerEntity(), GameStatus.CREATED);
         SquareEntity destination = new SquareEntity();
         PieceEntity piece = new PieceEntity("White", new SquareEntity(), "Pawn");
-        PieceModel pawn = new Pawn(piece);
-        MoveRequest request = new MoveRequest(pawn, new SquareModel(destination));
+        Piece pawn = new Pawn(piece);
+        MoveRequest request = new MoveRequest(pawn, new Square(destination));
 
         when(gameService.getById(gameId)).thenReturn(game);
 
@@ -79,8 +79,8 @@ public class MoveServiceTest {
         GameEntity game = new GameEntity(new PlayerEntity(), GameStatus.STARTED);
         final SquareEntity square = new SquareEntity();
         PieceEntity piece = new PieceEntity("White", square, "Pawn");
-        PieceModel pawn = new Pawn(piece);
-        final MoveRequest request = new MoveRequest(pawn, new SquareModel(square));
+        Piece pawn = new Pawn(piece);
+        final MoveRequest request = new MoveRequest(pawn, new Square(square));
 
         when(gameService.getById(gameId)).thenReturn(game);
         when(moveRepository.save(any(MoveEntity.class))).thenReturn(new MoveEntity());
@@ -103,9 +103,9 @@ public class MoveServiceTest {
         GameEntity game = new GameEntity(new PlayerEntity(), GameStatus.STARTED);
         ReflectionTestUtils.setField(game, "id", gameId);
         SquareEntity destination = new SquareEntity();
-        SquareModel expectedDestination = new SquareModel(destination);
+        Square expectedDestination = new Square(destination);
          PieceEntity piece = new PieceEntity("White", destination, "Pawn");
-        PieceModel pawn = new Pawn(piece);
+        Piece pawn = new Pawn(piece);
         final MoveEntity move = new MoveEntity(game, null, destination, order);
 
         when(gameService.getById(gameId)).thenReturn(game);

@@ -2,10 +2,10 @@ package com.chessmasters.chessapi.controllers;
 
 import com.chessmasters.chessapi.entities.*;
 import com.chessmasters.chessapi.enums.GameStatus;
-import com.chessmasters.chessapi.models.MoveModel;
+import com.chessmasters.chessapi.models.Move;
 import com.chessmasters.chessapi.models.Pawn;
-import com.chessmasters.chessapi.models.PieceModel;
-import com.chessmasters.chessapi.models.SquareModel;
+import com.chessmasters.chessapi.models.Piece;
+import com.chessmasters.chessapi.models.Square;
 import com.chessmasters.chessapi.request.MoveRequest;
 import com.chessmasters.chessapi.response.MoveResponse;
 import com.chessmasters.chessapi.services.MoveService;
@@ -60,12 +60,12 @@ public class MoveControllerTest {
         ReflectionTestUtils.setField(game, "id", gameId);
         final SquareEntity destination = new SquareEntity();
         final MoveEntity move = new MoveEntity(game, null, destination, moveOrder);
-        final SquareModel expectedDestination = new SquareModel(destination);
+        final Square expectedDestination = new Square(destination);
         final PieceEntity piece = new PieceEntity("White", destination, "Pawn");
-        PieceModel pawn = new Pawn(piece);
+        Piece pawn = new Pawn(piece);
         MoveRequest request = new MoveRequest(pawn, expectedDestination);
 
-        when(moveService.createMove(gameId, request)).thenReturn(new MoveModel(move));
+        when(moveService.createMove(gameId, request)).thenReturn(new Move(move));
 
         return request;
     }
