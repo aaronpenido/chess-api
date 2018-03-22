@@ -21,9 +21,6 @@ public abstract class Piece {
     private String color;
     private String type;
 
-    public Piece() {
-    }
-
     public Piece(PieceEntity pieceEntity) {
         if(pieceEntity != null) {
             this.square = new Square(pieceEntity.getSquare());
