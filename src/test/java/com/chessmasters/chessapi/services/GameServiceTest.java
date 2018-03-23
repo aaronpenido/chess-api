@@ -34,23 +34,16 @@ public class GameServiceTest {
 
     @Test
     public void createGame() {
-        final Long gameId = 1L;
         final Long playerId = 1L;
-        PlayerEntity player = new PlayerEntity();
-        ReflectionTestUtils.setField(player, "id", playerId);
-        final GameEntity game = new GameEntity(player, GameStatus.CREATED);
-        ReflectionTestUtils.setField(game, "id", gameId);
         GameRequest gameRequest = new GameRequest(playerId);
-
-        when(playerService.getById(playerId)).thenReturn(player);
-        when(gameRepository.save(any(GameEntity.class))).thenReturn(game);
+        final GameEntity gameEntity = createGameEntity(playerId);
 
         Game gameModel = service.createGame(gameRequest);
 
         assertThat(gameModel).isNotNull();
-        assertThat(gameModel.getId()).isEqualTo(game.getId());
-        assertThat(gameModel.getPlayerId()).isEqualTo(game.getPlayer().getId());
-        assertThat(gameModel.getStatus()).isEqualTo(game.getStatus());
+        assertThat(gameModel.getId()).isEqualTo(gameEntity.getId());
+        assertThat(gameModel.getPlayerId()).isEqualTo(gameEntity.getPlayer().getId());
+        assertThat(gameModel.getStatus()).isEqualTo(gameEntity.getStatus());
     }
 
     @Test
@@ -132,9 +125,21 @@ public class GameServiceTest {
     public void playersHaveDifferentColorsOnStartGame() {
         final Long gameId = 1L;
         final Long playerId = 1L;
+        GameEntity gameEntity = createGameEntity(playerId);
+        GameRequest gameRequest = new GameRequest(playerId);
+
+        service.startGame(gameId, gameRequest);
+
+        assertThat(gameEntity.getPlayer2()).isNotNull();
+        assertThat(gameEntity.getPlayer().getColor()).isNotNull();
+        assertThat(gameEntity.getPlayer2().getColor()).isNotNull();
+        assertThat(gameEntity.getPlayer().getColor()).isNotEqualTo(gameEntity.getPlayer2().getColor());
+    }
+
+    private GameEntity createGameEntity(Long playerId) {
         PlayerEntity player = new PlayerEntity();
         player.setColor(Color.WHITE);
-        GameRequest gameRequest = new GameRequest(playerId);
+
         GameEntity gameEntity = new GameEntity(player, GameStatus.CREATED);
         PlayerEntity player2 = new PlayerEntity();
         player2.setColor(Color.BLACK);
@@ -144,11 +149,6 @@ public class GameServiceTest {
         when(gameRepository.findOne(any(Long.class))).thenReturn(gameEntity);
         when(gameRepository.save(any(GameEntity.class))).thenReturn(gameEntity);
 
-        service.startGame(gameId, gameRequest);
-
-        assertThat(gameEntity.getPlayer2()).isNotNull();
-        assertThat(gameEntity.getPlayer().getColor()).isNotNull();
-        assertThat(gameEntity.getPlayer2().getColor()).isNotNull();
-        assertThat(gameEntity.getPlayer().getColor()).isNotEqualTo(gameEntity.getPlayer2().getColor());
+        return gameEntity;
     }
 }
