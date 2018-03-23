@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static com.chessmasters.chessapi.enums.Color.BLACK;
 import static com.chessmasters.chessapi.enums.Color.WHITE;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.hamcrest.CoreMatchers.is;
@@ -37,13 +38,18 @@ public class MoveControllerComponentTest extends BaseComponentTest {
         final Square expectedDestination = new Square(destination);
         final PieceEntity piece = new PieceEntity(WHITE, destination, "Pawn");
         Piece pawn = new Pawn(piece);
-        final MoveRequest moveRequest = new MoveRequest(pawn, expectedDestination);
         final int expectedOrder = 1;
         final String playerName = "Player name";
         final PlayerEntity player = playerRepository.save(new PlayerEntity(playerName));
-        final GameEntity game = gameRepository.save(new GameEntity(player, GameStatus.STARTED));
+        player.setColor(WHITE);
+        final PlayerEntity player2 = playerRepository.save(new PlayerEntity(playerName));
+        player2.setColor(BLACK);
+        GameEntity game = new GameEntity(player, GameStatus.STARTED);
+        game.setPlayer2(player2);
+        game = gameRepository.save(game);
         final int gameId = game.getId().intValue();
         final String path = String.format("/games/%s/moves", gameId);
+        final MoveRequest moveRequest = new MoveRequest(player.getId(), pawn, expectedDestination);
 
         given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)

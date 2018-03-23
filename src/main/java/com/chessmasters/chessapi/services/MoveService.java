@@ -1,11 +1,11 @@
 package com.chessmasters.chessapi.services;
 
-import com.chessmasters.chessapi.entities.GameEntity;
-import com.chessmasters.chessapi.entities.MoveEntity;
-import com.chessmasters.chessapi.entities.PieceEntity;
-import com.chessmasters.chessapi.entities.SquareEntity;
+import com.chessmasters.chessapi.entities.*;
+import com.chessmasters.chessapi.enums.Color;
+import com.chessmasters.chessapi.enums.ErrorMessage;
 import com.chessmasters.chessapi.enums.GameStatus;
 import com.chessmasters.chessapi.exceptions.GameNotStartedException;
+import com.chessmasters.chessapi.exceptions.InvalidMoveException;
 import com.chessmasters.chessapi.models.Move;
 import com.chessmasters.chessapi.repositories.MoveRepository;
 import com.chessmasters.chessapi.request.MoveRequest;
@@ -21,10 +21,12 @@ public class MoveService {
 
     private MoveRepository moveRepository;
     private GameService gameService;
+    private PlayerService playerService;
 
-    public MoveService(MoveRepository moveRepository, GameService gameService) {
+    public MoveService(MoveRepository moveRepository, GameService gameService, PlayerService playerService) {
         this.moveRepository = moveRepository;
         this.gameService = gameService;
+        this.playerService = playerService;
     }
 
     public Move createMove(Long gameId, MoveRequest request) {
@@ -34,6 +36,10 @@ public class MoveService {
             throw new GameNotStartedException(gameId);
         }
 
+        PlayerEntity player = playerService.getById(request.getPlayerId());
+
+        throwExceptionIfMoveIsDoneSequentiallyByThePlayer(game, player);
+
         final SquareEntity destination = new SquareEntity(
                 request.getDestination().getNumber(),
                 request.getDestination().getLetter());
@@ -42,6 +48,21 @@ public class MoveService {
         MoveEntity move = new MoveEntity(game, piece, destination, generateMoveOrder(gameId));
 
         return new Move(moveRepository.save(move));
+    }
+
+    private void throwExceptionIfMoveIsDoneSequentiallyByThePlayer(GameEntity game, PlayerEntity player) {
+        MoveEntity moveEntity = moveRepository.findTopByGameOrderByMoveOrderDesc(game);
+
+        if(moveEntity != null) {
+            final boolean lastMoveColorIsEqualsToPlayerColor =
+                    moveEntity.getPiece().getColor().equals(player.getColor());
+
+            if(lastMoveColorIsEqualsToPlayerColor) {
+                throw new InvalidMoveException(String.valueOf(ErrorMessage.INVALID_MOVE_ITS_OPPONENTS_TURN));
+            }
+        } else if (!player.getColor().equals(Color.WHITE)) {
+            throw new InvalidMoveException(String.valueOf(ErrorMessage.INVALID_MOVE_ITS_OPPONENTS_TURN));
+        }
     }
 
     public List<Move> getMoves(Long gameId) {

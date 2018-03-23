@@ -2,6 +2,7 @@ package com.chessmasters.chessapi.services;
 
 import com.chessmasters.chessapi.entities.GameEntity;
 import com.chessmasters.chessapi.entities.PlayerEntity;
+import com.chessmasters.chessapi.enums.Color;
 import com.chessmasters.chessapi.enums.GameStatus;
 import com.chessmasters.chessapi.exceptions.GameNotFoundException;
 import com.chessmasters.chessapi.exceptions.GameStartedException;
@@ -125,5 +126,29 @@ public class GameServiceTest {
 
         assertThatThrownBy(() -> service.startGame(gameId, request))
                 .isInstanceOf(GameStartedException.class);
+    }
+
+    @Test
+    public void playersHaveDifferentColorsOnStartGame() {
+        final Long gameId = 1L;
+        final Long playerId = 1L;
+        PlayerEntity player = new PlayerEntity();
+        player.setColor(Color.WHITE);
+        GameRequest gameRequest = new GameRequest(playerId);
+        GameEntity gameEntity = new GameEntity(player, GameStatus.CREATED);
+        PlayerEntity player2 = new PlayerEntity();
+        player2.setColor(Color.BLACK);
+        gameEntity.setPlayer2(player2);
+
+        when(playerService.getById(playerId)).thenReturn(player2);
+        when(gameRepository.findOne(any(Long.class))).thenReturn(gameEntity);
+        when(gameRepository.save(any(GameEntity.class))).thenReturn(gameEntity);
+
+        service.startGame(gameId, gameRequest);
+
+        assertThat(gameEntity.getPlayer2()).isNotNull();
+        assertThat(gameEntity.getPlayer().getColor()).isNotNull();
+        assertThat(gameEntity.getPlayer2().getColor()).isNotNull();
+        assertThat(gameEntity.getPlayer().getColor()).isNotEqualTo(gameEntity.getPlayer2().getColor());
     }
 }

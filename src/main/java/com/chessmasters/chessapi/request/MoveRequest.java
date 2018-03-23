@@ -6,12 +6,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class MoveRequest {
 
+    private Long playerId;
     private Square destination;
     private Piece pieceModel;
 
-    public MoveRequest(@JsonProperty("piece") Piece piece, @JsonProperty("destination") Square destination) {
+    public MoveRequest(@JsonProperty("playerId") Long playerId,
+                       @JsonProperty("piece") Piece piece,
+                       @JsonProperty("destination") Square destination) {
+        this.playerId = playerId;
         this.pieceModel = piece;
         this.destination = destination;
+    }
+
+    public Long getPlayerId() {
+        return playerId;
     }
 
     public Square getDestination() {

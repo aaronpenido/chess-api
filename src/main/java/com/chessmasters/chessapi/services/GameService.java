@@ -2,6 +2,7 @@ package com.chessmasters.chessapi.services;
 
 import com.chessmasters.chessapi.entities.GameEntity;
 import com.chessmasters.chessapi.entities.PlayerEntity;
+import com.chessmasters.chessapi.enums.Color;
 import com.chessmasters.chessapi.enums.GameStatus;
 import com.chessmasters.chessapi.exceptions.GameNotFoundException;
 import com.chessmasters.chessapi.exceptions.GameStartedException;
@@ -11,6 +12,7 @@ import com.chessmasters.chessapi.request.GameRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,6 +56,9 @@ public class GameService {
 
         PlayerEntity player2 = playerService.getById(gameRequest.getPlayerId());
 
+        game.getPlayer().setColor(randomColor());
+        player2.setColor(game.getPlayer().getColor().opposite());
+
         game.setStatus(GameStatus.STARTED);
         game.setPlayer2(player2);
         game = gameRepository.save(game);
@@ -69,5 +74,10 @@ public class GameService {
         }
 
         return game;
+    }
+
+    private Color randomColor() {
+        final int randomNumber = new Random().nextInt(1);
+        return Color.values()[randomNumber];
     }
 }

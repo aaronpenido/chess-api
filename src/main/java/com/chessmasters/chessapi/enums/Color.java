@@ -13,4 +13,8 @@ public enum Color {
     public String toString() {
         return color;
     }
+
+    public Color opposite() {
+        return this.equals(WHITE) ? BLACK : WHITE;
+    }
 }
