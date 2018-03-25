@@ -1,6 +1,7 @@
 package com.chessmasters.chessapi.services;
 
 import com.chessmasters.chessapi.entities.*;
+import com.chessmasters.chessapi.enums.Color;
 import com.chessmasters.chessapi.enums.ErrorMessage;
 import com.chessmasters.chessapi.enums.GameStatus;
 import com.chessmasters.chessapi.exceptions.GameNotStartedException;
@@ -20,6 +21,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import static com.chessmasters.chessapi.enums.Color.BLACK;
 import static com.chessmasters.chessapi.enums.Color.WHITE;
+import static com.chessmasters.chessapi.enums.GameStatus.CREATED;
+import static com.chessmasters.chessapi.enums.GameStatus.STARTED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Matchers.any;
@@ -77,15 +80,14 @@ public class MoveServiceTest {
 
     @Test
     public void throwGameNotStartedExceptionWhenTryingToMovePieceOnNonStartedGame() {
-        final Long playerId = 1L;
         final Long gameId = 1L;
-        GameEntity game = new GameEntity(new PlayerEntity(), GameStatus.CREATED);
-        SquareEntity destination = new SquareEntity();
-        PieceEntity piece = new PieceEntity(WHITE, new SquareEntity(), "Pawn");
-        Piece pawn = new Pawn(piece);
-        MoveRequest request = new MoveRequest(playerId, pawn, new Square(destination));
+        final int order = 1;
+        final PlayerEntity player = new PlayerEntity();
+        player.setColor(WHITE);
 
-        when(gameService.getById(gameId)).thenReturn(game);
+        MoveRequest request = createMoveRequest(gameId, order, WHITE, CREATED);
+
+        when(playerService.getById(anyLong())).thenReturn(player);
 
         assertThatThrownBy(() -> service.createMove(gameId, request))
                 .isInstanceOf(GameNotStartedException.class);
@@ -93,20 +95,14 @@ public class MoveServiceTest {
 
     @Test
     public void saveMoveOnDatabase() {
-        final Long playerId = 1L;
         final Long gameId = 1L;
-        GameEntity game = new GameEntity(new PlayerEntity(), GameStatus.STARTED);
-        final SquareEntity square = new SquareEntity();
-        PieceEntity piece = new PieceEntity(WHITE, square, "Pawn");
-        Piece pawn = new Pawn(piece);
-        final MoveRequest request = new MoveRequest(playerId, pawn, new Square(square));
+        final int order = 1;
         final PlayerEntity player = new PlayerEntity();
         player.setColor(WHITE);
 
         when(playerService.getById(anyLong())).thenReturn(player);
-        when(moveRepository.findTopByGameOrderByMoveOrderDesc(game)).thenReturn(null);
-        when(gameService.getById(gameId)).thenReturn(game);
-        when(moveRepository.save(any(MoveEntity.class))).thenReturn(new MoveEntity());
+
+        MoveRequest request = createMoveRequest(gameId, order);
 
         service.createMove(gameId, request);
 
@@ -124,35 +120,33 @@ public class MoveServiceTest {
 
     @Test
     public void throwInvalidMoveExceptionWhenFirstMoveIsNotFromWhitePlayer() {
-        final Long playerId = 1L;
         final Long gameId = 1L;
-        SquareEntity destination = new SquareEntity();
-        PieceEntity piece = new PieceEntity(BLACK, destination, "Pawn");
-        Piece pawn = new Pawn(piece);
-        MoveRequest request = new MoveRequest(playerId, pawn, new Square(destination));
+        final int order = 1;
         PlayerEntity player = new PlayerEntity();
         player.setColor(BLACK);
-        GameEntity game = new GameEntity(player, GameStatus.STARTED);
+        MoveRequest request = createMoveRequest(gameId, order, BLACK, STARTED);
 
-        when(gameService.getById(gameId)).thenReturn(game);
-        when(playerService.getById(playerId)).thenReturn(player);
-        when(moveRepository.findTopByGameOrderByMoveOrderDesc(game)).thenReturn(null);
-        when(moveRepository.save(any(MoveEntity.class))).thenReturn(new MoveEntity());
+        when(playerService.getById(anyLong())).thenReturn(player);
+        when(moveRepository.findTopByGameOrderByMoveOrderDesc(any(GameEntity.class))).thenReturn(null);
 
         assertThatThrownBy(() -> service.createMove(gameId, request))
                 .isInstanceOf(InvalidMoveException.class)
                 .hasMessage(String.valueOf(ErrorMessage.INVALID_MOVE_ITS_OPPONENTS_TURN));
     }
 
-    private MoveRequest createMoveRequest(final Long gameId, final int order) {
+    private MoveRequest createMoveRequest(final Long gameId, final int moveOrder) {
+        return createMoveRequest(gameId, moveOrder, WHITE, STARTED);
+    }
+
+    private MoveRequest createMoveRequest(final Long gameId, final int moveOrder, Color pieceColor, GameStatus gameStatus) {
         final Long playerId = 1L;
-        GameEntity game = new GameEntity(new PlayerEntity(), GameStatus.STARTED);
+        GameEntity game = new GameEntity(new PlayerEntity(), gameStatus);
         ReflectionTestUtils.setField(game, "id", gameId);
         SquareEntity destination = new SquareEntity();
         Square expectedDestination = new Square(destination);
-         PieceEntity piece = new PieceEntity(WHITE, destination, "Pawn");
+         PieceEntity piece = new PieceEntity(pieceColor, destination, "Pawn");
         Piece pawn = new Pawn(piece);
-        final MoveEntity move = new MoveEntity(game, null, destination, order);
+        final MoveEntity move = new MoveEntity(game, null, destination, moveOrder);
 
         when(gameService.getById(gameId)).thenReturn(game);
         when(moveRepository.save(any(MoveEntity.class))).thenReturn(move);
