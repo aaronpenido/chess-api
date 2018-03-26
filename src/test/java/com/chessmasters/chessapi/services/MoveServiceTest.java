@@ -46,48 +46,42 @@ public class MoveServiceTest {
     public void createMove() {
         final Long gameId = 1L;
         final int expectedOrder = 1;
-        MoveRequest request = createMoveRequest(gameId, expectedOrder);
-        final PlayerEntity player = new PlayerEntity();
-        player.setColor(WHITE);
+        MoveRequest request = createMoveRequest();
+        mockPlayerEntity();
+        GameEntity gameEntity = mockGameEntity(gameId, STARTED);
+        mockMoveEntity(gameEntity, expectedOrder);
 
-        when(playerService.getById(anyLong())).thenReturn(player);
-        when(moveRepository.findTopByGameOrderByMoveOrderDesc(any(GameEntity.class))).thenReturn(null);
+        Move move = service.createMove(gameId, request);
 
-        Move moveModel = service.createMove(gameId, request);
-
-        assertThat(moveModel).isNotNull();
-        assertThat(moveModel.getGameId()).isEqualTo(gameId);
-        assertThat(moveModel.getOrder()).isEqualTo(expectedOrder);
-        assertThat(moveModel.getDestination()).isEqualTo(request.getDestination());
+        assertThat(move).isNotNull();
+        assertThat(move.getGameId()).isEqualTo(gameId);
+        assertThat(move.getOrder()).isEqualTo(expectedOrder);
+        assertThat(move.getDestination()).isEqualTo(request.getDestination());
     }
 
     @Test
     public void createMoveHasOrderIncreasedByOne() {
         final Long gameId = 1L;
         final int increasedMoveOrder = 2;
-        final PlayerEntity player = new PlayerEntity();
-        player.setColor(WHITE);
+        MoveRequest request = createMoveRequest();
+        mockPlayerEntity();
+        GameEntity gameEntity = mockGameEntity(gameId, STARTED);
+        mockMoveEntity(gameEntity, increasedMoveOrder);
 
-        when(playerService.getById(anyLong())).thenReturn(player);
-        when(moveRepository.findTopByGameOrderByMoveOrderDesc(any(GameEntity.class))).thenReturn(null);
+        Move move = service.createMove(gameId, request);
 
-        MoveRequest request = createMoveRequest(gameId, increasedMoveOrder);
-        Move moveModel = service.createMove(gameId, request);
-
-        assertThat(moveModel).isNotNull();
-        assertThat(moveModel.getOrder()).isEqualTo(increasedMoveOrder);
+        assertThat(move).isNotNull();
+        assertThat(move.getOrder()).isEqualTo(increasedMoveOrder);
     }
 
     @Test
     public void throwGameNotStartedExceptionWhenTryingToMovePieceOnNonStartedGame() {
         final Long gameId = 1L;
         final int order = 1;
-        final PlayerEntity player = new PlayerEntity();
-        player.setColor(WHITE);
-
-        MoveRequest request = createMoveRequest(gameId, order, WHITE, CREATED);
-
-        when(playerService.getById(anyLong())).thenReturn(player);
+        MoveRequest request = createMoveRequest();
+        mockPlayerEntity();
+        GameEntity gameEntity = mockGameEntity(gameId, CREATED);
+        mockMoveEntity(gameEntity, order);
 
         assertThatThrownBy(() -> service.createMove(gameId, request))
                 .isInstanceOf(GameNotStartedException.class);
@@ -97,12 +91,10 @@ public class MoveServiceTest {
     public void saveMoveOnDatabase() {
         final Long gameId = 1L;
         final int order = 1;
-        final PlayerEntity player = new PlayerEntity();
-        player.setColor(WHITE);
-
-        when(playerService.getById(anyLong())).thenReturn(player);
-
-        MoveRequest request = createMoveRequest(gameId, order);
+        MoveRequest request = createMoveRequest();
+        mockPlayerEntity();
+        GameEntity gameEntity = mockGameEntity(gameId, STARTED);
+        mockMoveEntity(gameEntity, order);
 
         service.createMove(gameId, request);
 
@@ -122,35 +114,53 @@ public class MoveServiceTest {
     public void throwInvalidMoveExceptionWhenFirstMoveIsNotFromWhitePlayer() {
         final Long gameId = 1L;
         final int order = 1;
-        PlayerEntity player = new PlayerEntity();
-        player.setColor(BLACK);
-        MoveRequest request = createMoveRequest(gameId, order, BLACK, STARTED);
-
-        when(playerService.getById(anyLong())).thenReturn(player);
-        when(moveRepository.findTopByGameOrderByMoveOrderDesc(any(GameEntity.class))).thenReturn(null);
+        MoveRequest request = createMoveRequest(BLACK);
+        mockPlayerEntity(BLACK);
+        GameEntity gameEntity = mockGameEntity(gameId, STARTED);
+        mockMoveEntity(gameEntity, order);
 
         assertThatThrownBy(() -> service.createMove(gameId, request))
                 .isInstanceOf(InvalidMoveException.class)
                 .hasMessage(String.valueOf(ErrorMessage.INVALID_MOVE_ITS_OPPONENTS_TURN));
     }
 
-    private MoveRequest createMoveRequest(final Long gameId, final int moveOrder) {
-        return createMoveRequest(gameId, moveOrder, WHITE, STARTED);
+    private MoveRequest createMoveRequest() {
+        return createMoveRequest(WHITE);
     }
 
-    private MoveRequest createMoveRequest(final Long gameId, final int moveOrder, Color pieceColor, GameStatus gameStatus) {
+    private MoveRequest createMoveRequest(Color pieceColor) {
         final Long playerId = 1L;
-        GameEntity game = new GameEntity(new PlayerEntity(), gameStatus);
-        ReflectionTestUtils.setField(game, "id", gameId);
         SquareEntity destination = new SquareEntity();
         Square expectedDestination = new Square(destination);
-         PieceEntity piece = new PieceEntity(pieceColor, destination, "Pawn");
+        PieceEntity piece = new PieceEntity(pieceColor, destination, "Pawn");
         Piece pawn = new Pawn(piece);
-        final MoveEntity move = new MoveEntity(game, null, destination, moveOrder);
-
-        when(gameService.getById(gameId)).thenReturn(game);
-        when(moveRepository.save(any(MoveEntity.class))).thenReturn(move);
 
         return new MoveRequest(playerId, pawn, expectedDestination);
+    }
+
+    private GameEntity mockGameEntity(final Long gameId, GameStatus gameStatus) {
+        GameEntity gameEntity = new GameEntity(new PlayerEntity(), gameStatus);
+        ReflectionTestUtils.setField(gameEntity, "id", gameId);
+        when(gameService.getById(gameId)).thenReturn(gameEntity);
+
+        return gameEntity;
+    }
+
+    private void mockMoveEntity(GameEntity gameEntity, final int moveOrder) {
+        SquareEntity destination = new SquareEntity();
+        final MoveEntity move = new MoveEntity(gameEntity, null, destination, moveOrder);
+
+        when(moveRepository.save(any(MoveEntity.class))).thenReturn(move);
+    }
+
+    private void mockPlayerEntity() {
+        mockPlayerEntity(WHITE);
+    }
+
+    private void mockPlayerEntity(Color playerColor) {
+        final PlayerEntity player = new PlayerEntity();
+        player.setColor(playerColor);
+
+        when(playerService.getById(anyLong())).thenReturn(player);
     }
 }
