@@ -8,13 +8,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class MoveResponse {
 
     private Long gameId;
-    private Piece pieceModel;
+    private Piece piece;
     private int order;
     private Square destination;
 
     public MoveResponse(@JsonProperty("move") Move move) {
         this.gameId = move.getGameId();
-        this.pieceModel = move.getPieceModel();
+        this.piece = move.getPieceModel();
         this.destination = move.getDestination();
         this.order = move.getOrder();
     }
@@ -23,8 +23,8 @@ public class MoveResponse {
         return gameId;
     }
 
-    public Piece getPieceModel() {
-        return pieceModel;
+    public Piece getPiece() {
+        return piece;
     }
 
     public Square getDestination() {
