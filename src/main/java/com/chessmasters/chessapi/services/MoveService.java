@@ -38,6 +38,7 @@ public class MoveService {
 
         PlayerEntity player = playerService.getById(request.getPlayerId());
 
+        throwExceptionIfPlayerTriesToMoveOpponentsPiece(player, request);
         throwExceptionIfMoveIsDoneSequentiallyByThePlayer(game, player);
 
         final SquareEntity destination = new SquareEntity(
@@ -49,6 +50,13 @@ public class MoveService {
 
         return new Move(moveRepository.save(move));
     }
+
+    private void throwExceptionIfPlayerTriesToMoveOpponentsPiece(PlayerEntity playerEntity, MoveRequest request) {
+        if(!request.getPieceModel().getColor().equals(playerEntity.getColor())) {
+            throw new InvalidMoveException(String.valueOf(ErrorMessage.INVALID_MOVE_ITS_OPPONENTS_PIECE));
+        }
+    }
+
 
     private void throwExceptionIfMoveIsDoneSequentiallyByThePlayer(GameEntity game, PlayerEntity player) {
         MoveEntity moveEntity = moveRepository.findTopByGameOrderByMoveOrderDesc(game);

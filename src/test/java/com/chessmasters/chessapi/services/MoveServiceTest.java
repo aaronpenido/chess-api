@@ -131,15 +131,29 @@ public class MoveServiceTest {
         final int moveOrder = 1;
         final Color pieceColor = WHITE;
         MoveRequest request = createMoveRequest(pieceColor);
-        mockPlayerEntity(pieceColor);
+        mockPlayerEntity();
         GameEntity gameEntity = mockGameEntity(gameId, STARTED);
+        MoveEntity lastMove = mockMoveEntity(gameEntity, moveOrder);
 
-        MoveEntity moveEntity = mockMoveEntity(gameEntity, moveOrder);
-        when(moveRepository.findTopByGameOrderByMoveOrderDesc(any(GameEntity.class))).thenReturn(moveEntity);
+        when(moveRepository.findTopByGameOrderByMoveOrderDesc(any(GameEntity.class))).thenReturn(lastMove);
 
         assertThatThrownBy(() -> service.createMove(gameId, request))
                 .isInstanceOf(InvalidMoveException.class)
                 .hasMessage(String.valueOf(ErrorMessage.INVALID_MOVE_ITS_OPPONENTS_TURN));
+    }
+
+    @Test
+    public void throwInvalidMoveExceptionWhenPlayerTriesToMoveOpponentsPiece() {
+        final Long gameId = 1L;
+        final Color playerColor = WHITE;
+        final Color pieceColor = BLACK;
+        MoveRequest request = createMoveRequest(pieceColor);
+        mockPlayerEntity(playerColor);
+        mockGameEntity(gameId, STARTED);
+
+        assertThatThrownBy(() -> service.createMove(gameId, request))
+                .isInstanceOf(InvalidMoveException.class)
+                .hasMessage(String.valueOf(ErrorMessage.INVALID_MOVE_ITS_OPPONENTS_PIECE));
     }
 
     private MoveRequest createMoveRequest() {
