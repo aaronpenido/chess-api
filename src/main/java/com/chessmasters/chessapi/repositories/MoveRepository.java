@@ -12,6 +12,5 @@ import java.util.List;
 public interface MoveRepository extends JpaRepository<MoveEntity, Long>  {
 
     List<MoveEntity> findByGameId(Long gameId);
-    //@Query("select m from Move m WHERE m.game = :game ORDER BY m.moveOrder DESC")
     MoveEntity findTopByGameOrderByMoveOrderDesc(@Param("game") GameEntity gameEntity);
 }

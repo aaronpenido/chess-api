@@ -114,10 +114,28 @@ public class MoveServiceTest {
     public void throwInvalidMoveExceptionWhenFirstMoveIsNotFromWhitePlayer() {
         final Long gameId = 1L;
         final int order = 1;
-        MoveRequest request = createMoveRequest(BLACK);
-        mockPlayerEntity(BLACK);
+        final Color pieceColor = BLACK;
+        MoveRequest request = createMoveRequest(pieceColor);
+        mockPlayerEntity(pieceColor);
         GameEntity gameEntity = mockGameEntity(gameId, STARTED);
         mockMoveEntity(gameEntity, order);
+
+        assertThatThrownBy(() -> service.createMove(gameId, request))
+                .isInstanceOf(InvalidMoveException.class)
+                .hasMessage(String.valueOf(ErrorMessage.INVALID_MOVE_ITS_OPPONENTS_TURN));
+    }
+
+    @Test
+    public void throwInvalidMoveExceptionWhenNextMoveIsFromRepeatedColor() {
+        final Long gameId = 1L;
+        final int moveOrder = 1;
+        final Color pieceColor = WHITE;
+        MoveRequest request = createMoveRequest(pieceColor);
+        mockPlayerEntity(pieceColor);
+        GameEntity gameEntity = mockGameEntity(gameId, STARTED);
+
+        MoveEntity moveEntity = mockMoveEntity(gameEntity, moveOrder);
+        when(moveRepository.findTopByGameOrderByMoveOrderDesc(any(GameEntity.class))).thenReturn(moveEntity);
 
         assertThatThrownBy(() -> service.createMove(gameId, request))
                 .isInstanceOf(InvalidMoveException.class)
@@ -146,11 +164,14 @@ public class MoveServiceTest {
         return gameEntity;
     }
 
-    private void mockMoveEntity(GameEntity gameEntity, final int moveOrder) {
+    private MoveEntity mockMoveEntity(GameEntity gameEntity, final int moveOrder) {
         SquareEntity destination = new SquareEntity();
-        final MoveEntity move = new MoveEntity(gameEntity, null, destination, moveOrder);
+        final PieceEntity pawn = new PieceEntity(WHITE, destination, "Pawn");
+        final MoveEntity moveEntity = new MoveEntity(gameEntity, pawn, destination, moveOrder);
 
-        when(moveRepository.save(any(MoveEntity.class))).thenReturn(move);
+        when(moveRepository.save(any(MoveEntity.class))).thenReturn(moveEntity);
+
+        return moveEntity;
     }
 
     private void mockPlayerEntity() {
