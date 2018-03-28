@@ -1,11 +1,13 @@
 package com.chessmasters.chessapi.services;
 
 import com.chessmasters.chessapi.entities.GameEntity;
+import com.chessmasters.chessapi.entities.PieceEntity;
 import com.chessmasters.chessapi.entities.PlayerEntity;
 import com.chessmasters.chessapi.enums.Color;
 import com.chessmasters.chessapi.enums.GameStatus;
 import com.chessmasters.chessapi.exceptions.GameNotFoundException;
 import com.chessmasters.chessapi.exceptions.GameStartedException;
+import com.chessmasters.chessapi.models.BoardInitializer;
 import com.chessmasters.chessapi.models.Game;
 import com.chessmasters.chessapi.repositories.GameRepository;
 import com.chessmasters.chessapi.request.GameRequest;
@@ -61,6 +63,10 @@ public class GameService {
 
         game.setStatus(GameStatus.STARTED);
         game.setPlayer2(player2);
+
+        List<PieceEntity> pieces = new BoardInitializer(game).getPieces();
+        game.getPieces().addAll(pieces);
+
         game = gameRepository.save(game);
 
         return new Game(game);

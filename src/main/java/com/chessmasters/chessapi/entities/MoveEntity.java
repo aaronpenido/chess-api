@@ -11,7 +11,7 @@ public class MoveEntity {
     @ManyToOne
     @JoinColumn(name="game_id")
     private GameEntity game;
-    @Embedded
+    @OneToOne
     private PieceEntity piece;
     @AttributeOverrides( {
             @AttributeOverride(name="letter", column = @Column(name="destinationletter") ),

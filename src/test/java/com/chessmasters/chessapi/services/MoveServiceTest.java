@@ -164,7 +164,7 @@ public class MoveServiceTest {
         final Long playerId = 1L;
         SquareEntity destination = new SquareEntity();
         Square expectedDestination = new Square(destination);
-        PieceEntity piece = new PieceEntity(pieceColor, destination, "Pawn");
+        PieceEntity piece = new PieceEntity(new GameEntity(), pieceColor, destination, "Pawn");
         Piece pawn = new Pawn(piece);
 
         return new MoveRequest(playerId, pawn, expectedDestination);
@@ -180,7 +180,7 @@ public class MoveServiceTest {
 
     private MoveEntity mockMoveEntity(GameEntity gameEntity, final int moveOrder) {
         SquareEntity destination = new SquareEntity();
-        final PieceEntity pawn = new PieceEntity(WHITE, destination, "Pawn");
+        final PieceEntity pawn = new PieceEntity(new GameEntity(), WHITE, destination, "Pawn");
         final MoveEntity moveEntity = new MoveEntity(gameEntity, pawn, destination, moveOrder);
 
         when(moveRepository.save(any(MoveEntity.class))).thenReturn(moveEntity);

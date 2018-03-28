@@ -34,22 +34,12 @@ public class MoveControllerComponentTest extends BaseComponentTest {
 
     @Test
     public void createMove() {
-        final SquareEntity destination = new SquareEntity(1, Letter.A);
-        final Square expectedDestination = new Square(destination);
-        final PieceEntity piece = new PieceEntity(WHITE, destination, "Pawn");
-        Piece pawn = new Pawn(piece);
         final int expectedOrder = 1;
-        final String playerName = "Player name";
-        final PlayerEntity player = playerRepository.save(new PlayerEntity(playerName));
-        player.setColor(WHITE);
-        final PlayerEntity player2 = playerRepository.save(new PlayerEntity(playerName));
-        player2.setColor(BLACK);
-        GameEntity game = new GameEntity(player, GameStatus.STARTED);
-        game.setPlayer2(player2);
-        game = gameRepository.save(game);
+        GameEntity game = createGameEntity();
         final int gameId = game.getId().intValue();
         final String path = String.format("/games/%s/moves", gameId);
-        final MoveRequest moveRequest = new MoveRequest(player.getId(), pawn, expectedDestination);
+
+        final MoveRequest moveRequest = createMoveRequest(game);
 
         given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -58,7 +48,6 @@ public class MoveControllerComponentTest extends BaseComponentTest {
                 .statusCode(HttpStatus.CREATED.value())
                 .body("gameId", is(gameId))
                 .body("order", is(expectedOrder));
-
     }
 
     @Test
@@ -72,5 +61,27 @@ public class MoveControllerComponentTest extends BaseComponentTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
         .get(path).then()
                 .statusCode(HttpStatus.OK.value());
+    }
+
+    private GameEntity createGameEntity() {
+        final String playerName = "Player name";
+        final PlayerEntity player = playerRepository.save(new PlayerEntity(playerName));
+        player.setColor(WHITE);
+        final PlayerEntity player2 = playerRepository.save(new PlayerEntity(playerName));
+        player2.setColor(BLACK);
+        GameEntity game = new GameEntity(player, GameStatus.STARTED);
+        game.setPlayer2(player2);
+        game = gameRepository.save(game);
+
+        return game;
+    }
+
+    private MoveRequest createMoveRequest(GameEntity gameEntity) {
+        final SquareEntity destination = new SquareEntity(1, Letter.A);
+        final Square expectedDestination = new Square(destination);
+        final PieceEntity piece = new PieceEntity(gameEntity, WHITE, destination, "Pawn");
+        Piece pawn = new Pawn(piece);
+
+        return new MoveRequest(gameEntity.getPlayer().getId(), pawn, expectedDestination);
     }
 }

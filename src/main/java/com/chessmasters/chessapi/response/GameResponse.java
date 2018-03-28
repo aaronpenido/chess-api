@@ -2,7 +2,10 @@ package com.chessmasters.chessapi.response;
 
 import com.chessmasters.chessapi.enums.GameStatus;
 import com.chessmasters.chessapi.models.Game;
+import com.chessmasters.chessapi.models.Piece;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.List;
 
 public class GameResponse {
 
@@ -10,12 +13,14 @@ public class GameResponse {
     private GameStatus status;
     private Long playerId;
     private Long player2Id;
+    private List<Piece> pieces;
 
     public GameResponse(@JsonProperty("game") Game game) {
         this.id = game.getId();
         this.status = game.getStatus();
         this.playerId = game.getPlayerId();
         this.player2Id = game.getPlayer2Id();
+        this.pieces = game.getPieces();
     }
 
     public Long getId() {
@@ -32,5 +37,9 @@ public class GameResponse {
 
     public Long getPlayer2Id() {
         return player2Id;
+    }
+
+    public List<Piece> getPieces() {
+        return pieces;
     }
 }

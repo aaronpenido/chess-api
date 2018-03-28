@@ -63,7 +63,7 @@ public class MoveControllerTest {
         final SquareEntity destination = new SquareEntity();
         final MoveEntity move = new MoveEntity(game, null, destination, moveOrder);
         final Square expectedDestination = new Square(destination);
-        final PieceEntity piece = new PieceEntity(WHITE, destination, "Pawn");
+        final PieceEntity piece = new PieceEntity(game, WHITE, destination, "Pawn");
         Piece pawn = new Pawn(piece);
         MoveRequest request = new MoveRequest(playerId, pawn, expectedDestination);
 

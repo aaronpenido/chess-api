@@ -3,6 +3,9 @@ package com.chessmasters.chessapi.entities;
 import com.chessmasters.chessapi.enums.GameStatus;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Entity(name = "Game")
 public class GameEntity {
@@ -18,6 +21,8 @@ public class GameEntity {
     @OneToOne
     @JoinColumn(name = "player2_id", referencedColumnName = "id")
     private PlayerEntity player2;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PieceEntity> pieces = new ArrayList<>();
 
     public GameEntity() {
     }
@@ -49,5 +54,26 @@ public class GameEntity {
 
     public void setPlayer2(PlayerEntity player2) {
         this.player2 = player2;
+    }
+
+    public List<PieceEntity> getPieces() {
+        return pieces;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        GameEntity that = (GameEntity) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

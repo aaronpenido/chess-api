@@ -45,7 +45,11 @@ public class MoveService {
                 request.getDestination().getNumber(),
                 request.getDestination().getLetter());
 
-        PieceEntity piece = new PieceEntity(request.getPieceModel().getColor(), destination, request.getPieceModel().getType());
+        PieceEntity piece = new PieceEntity(game,
+                request.getPieceModel().getColor(),
+                destination,
+                request.getPieceModel().getType());
+
         MoveEntity move = new MoveEntity(game, piece, destination, generateMoveOrder(gameId));
 
         return new Move(moveRepository.save(move));
@@ -56,7 +60,6 @@ public class MoveService {
             throw new InvalidMoveException(String.valueOf(ErrorMessage.INVALID_MOVE_ITS_OPPONENTS_PIECE));
         }
     }
-
 
     private void throwExceptionIfMoveIsDoneSequentiallyByThePlayer(GameEntity game, PlayerEntity player) {
         MoveEntity moveEntity = moveRepository.findTopByGameOrderByMoveOrderDesc(game);
