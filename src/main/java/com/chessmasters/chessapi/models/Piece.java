@@ -18,16 +18,22 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 })
 public abstract class Piece {
 
+    private Long id;
     private Square square;
     private Color color;
     private String type;
 
     public Piece(PieceEntity pieceEntity) {
         if(pieceEntity != null) {
+            this.id = pieceEntity.getId();
             this.square = new Square(pieceEntity.getSquare());
             this.color = pieceEntity.getColor();
             this.type = pieceEntity.getType();
         }
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public Square getSquare() {
