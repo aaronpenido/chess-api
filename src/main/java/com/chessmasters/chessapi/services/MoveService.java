@@ -6,8 +6,10 @@ import com.chessmasters.chessapi.enums.ErrorMessage;
 import com.chessmasters.chessapi.enums.GameStatus;
 import com.chessmasters.chessapi.exceptions.GameNotStartedException;
 import com.chessmasters.chessapi.exceptions.InvalidMoveException;
+import com.chessmasters.chessapi.exceptions.PieceNotFoundException;
 import com.chessmasters.chessapi.models.Move;
 import com.chessmasters.chessapi.repositories.MoveRepository;
+import com.chessmasters.chessapi.repositories.PieceRepository;
 import com.chessmasters.chessapi.request.MoveRequest;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +22,14 @@ import java.util.stream.Collectors;
 public class MoveService {
 
     private MoveRepository moveRepository;
+    private PieceRepository pieceRepository;
     private GameService gameService;
     private PlayerService playerService;
 
-    public MoveService(MoveRepository moveRepository, GameService gameService, PlayerService playerService) {
+    public MoveService(MoveRepository moveRepository, PieceRepository pieceRepository,
+                       GameService gameService, PlayerService playerService) {
         this.moveRepository = moveRepository;
+        this.pieceRepository = pieceRepository;
         this.gameService = gameService;
         this.playerService = playerService;
     }
@@ -38,25 +43,26 @@ public class MoveService {
 
         PlayerEntity player = playerService.getById(request.getPlayerId());
 
-        throwExceptionIfPlayerTriesToMoveOpponentsPiece(player, request);
+        PieceEntity pieceEntity = pieceRepository.findOne(request.getPieceId());
+
+        if(pieceEntity == null) {
+            throw new PieceNotFoundException(request.getPieceId());
+        }
+
+        throwExceptionIfPlayerTriesToMoveOpponentsPiece(player, pieceEntity);
         throwExceptionIfMoveIsDoneSequentiallyByThePlayer(game, player);
 
         final SquareEntity destination = new SquareEntity(
                 request.getDestination().getNumber(),
                 request.getDestination().getLetter());
 
-        PieceEntity piece = new PieceEntity(game,
-                request.getPieceModel().getColor(),
-                destination,
-                request.getPieceModel().getType());
-
-        MoveEntity move = new MoveEntity(game, piece, destination, generateMoveOrder(gameId));
+        MoveEntity move = new MoveEntity(game, pieceEntity, destination, generateMoveOrder(gameId));
 
         return new Move(moveRepository.save(move));
     }
 
-    private void throwExceptionIfPlayerTriesToMoveOpponentsPiece(PlayerEntity playerEntity, MoveRequest request) {
-        if(!request.getPieceModel().getColor().equals(playerEntity.getColor())) {
+    private void throwExceptionIfPlayerTriesToMoveOpponentsPiece(PlayerEntity playerEntity, PieceEntity pieceEntity) {
+        if(!pieceEntity.getColor().equals(playerEntity.getColor())) {
             throw new InvalidMoveException(String.valueOf(ErrorMessage.INVALID_MOVE_ITS_OPPONENTS_PIECE));
         }
     }

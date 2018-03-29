@@ -1,10 +1,11 @@
 package com.chessmasters.chessapi.controllers;
 
-import com.chessmasters.chessapi.entities.*;
+import com.chessmasters.chessapi.entities.GameEntity;
+import com.chessmasters.chessapi.entities.MoveEntity;
+import com.chessmasters.chessapi.entities.PlayerEntity;
+import com.chessmasters.chessapi.entities.SquareEntity;
 import com.chessmasters.chessapi.enums.GameStatus;
 import com.chessmasters.chessapi.models.Move;
-import com.chessmasters.chessapi.models.Pawn;
-import com.chessmasters.chessapi.models.Piece;
 import com.chessmasters.chessapi.models.Square;
 import com.chessmasters.chessapi.request.MoveRequest;
 import com.chessmasters.chessapi.response.MoveResponse;
@@ -19,7 +20,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.chessmasters.chessapi.enums.Color.WHITE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -58,14 +58,13 @@ public class MoveControllerTest {
 
     private MoveRequest createMoveRequest(final Long gameId, final int moveOrder) {
         final Long playerId = 1L;
+        final Long pieceId = 1L;
         GameEntity game = new GameEntity(new PlayerEntity(), GameStatus.STARTED);
         ReflectionTestUtils.setField(game, "id", gameId);
         final SquareEntity destination = new SquareEntity();
         final MoveEntity move = new MoveEntity(game, null, destination, moveOrder);
         final Square expectedDestination = new Square(destination);
-        final PieceEntity piece = new PieceEntity(game, WHITE, destination, "Pawn");
-        Piece pawn = new Pawn(piece);
-        MoveRequest request = new MoveRequest(playerId, pawn, expectedDestination);
+        MoveRequest request = new MoveRequest(playerId, pieceId, expectedDestination);
 
         when(moveService.createMove(gameId, request)).thenReturn(new Move(move));
 

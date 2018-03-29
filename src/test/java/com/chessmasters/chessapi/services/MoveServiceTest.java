@@ -6,11 +6,11 @@ import com.chessmasters.chessapi.enums.ErrorMessage;
 import com.chessmasters.chessapi.enums.GameStatus;
 import com.chessmasters.chessapi.exceptions.GameNotStartedException;
 import com.chessmasters.chessapi.exceptions.InvalidMoveException;
+import com.chessmasters.chessapi.exceptions.PieceNotFoundException;
 import com.chessmasters.chessapi.models.Move;
-import com.chessmasters.chessapi.models.Pawn;
-import com.chessmasters.chessapi.models.Piece;
 import com.chessmasters.chessapi.models.Square;
 import com.chessmasters.chessapi.repositories.MoveRepository;
+import com.chessmasters.chessapi.repositories.PieceRepository;
 import com.chessmasters.chessapi.request.MoveRequest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,6 +38,8 @@ public class MoveServiceTest {
     @Mock
     private MoveRepository moveRepository;
     @Mock
+    private PieceRepository pieceRepository;
+    @Mock
     private GameService gameService;
     @Mock
     private PlayerService playerService;
@@ -46,10 +48,11 @@ public class MoveServiceTest {
     public void createMove() {
         final Long gameId = 1L;
         final int expectedOrder = 1;
-        MoveRequest request = createMoveRequest();
         mockPlayerEntity();
+        mockPieceEntity();
         GameEntity gameEntity = mockGameEntity(gameId, STARTED);
         mockMoveEntity(gameEntity, expectedOrder);
+        MoveRequest request = createMoveRequest();
 
         Move move = service.createMove(gameId, request);
 
@@ -63,10 +66,11 @@ public class MoveServiceTest {
     public void createMoveHasOrderIncreasedByOne() {
         final Long gameId = 1L;
         final int increasedMoveOrder = 2;
-        MoveRequest request = createMoveRequest();
         mockPlayerEntity();
+        mockPieceEntity();
         GameEntity gameEntity = mockGameEntity(gameId, STARTED);
         mockMoveEntity(gameEntity, increasedMoveOrder);
+        MoveRequest request = createMoveRequest();
 
         Move move = service.createMove(gameId, request);
 
@@ -78,10 +82,10 @@ public class MoveServiceTest {
     public void throwGameNotStartedExceptionWhenTryingToMovePieceOnNonStartedGame() {
         final Long gameId = 1L;
         final int order = 1;
-        MoveRequest request = createMoveRequest();
         mockPlayerEntity();
         GameEntity gameEntity = mockGameEntity(gameId, CREATED);
         mockMoveEntity(gameEntity, order);
+        MoveRequest request = createMoveRequest();
 
         assertThatThrownBy(() -> service.createMove(gameId, request))
                 .isInstanceOf(GameNotStartedException.class);
@@ -91,10 +95,11 @@ public class MoveServiceTest {
     public void saveMoveOnDatabase() {
         final Long gameId = 1L;
         final int order = 1;
-        MoveRequest request = createMoveRequest();
         mockPlayerEntity();
+        mockPieceEntity();
         GameEntity gameEntity = mockGameEntity(gameId, STARTED);
         mockMoveEntity(gameEntity, order);
+        MoveRequest request = createMoveRequest();
 
         service.createMove(gameId, request);
 
@@ -115,10 +120,11 @@ public class MoveServiceTest {
         final Long gameId = 1L;
         final int order = 1;
         final Color pieceColor = BLACK;
-        MoveRequest request = createMoveRequest(pieceColor);
         mockPlayerEntity(pieceColor);
+        mockPieceEntity(pieceColor);
         GameEntity gameEntity = mockGameEntity(gameId, STARTED);
         mockMoveEntity(gameEntity, order);
+        MoveRequest request = createMoveRequest();
 
         assertThatThrownBy(() -> service.createMove(gameId, request))
                 .isInstanceOf(InvalidMoveException.class)
@@ -129,11 +135,11 @@ public class MoveServiceTest {
     public void throwInvalidMoveExceptionWhenNextMoveIsFromRepeatedColor() {
         final Long gameId = 1L;
         final int moveOrder = 1;
-        final Color pieceColor = WHITE;
-        MoveRequest request = createMoveRequest(pieceColor);
         mockPlayerEntity();
+        mockPieceEntity();
         GameEntity gameEntity = mockGameEntity(gameId, STARTED);
         MoveEntity lastMove = mockMoveEntity(gameEntity, moveOrder);
+        MoveRequest request = createMoveRequest();
 
         when(moveRepository.findTopByGameOrderByMoveOrderDesc(any(GameEntity.class))).thenReturn(lastMove);
 
@@ -147,27 +153,36 @@ public class MoveServiceTest {
         final Long gameId = 1L;
         final Color playerColor = WHITE;
         final Color pieceColor = BLACK;
-        MoveRequest request = createMoveRequest(pieceColor);
         mockPlayerEntity(playerColor);
+        mockPieceEntity(pieceColor);
         mockGameEntity(gameId, STARTED);
+        MoveRequest request = createMoveRequest();
 
         assertThatThrownBy(() -> service.createMove(gameId, request))
                 .isInstanceOf(InvalidMoveException.class)
                 .hasMessage(String.valueOf(ErrorMessage.INVALID_MOVE_ITS_OPPONENTS_PIECE));
     }
 
-    private MoveRequest createMoveRequest() {
-        return createMoveRequest(WHITE);
+    @Test
+    public void throwPieceNotFoundWhenTryingToMoveNonExistentPiece() {
+        final Long gameId = 1L;
+        mockPlayerEntity(WHITE);
+        mockGameEntity(gameId, STARTED);
+        MoveRequest request = createMoveRequest();
+
+        when(pieceRepository.findOne(any(Long.class))).thenReturn(null);
+
+        assertThatThrownBy(() -> service.createMove(gameId, request))
+                .isInstanceOf(PieceNotFoundException.class);
     }
 
-    private MoveRequest createMoveRequest(Color pieceColor) {
+    private MoveRequest createMoveRequest() {
         final Long playerId = 1L;
+        final Long pieceId = 1L;
         SquareEntity destination = new SquareEntity();
         Square expectedDestination = new Square(destination);
-        PieceEntity piece = new PieceEntity(new GameEntity(), pieceColor, destination, "Pawn");
-        Piece pawn = new Pawn(piece);
 
-        return new MoveRequest(playerId, pawn, expectedDestination);
+        return new MoveRequest(playerId, pieceId, expectedDestination);
     }
 
     private GameEntity mockGameEntity(final Long gameId, GameStatus gameStatus) {
@@ -180,7 +195,7 @@ public class MoveServiceTest {
 
     private MoveEntity mockMoveEntity(GameEntity gameEntity, final int moveOrder) {
         SquareEntity destination = new SquareEntity();
-        final PieceEntity pawn = new PieceEntity(new GameEntity(), WHITE, destination, "Pawn");
+        final PieceEntity pawn = createPieceEntity(WHITE);
         final MoveEntity moveEntity = new MoveEntity(gameEntity, pawn, destination, moveOrder);
 
         when(moveRepository.save(any(MoveEntity.class))).thenReturn(moveEntity);
@@ -197,5 +212,18 @@ public class MoveServiceTest {
         player.setColor(playerColor);
 
         when(playerService.getById(anyLong())).thenReturn(player);
+    }
+
+    private void mockPieceEntity() {
+        mockPieceEntity(WHITE);
+    }
+
+    private void mockPieceEntity(Color pieceColor) {
+        final PieceEntity pieceEntity = createPieceEntity(pieceColor);
+        when(pieceRepository.findOne(any(Long.class))).thenReturn(pieceEntity);
+    }
+
+    private PieceEntity createPieceEntity(Color pieceColor) {
+        return new PieceEntity(new GameEntity(), pieceColor, null, "Pawn");
     }
 }

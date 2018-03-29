@@ -6,10 +6,9 @@ import com.chessmasters.chessapi.entities.PlayerEntity;
 import com.chessmasters.chessapi.entities.SquareEntity;
 import com.chessmasters.chessapi.enums.GameStatus;
 import com.chessmasters.chessapi.enums.Letter;
-import com.chessmasters.chessapi.models.Pawn;
-import com.chessmasters.chessapi.models.Piece;
 import com.chessmasters.chessapi.models.Square;
 import com.chessmasters.chessapi.repositories.GameRepository;
+import com.chessmasters.chessapi.repositories.PieceRepository;
 import com.chessmasters.chessapi.repositories.PlayerRepository;
 import com.chessmasters.chessapi.request.MoveRequest;
 import org.junit.Test;
@@ -31,15 +30,17 @@ public class MoveControllerComponentTest extends BaseComponentTest {
     private PlayerRepository playerRepository;
     @Autowired
     private GameRepository gameRepository;
+    @Autowired
+    private PieceRepository pieceRepository;
 
     @Test
     public void createMove() {
         final int expectedOrder = 1;
-        GameEntity game = createGameEntity();
-        final int gameId = game.getId().intValue();
+        GameEntity gameEntity = createGameEntity();
+        PieceEntity pieceEntity = createPieceEntity(gameEntity);
+        final MoveRequest moveRequest = createMoveRequest(gameEntity, pieceEntity.getId());
+        final int gameId = gameEntity.getId().intValue();
         final String path = String.format("/games/%s/moves", gameId);
-
-        final MoveRequest moveRequest = createMoveRequest(game);
 
         given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -76,12 +77,16 @@ public class MoveControllerComponentTest extends BaseComponentTest {
         return game;
     }
 
-    private MoveRequest createMoveRequest(GameEntity gameEntity) {
+    private MoveRequest createMoveRequest(GameEntity gameEntity, Long pieceId) {
         final SquareEntity destination = new SquareEntity(1, Letter.A);
         final Square expectedDestination = new Square(destination);
-        final PieceEntity piece = new PieceEntity(gameEntity, WHITE, destination, "Pawn");
-        Piece pawn = new Pawn(piece);
 
-        return new MoveRequest(gameEntity.getPlayer().getId(), pawn, expectedDestination);
+        return new MoveRequest(gameEntity.getPlayer().getId(), pieceId, expectedDestination);
+    }
+
+    private PieceEntity createPieceEntity(GameEntity gameEntity) {
+        SquareEntity destination = new SquareEntity(1, Letter.A);
+        PieceEntity pieceEntity = new PieceEntity(gameEntity, WHITE, destination, "Pawn");
+        return pieceRepository.save(pieceEntity);
     }
 }
