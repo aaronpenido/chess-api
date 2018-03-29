@@ -11,18 +11,15 @@ public class Game {
 
     private Long id;
     private GameStatus status;
-    private Long playerId;
-    private Long player2Id;
+    private Player player;
+    private Player player2;
     private List<Piece> pieces;
 
     public Game(@JsonProperty("gameEntity") GameEntity gameEntity) {
         this.id = gameEntity.getId();
         this.status = gameEntity.getStatus();
-        this.playerId = gameEntity.getPlayer().getId();
-
-        if(gameEntity.getPlayer2() != null) {
-            this.player2Id = gameEntity.getPlayer2().getId();
-        }
+        this.player = new Player(gameEntity.getPlayer());
+        this.player2 = new Player(gameEntity.getPlayer2());
 
         if(gameEntity.getPieces() != null) {
             this.pieces = gameEntity.getPieces()
@@ -40,12 +37,12 @@ public class Game {
         return status;
     }
 
-    public Long getPlayerId() {
-        return playerId;
+    public Player getPlayer() {
+        return player;
     }
 
-    public Long getPlayer2Id() {
-        return player2Id;
+    public Player getPlayer2() {
+        return player2;
     }
 
     public List<Piece> getPieces() {

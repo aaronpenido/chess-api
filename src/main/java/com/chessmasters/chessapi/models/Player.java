@@ -11,9 +11,11 @@ public class Player {
     private Color color;
 
     public Player(@JsonProperty("playerEntity") PlayerEntity playerEntity) {
-        this.id = playerEntity.getId();
-        this.name = playerEntity.getName();
-        this.color = playerEntity.getColor();
+        if(playerEntity != null) {
+            this.id = playerEntity.getId();
+            this.name = playerEntity.getName();
+            this.color = playerEntity.getColor();
+        }
     }
 
     public Long getId() {

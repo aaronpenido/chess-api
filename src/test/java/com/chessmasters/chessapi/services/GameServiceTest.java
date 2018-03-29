@@ -36,14 +36,16 @@ public class GameServiceTest {
     public void createGame() {
         final Long playerId = 1L;
         GameRequest gameRequest = new GameRequest(playerId);
-        final GameEntity gameEntity = createGameEntity(playerId);
+        final GameEntity gameEntity = createGameEntity();
+        mockObjects(gameEntity, gameEntity.getPlayer());
 
-        Game gameModel = service.createGame(gameRequest);
+        Game game = service.createGame(gameRequest);
 
-        assertThat(gameModel).isNotNull();
-        assertThat(gameModel.getId()).isEqualTo(gameEntity.getId());
-        assertThat(gameModel.getPlayerId()).isEqualTo(gameEntity.getPlayer().getId());
-        assertThat(gameModel.getStatus()).isEqualTo(gameEntity.getStatus());
+        assertThat(game).isNotNull();
+        assertThat(game.getId()).isEqualTo(gameEntity.getId());
+        assertThat(game.getPlayer()).isNotNull();
+        assertThat(game.getPlayer().getId()).isEqualTo(gameEntity.getPlayer().getId());
+        assertThat(game.getStatus()).isEqualTo(gameEntity.getStatus());
     }
 
     @Test
@@ -67,21 +69,19 @@ public class GameServiceTest {
     }
 
     @Test
-    public void startGameUpdatesGameStatusToStarted() {
+    public void startingGameUpdatesGameStatusToStarted() {
         final Long gameId = 1L;
         final Long playerId = 1L;
         PlayerEntity player = new PlayerEntity();
         GameRequest gameRequest = new GameRequest(playerId);
-        GameEntity game = new GameEntity(player, GameStatus.CREATED);
+        GameEntity gameEntity = new GameEntity(player, GameStatus.CREATED);
 
-        when(playerService.getById(playerId)).thenReturn(player);
-        when(gameRepository.findOne(any(Long.class))).thenReturn(game);
-        when(gameRepository.save(any(GameEntity.class))).thenReturn(game);
+        mockObjects(gameEntity, player);
 
-        Game gameModel = service.startGame(gameId, gameRequest);
+        Game game = service.startGame(gameId, gameRequest);
 
-        assertThat(gameModel).isNotNull();
-        assertThat(gameModel.getStatus()).isEqualTo(GameStatus.STARTED);
+        assertThat(game).isNotNull();
+        assertThat(game.getStatus()).isEqualTo(GameStatus.STARTED);
     }
 
     @Test
@@ -112,31 +112,45 @@ public class GameServiceTest {
         final Long gameId = 1L;
         Long playerId = 1L;
         GameRequest request = new GameRequest(playerId);
-        GameEntity game = new GameEntity(new PlayerEntity(), GameStatus.STARTED);
-        ReflectionTestUtils.setField(game, "id", gameId);
+        GameEntity gameEntity = new GameEntity(new PlayerEntity(), GameStatus.STARTED);
+        ReflectionTestUtils.setField(gameEntity, "id", gameId);
+
         when(playerService.getById(any(Long.class))).thenReturn(new PlayerEntity());
-        when(gameRepository.findOne(any(Long.class))).thenReturn(game);
+        when(gameRepository.findOne(any(Long.class))).thenReturn(gameEntity);
 
         assertThatThrownBy(() -> service.startGame(gameId, request))
                 .isInstanceOf(GameStartedException.class);
     }
 
     @Test
+    public void gameHasSecondPlayerOnStart() {
+        final Long gameId = 1L;
+        final Long playerId = 1L;
+        GameEntity gameEntity = createGameEntity();
+        GameRequest gameRequest = new GameRequest(playerId);
+        mockObjects(gameEntity, gameEntity.getPlayer());
+
+        Game game = service.startGame(gameId, gameRequest);
+
+        assertThat(game.getPlayer2()).isNotNull();
+    }
+
+    @Test
     public void playersHaveDifferentColorsOnStartGame() {
         final Long gameId = 1L;
         final Long playerId = 1L;
-        GameEntity gameEntity = createGameEntity(playerId);
+        GameEntity gameEntity = createGameEntity();
         GameRequest gameRequest = new GameRequest(playerId);
+        mockObjects(gameEntity, gameEntity.getPlayer2());
 
-        service.startGame(gameId, gameRequest);
+        Game game = service.startGame(gameId, gameRequest);
 
-        assertThat(gameEntity.getPlayer2()).isNotNull();
-        assertThat(gameEntity.getPlayer().getColor()).isNotNull();
-        assertThat(gameEntity.getPlayer2().getColor()).isNotNull();
-        assertThat(gameEntity.getPlayer().getColor()).isNotEqualTo(gameEntity.getPlayer2().getColor());
+        assertThat(game.getPlayer().getColor()).isNotNull();
+        assertThat(game.getPlayer2().getColor()).isNotNull();
+        assertThat(game.getPlayer().getColor()).isNotEqualTo(gameEntity.getPlayer2().getColor());
     }
 
-    private GameEntity createGameEntity(Long playerId) {
+    private GameEntity createGameEntity() {
         PlayerEntity player = new PlayerEntity();
         player.setColor(Color.WHITE);
 
@@ -145,10 +159,12 @@ public class GameServiceTest {
         player2.setColor(Color.BLACK);
         gameEntity.setPlayer2(player2);
 
-        when(playerService.getById(playerId)).thenReturn(player2);
+        return gameEntity;
+    }
+
+    private void mockObjects(GameEntity gameEntity, PlayerEntity playerEntity) {
+        when(playerService.getById(any(Long.class))).thenReturn(playerEntity);
         when(gameRepository.findOne(any(Long.class))).thenReturn(gameEntity);
         when(gameRepository.save(any(GameEntity.class))).thenReturn(gameEntity);
-
-        return gameEntity;
     }
 }

@@ -32,7 +32,7 @@ public class GameControllerTest {
     public void createGame() {
         final Long playerId = 1L;
         GameRequest request = new GameRequest(playerId);
-        Game gameModel = createGameModel(GameStatus.CREATED);
+        Game gameModel = createGame(GameStatus.CREATED);
 
         when(gameService.createGame(request)).thenReturn(gameModel);
 
@@ -42,12 +42,11 @@ public class GameControllerTest {
         assertThat(response.getId()).isEqualTo(gameModel.getId());
         assertThat(response.getStatus()).isEqualTo(gameModel.getStatus());
         assertThat(response.getPlayerId()).isEqualTo(playerId);
-        assertThat(response.getPlayer2Id()).isNull();
     }
 
     @Test
     public void listGames() {
-        Game gameModel = createGameModel(GameStatus.CREATED);
+        Game gameModel = createGame(GameStatus.CREATED);
         when(gameService.getGames()).thenReturn(Collections.singletonList(gameModel));
 
         List<GameResponse> responseList = controller.listGames();
@@ -56,9 +55,8 @@ public class GameControllerTest {
 
         final GameResponse response = responseList.get(0);
         assertThat(response.getId()).isEqualTo(gameModel.getId());
-        assertThat(response.getPlayerId()).isEqualTo(gameModel.getPlayerId());
+        assertThat(response.getPlayerId()).isEqualTo(gameModel.getPlayer().getId());
         assertThat(response.getStatus()).isEqualTo(gameModel.getStatus());
-        assertThat(response.getPlayer2Id()).isNull();
     }
 
     @Test
@@ -66,27 +64,33 @@ public class GameControllerTest {
         final Long gameId = 1L;
         final Long playerId = 1L;
         GameRequest request = new GameRequest(playerId);
-        Game gameModel = createGameModel(GameStatus.STARTED);
-        ReflectionTestUtils.setField(gameModel, "player2Id", playerId);
-        when(gameService.startGame(gameId, request)).thenReturn(gameModel);
+        Game game = createGame(GameStatus.STARTED);
+        when(gameService.startGame(gameId, request)).thenReturn(game);
 
         GameResponse response = controller.startGame(gameId, request);
 
         assertThat(response).isNotNull();
-        assertThat(response.getId()).isEqualTo(gameModel.getId());
-        assertThat(response.getStatus()).isEqualTo(gameModel.getStatus());
-        assertThat(response.getPlayerId()).isEqualTo(playerId);
-        assertThat(response.getPlayer2Id()).isEqualTo(gameModel.getPlayerId());
+        assertThat(response.getId()).isEqualTo(game.getId());
+        assertThat(response.getStatus()).isEqualTo(game.getStatus());
+        assertThat(response.getPlayerId()).isEqualTo(game.getPlayer().getId());
+        assertThat(response.getPlayer2Id()).isEqualTo(game.getPlayer2().getId());
     }
 
-    private Game createGameModel(GameStatus gameStatus) {
+    private Game createGame(GameStatus gameStatus) {
         final Long gameId = 1L;
         final Long playerId = 1L;
+        final Long player2Id = 2L;
 
-        final PlayerEntity player = new PlayerEntity();
-        final GameEntity game = new GameEntity(player, gameStatus);
+        PlayerEntity player = new PlayerEntity();
+        PlayerEntity player2 = new PlayerEntity();
+
+        GameEntity game = new GameEntity(player, gameStatus);
+        game.setPlayer2(player2);
+
         ReflectionTestUtils.setField(player, "id", playerId);
+        ReflectionTestUtils.setField(player2, "id", player2Id);
         ReflectionTestUtils.setField(game, "id", gameId);
+
         return new Game(game);
     }
 }

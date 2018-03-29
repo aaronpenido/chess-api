@@ -18,8 +18,10 @@ public class GameResponse {
     public GameResponse(@JsonProperty("game") Game game) {
         this.id = game.getId();
         this.status = game.getStatus();
-        this.playerId = game.getPlayerId();
-        this.player2Id = game.getPlayer2Id();
+        this.playerId = game.getPlayer().getId();
+        if(game.getPlayer2() != null) {
+            this.player2Id = game.getPlayer2().getId();
+        }
         this.pieces = game.getPieces();
     }
 
