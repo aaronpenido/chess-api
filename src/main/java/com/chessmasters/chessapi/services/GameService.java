@@ -4,6 +4,7 @@ import com.chessmasters.chessapi.entities.GameEntity;
 import com.chessmasters.chessapi.entities.PieceEntity;
 import com.chessmasters.chessapi.entities.PlayerEntity;
 import com.chessmasters.chessapi.enums.Color;
+import com.chessmasters.chessapi.enums.ErrorMessage;
 import com.chessmasters.chessapi.enums.GameStatus;
 import com.chessmasters.chessapi.exceptions.GameNotFoundException;
 import com.chessmasters.chessapi.exceptions.GameStartedException;
@@ -34,7 +35,7 @@ public class GameService {
         GameEntity game = gameRepository.save(new GameEntity(player, GameStatus.CREATED));
 
         if(game == null) {
-            throw new RuntimeException("An error occurred when trying to create a game.");
+            throw new RuntimeException(String.valueOf(ErrorMessage.CREATE_GAME_ERROR));
         }
 
         return new Game(game);
