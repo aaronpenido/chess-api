@@ -3,6 +3,7 @@ package com.chessmasters.chessapi.services;
 import com.chessmasters.chessapi.entities.GameEntity;
 import com.chessmasters.chessapi.entities.PlayerEntity;
 import com.chessmasters.chessapi.enums.Color;
+import com.chessmasters.chessapi.enums.ErrorMessage;
 import com.chessmasters.chessapi.enums.GameStatus;
 import com.chessmasters.chessapi.exceptions.GameNotFoundException;
 import com.chessmasters.chessapi.exceptions.GameStartedException;
@@ -15,6 +16,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.test.util.ReflectionTestUtils;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -42,10 +46,7 @@ public class GameServiceTest {
         Game game = service.createGame(gameRequest);
 
         assertThat(game).isNotNull();
-        assertThat(game.getId()).isEqualTo(gameEntity.getId());
         assertThat(game.getPlayer()).isNotNull();
-        assertThat(game.getPlayer().getId()).isEqualTo(gameEntity.getPlayer().getId());
-        assertThat(game.getStatus()).isEqualTo(gameEntity.getStatus());
     }
 
     @Test
@@ -63,43 +64,6 @@ public class GameServiceTest {
     }
 
     @Test
-    public void startGameSavesOnDatabase() {
-        final Long gameId = 1L;
-        final Long playerId = 1L;
-        GameRequest request = new GameRequest(playerId);
-        PlayerEntity playerEntity = new PlayerEntity();
-        GameEntity gameEntity = createGameEntity();
-
-        mockObjects(gameEntity, playerEntity);
-
-        service.startGame(gameId, request);
-
-        verify(gameRepository).save(any(GameEntity.class));
-    }
-
-    @Test
-    public void getAllGamesFromDatabase() {
-        service.getGames();
-        verify(gameRepository).findAll();
-    }
-
-    @Test
-    public void startingGameUpdatesGameStatusToStarted() {
-        final Long gameId = 1L;
-        final Long playerId = 1L;
-        PlayerEntity player = new PlayerEntity();
-        GameRequest gameRequest = new GameRequest(playerId);
-        GameEntity gameEntity = new GameEntity(player, GameStatus.CREATED);
-
-        mockObjects(gameEntity, player);
-
-        Game game = service.startGame(gameId, gameRequest);
-
-        assertThat(game).isNotNull();
-        assertThat(game.getStatus()).isEqualTo(GameStatus.STARTED);
-    }
-
-    @Test
     public void throwRuntimeExceptionWhenErrorOccurredOnSaveGame() {
         Long playerId = 1L;
         GameRequest request = new GameRequest(playerId);
@@ -107,19 +71,8 @@ public class GameServiceTest {
         when(gameRepository.save(any(GameEntity.class))).thenReturn(null);
 
         assertThatThrownBy(() -> service.createGame(request))
-                .isInstanceOf(RuntimeException.class);
-    }
-
-    @Test
-    public void throwGameNotFoundExceptionWhenTryingToStartNonExistentGame() {
-        final Long gameId = 1L;
-        Long playerId = 1L;
-        GameRequest request = new GameRequest(playerId);
-
-        when(gameRepository.findOne(any(Long.class))).thenReturn(null);
-
-        assertThatThrownBy(() -> service.startGame(gameId, request))
-                .isInstanceOf(GameNotFoundException.class);
+                .isInstanceOf(RuntimeException.class)
+                .hasMessage(String.valueOf(ErrorMessage.CREATE_GAME_ERROR));
     }
 
     @Test
@@ -138,45 +91,61 @@ public class GameServiceTest {
     }
 
     @Test
-    public void gameHasSecondPlayerOnStart() {
+    public void startGameSavesOnDatabase() {
         final Long gameId = 1L;
         final Long playerId = 1L;
+        GameRequest request = new GameRequest(playerId);
+        PlayerEntity playerEntity = new PlayerEntity();
         GameEntity gameEntity = createGameEntity();
-        GameRequest gameRequest = new GameRequest(playerId);
-        mockObjects(gameEntity, gameEntity.getPlayer());
 
-        Game game = service.startGame(gameId, gameRequest);
+        mockObjects(gameEntity, playerEntity);
 
-        assertThat(game.getPlayer2()).isNotNull();
+        service.startGame(gameId, request);
+
+        verify(gameRepository).save(any(GameEntity.class));
     }
 
     @Test
-    public void playersHaveDifferentColorsOnStartGame() {
+    public void getByIdReturnsGameEntity() {
         final Long gameId = 1L;
-        final Long playerId = 1L;
         GameEntity gameEntity = createGameEntity();
-        GameRequest gameRequest = new GameRequest(playerId);
-        mockObjects(gameEntity, gameEntity.getPlayer2());
 
-        Game game = service.startGame(gameId, gameRequest);
+        when(gameRepository.findOne(any(Long.class))).thenReturn(gameEntity);
 
-        assertThat(game.getPlayer().getColor()).isNotNull();
-        assertThat(game.getPlayer2().getColor()).isNotNull();
-        assertThat(game.getPlayer().getColor()).isNotEqualTo(game.getPlayer2().getColor());
+        GameEntity returnedGameEntity = service.getById(gameId);
+
+        assertThat(returnedGameEntity).isEqualTo(gameEntity);
     }
 
     @Test
-    public void gameHasThirtyTwoPiecesOnStart() {
+    public void throwGameNotFoundExceptionWhenTryingToFindNonExistentGame() {
         final Long gameId = 1L;
-        final Long playerId = 1L;
-        GameEntity gameEntity = createGameEntity();
-        GameRequest gameRequest = new GameRequest(playerId);
-        mockObjects(gameEntity, gameEntity.getPlayer());
 
-        Game game = service.startGame(gameId, gameRequest);
+        when(gameRepository.findOne(any(Long.class))).thenReturn(null);
 
-        assertThat(game.getPieces()).isNotNull();
-        assertThat(game.getPieces().size()).isEqualTo(32);
+        assertThatThrownBy(() -> service.getById(gameId))
+                .isInstanceOf(GameNotFoundException.class);
+    }
+
+    @Test
+    public void getAllGamesReturnsValidGameList() {
+        final GameEntity gameEntity = createGameEntity();
+        List<GameEntity> gameEntities = Arrays.asList(gameEntity);
+
+        when(gameRepository.findAll()).thenReturn(gameEntities);
+
+        List<Game> games = service.getGames();
+
+        assertThat(games).isNotNull();
+        assertThat(games.size()).isEqualTo(gameEntities.size());
+        assertThat(games.get(0)).isNotNull();
+        assertThat(games.get(0).getId()).isEqualTo(gameEntities.get(0).getId());
+    }
+
+    @Test
+    public void getAllGamesFromDatabase() {
+        service.getGames();
+        verify(gameRepository).findAll();
     }
 
     private GameEntity createGameEntity() {

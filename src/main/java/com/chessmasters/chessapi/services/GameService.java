@@ -37,15 +37,6 @@ public class GameService {
         return new Game(game);
     }
 
-    public List<Game> getGames() {
-        List<GameEntity> games = gameRepository.findAll();
-
-        return games
-                .stream()
-                .map(Game::new)
-                .collect(Collectors.toList());
-    }
-
     public Game startGame(Long gameId, GameRequest gameRequest) {
         GameEntity gameEntity = getById(gameId);
 
@@ -61,6 +52,15 @@ public class GameService {
         gameRepository.save(gameEntity);
 
         return game;
+    }
+
+    public List<Game> getGames() {
+        List<GameEntity> games = gameRepository.findAll();
+
+        return games
+                .stream()
+                .map(Game::new)
+                .collect(Collectors.toList());
     }
 
     public GameEntity getById(Long gameId) {
