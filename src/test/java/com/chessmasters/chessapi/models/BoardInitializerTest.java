@@ -7,9 +7,6 @@ import com.chessmasters.chessapi.enums.Color;
 import com.chessmasters.chessapi.enums.Letter;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.List;
 import java.util.Random;
@@ -20,20 +17,20 @@ import static com.chessmasters.chessapi.enums.Color.WHITE;
 import static com.chessmasters.chessapi.enums.Letter.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(MockitoJUnitRunner.class)
 public class BoardInitializerTest {
 
-    private BoardInitializer initializer;
+    private BoardInitializer boardInitializer;
     private List<PieceEntity> pieces;
     private final static int WHITE_INITIAL_NUMBER = 1;
     private final static int BLACK_INITIAL_NUMBER = 8;
-    @Mock
     private GameEntity gameEntity;
 
     @Before
     public void setUp() {
-        initializer = new BoardInitializer(gameEntity);
-        pieces = initializer.getPieces();
+        gameEntity = new GameEntity();
+        boardInitializer = new BoardInitializer(gameEntity);
+        boardInitializer.initialize();
+        pieces = gameEntity.getPieces();
     }
 
     @Test

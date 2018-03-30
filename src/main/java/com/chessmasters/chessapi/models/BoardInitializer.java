@@ -21,23 +21,19 @@ public class BoardInitializer {
 
     public BoardInitializer(GameEntity gameEntity) {
         this.gameEntity = gameEntity;
-
-        initializePieces();
     }
 
-    public List<PieceEntity> getPieces() {
-        return pieces;
-    }
-
-    private void initializePieces() {
+    public void initialize() {
         pieces = new ArrayList<>();
 
-        addQueens();
         addKings();
-        addPawns();
+        addQueens();
+        addBishops();
         addKnights();
         addRooks();
-        addBishops();
+        addPawns();
+
+        gameEntity.getPieces().addAll(pieces);
     }
 
     private void addKings() {
@@ -54,13 +50,13 @@ public class BoardInitializer {
         addPieces(pieceType, initialSquareLetter);
     }
 
-    private void addPawns() {
-        final String pieceType = "Pawn";
-        final int whiteInitialSquareNumber = 2;
-        final int blackInitialSquareNumber = 7;
+    private void addBishops() {
+        final String pieceType = "Bishop";
+        final Letter firstInitialSquareLetter = Letter.C;
+        final Letter secondInitialSquareLetter = Letter.F;
 
-        Arrays.stream(Letter.values()).forEach(letter ->
-                addPieces(pieceType, letter, whiteInitialSquareNumber, blackInitialSquareNumber));
+        addPieces(pieceType, firstInitialSquareLetter);
+        addPieces(pieceType, secondInitialSquareLetter);
     }
 
     private void addKnights() {
@@ -81,22 +77,31 @@ public class BoardInitializer {
         addPieces(pieceType, secondInitialSquareLetter);
     }
 
-    private void addBishops() {
-        final String pieceType = "Bishop";
-        final Letter firstInitialSquareLetter = Letter.C;
-        final Letter secondInitialSquareLetter = Letter.F;
+    private void addPawns() {
+        final String pieceType = "Pawn";
+        final int whiteInitialSquareNumber = 2;
+        final int blackInitialSquareNumber = 7;
 
-        addPieces(pieceType, firstInitialSquareLetter);
-        addPieces(pieceType, secondInitialSquareLetter);
+        Arrays.stream(Letter.values()).forEach(letter ->
+                addPieces(pieceType,
+                        new SquareEntity(whiteInitialSquareNumber, letter),
+                        new SquareEntity(blackInitialSquareNumber, letter)
+                )
+        );
     }
 
     private void addPieces(final String pieceType, final Letter initialSquareLetter) {
-        addPieces(pieceType, initialSquareLetter, WHITE_INITIAL_SQUARE_NUMBER, BLACK_INITIAL_SQUARE_NUMBER);
+        final SquareEntity whiteSquare = new SquareEntity(WHITE_INITIAL_SQUARE_NUMBER, initialSquareLetter);
+        final SquareEntity blackSquare = new SquareEntity(BLACK_INITIAL_SQUARE_NUMBER, initialSquareLetter);
+
+        addPieces(pieceType, whiteSquare, blackSquare);
     }
 
-    private void addPieces(final String pieceType, final Letter initialSquareLetter,
-                          final int whiteInitialSquareNumber, final int blackInitialSquareNumber) {
-        pieces.add(new PieceEntity(gameEntity, WHITE, new SquareEntity(whiteInitialSquareNumber, initialSquareLetter), pieceType));
-        pieces.add(new PieceEntity(gameEntity, BLACK, new SquareEntity(blackInitialSquareNumber, initialSquareLetter), pieceType));
+    private void addPieces(final String pieceType, final SquareEntity whiteSquare, final SquareEntity blackSquare) {
+        final PieceEntity whitePiece = new PieceEntity(gameEntity, WHITE, whiteSquare, pieceType);
+        final PieceEntity blackPiece = new PieceEntity(gameEntity, BLACK, blackSquare, pieceType);
+
+        pieces.add(whitePiece);
+        pieces.add(blackPiece);
     }
 }

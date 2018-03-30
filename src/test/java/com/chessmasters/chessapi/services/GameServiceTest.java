@@ -49,7 +49,7 @@ public class GameServiceTest {
     }
 
     @Test
-    public void saveGameOnDatabase() {
+    public void createGameSavesOnDatabase() {
         final Long playerId = 1L;
         GameRequest request = new GameRequest(playerId);
         PlayerEntity player = new PlayerEntity();
@@ -58,6 +58,21 @@ public class GameServiceTest {
         when(gameRepository.save(any(GameEntity.class))).thenReturn(new GameEntity(player, GameStatus.CREATED));
 
         service.createGame(request);
+
+        verify(gameRepository).save(any(GameEntity.class));
+    }
+
+    @Test
+    public void startGameSavesOnDatabase() {
+        final Long gameId = 1L;
+        final Long playerId = 1L;
+        GameRequest request = new GameRequest(playerId);
+        PlayerEntity playerEntity = new PlayerEntity();
+        GameEntity gameEntity = createGameEntity();
+
+        mockObjects(gameEntity, playerEntity);
+
+        service.startGame(gameId, request);
 
         verify(gameRepository).save(any(GameEntity.class));
     }
@@ -147,7 +162,21 @@ public class GameServiceTest {
 
         assertThat(game.getPlayer().getColor()).isNotNull();
         assertThat(game.getPlayer2().getColor()).isNotNull();
-        assertThat(game.getPlayer().getColor()).isNotEqualTo(gameEntity.getPlayer2().getColor());
+        assertThat(game.getPlayer().getColor()).isNotEqualTo(game.getPlayer2().getColor());
+    }
+
+    @Test
+    public void gameHasThirtyTwoPiecesOnStart() {
+        final Long gameId = 1L;
+        final Long playerId = 1L;
+        GameEntity gameEntity = createGameEntity();
+        GameRequest gameRequest = new GameRequest(playerId);
+        mockObjects(gameEntity, gameEntity.getPlayer());
+
+        Game game = service.startGame(gameId, gameRequest);
+
+        assertThat(game.getPieces()).isNotNull();
+        assertThat(game.getPieces().size()).isEqualTo(32);
     }
 
     private GameEntity createGameEntity() {
