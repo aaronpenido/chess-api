@@ -5,15 +5,14 @@ import com.chessmasters.chessapi.entities.MoveEntity;
 public class Move {
 
     private Long gameId;
-    private Piece pieceModel;
+    private Piece piece;
     private Square destination;
     private int order;
 
     public Move(MoveEntity moveEntity) {
-
         if(moveEntity.getGame() != null) {
             this.gameId = moveEntity.getGame().getId();
-            this.pieceModel = new Pawn(moveEntity.getPiece());
+            this.piece = new Pawn(moveEntity.getPiece());
             this.order = moveEntity.getMoveOrder();
             this.destination = new Square(moveEntity.getDestination());
         }
@@ -23,8 +22,8 @@ public class Move {
         return gameId;
     }
 
-    public Piece getPieceModel() {
-        return pieceModel;
+    public Piece getPiece() {
+        return piece;
     }
 
     public Square getDestination() {
@@ -33,5 +32,9 @@ public class Move {
 
     public int getOrder() {
         return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
     }
 }

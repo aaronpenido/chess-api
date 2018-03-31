@@ -1,6 +1,7 @@
 package com.chessmasters.chessapi.services;
 
 import com.chessmasters.chessapi.entities.GameEntity;
+import com.chessmasters.chessapi.entities.MoveEntity;
 import com.chessmasters.chessapi.entities.PlayerEntity;
 import com.chessmasters.chessapi.enums.Color;
 import com.chessmasters.chessapi.enums.ErrorMessage;
@@ -146,6 +147,17 @@ public class GameServiceTest {
     public void getAllGamesFromDatabase() {
         service.getGames();
         verify(gameRepository).findAll();
+    }
+
+    @Test
+    public void addMoveToGame() {
+        GameEntity gameEntity = createGameEntity();
+        MoveEntity moveEntity = new MoveEntity();
+
+        service.addMoveToGame(gameEntity, moveEntity);
+
+        assertThat(gameEntity.getMoves()).contains(moveEntity);
+        verify(gameRepository).save(gameEntity);
     }
 
     private GameEntity createGameEntity() {

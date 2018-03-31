@@ -62,11 +62,12 @@ public class MoveControllerTest {
         GameEntity game = new GameEntity(new PlayerEntity(), GameStatus.STARTED);
         ReflectionTestUtils.setField(game, "id", gameId);
         final SquareEntity destination = new SquareEntity();
-        final MoveEntity move = new MoveEntity(game, null, destination, moveOrder);
+        final MoveEntity moveEntity = new MoveEntity(game, null, destination);
+        moveEntity.setMoveOrder(moveOrder);
         final Square expectedDestination = new Square(destination);
         MoveRequest request = new MoveRequest(playerId, pieceId, expectedDestination);
 
-        when(moveService.createMove(gameId, request)).thenReturn(new Move(move));
+        when(moveService.createMove(gameId, request)).thenReturn(new Move(moveEntity));
 
         return request;
     }

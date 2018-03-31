@@ -1,17 +1,21 @@
 package com.chessmasters.chessapi.models;
 
-import com.chessmasters.chessapi.entities.GameEntity;
-import com.chessmasters.chessapi.entities.PieceEntity;
-import com.chessmasters.chessapi.entities.PlayerEntity;
-import com.chessmasters.chessapi.entities.SquareEntity;
+import com.chessmasters.chessapi.entities.*;
 import com.chessmasters.chessapi.enums.Color;
+import com.chessmasters.chessapi.enums.ErrorMessage;
 import com.chessmasters.chessapi.enums.GameStatus;
 import com.chessmasters.chessapi.enums.Letter;
+import com.chessmasters.chessapi.exceptions.InvalidMoveException;
 import org.junit.Test;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Arrays;
+import java.util.Collections;
 
+import static com.chessmasters.chessapi.enums.Color.BLACK;
+import static com.chessmasters.chessapi.enums.Color.WHITE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class GameTest {
 
@@ -78,16 +82,70 @@ public class GameTest {
         assertThat(game.getPieces()).isNotEmpty();
     }
 
+    @Test
+    public void throwInvalidMoveExceptionWhenFirstMoveIsNotFromWhitePlayer() {
+        final GameEntity gameEntity = createGameEntity();
+        Game game = new Game(gameEntity);
+        Player player = createPlayer(BLACK);
+        Move move = createMove(gameEntity);
+
+        assertThatThrownBy(() -> game.move(player, move))
+                .isInstanceOf(InvalidMoveException.class)
+                .hasMessage(String.valueOf(ErrorMessage.INVALID_MOVE_ITS_OPPONENTS_TURN));
+    }
+
+    @Test
+    public void throwInvalidMoveExceptionWhenNextMoveIsFromRepeatedColor() {
+        final GameEntity gameEntity = createGameEntity();
+        SquareEntity destination = new SquareEntity();
+        PieceEntity pieceEntity = new PieceEntity(gameEntity, WHITE, destination, "Pawn");
+        MoveEntity previousMove = new MoveEntity(gameEntity, pieceEntity, destination);
+        ReflectionTestUtils.setField(gameEntity, "moves", Collections.singletonList(previousMove));
+        Game game = new Game(gameEntity);
+        Player player = createPlayer(WHITE);
+        MoveEntity moveEntity = new MoveEntity(gameEntity, pieceEntity, destination);
+        Move move = new Move(moveEntity);
+
+        assertThatThrownBy(() -> game.move(player, move))
+                .isInstanceOf(InvalidMoveException.class)
+                .hasMessage(String.valueOf(ErrorMessage.INVALID_MOVE_ITS_OPPONENTS_TURN));
+    }
+
+    @Test
+    public void throwInvalidMoveExceptionWhenPlayerTriesToMoveOpponentsPiece() {
+        final GameEntity gameEntity = createGameEntity();
+        Game game = new Game(gameEntity);
+        Player player = createPlayer(WHITE);
+        Move move = createMove(gameEntity);
+
+        assertThatThrownBy(() -> game.move(player, move))
+                .isInstanceOf(InvalidMoveException.class)
+                .hasMessage(String.valueOf(ErrorMessage.INVALID_MOVE_ITS_OPPONENTS_PIECE));
+    }
+
     private GameEntity createGameEntity() {
+        final int squareNumber = 1;
         PlayerEntity player = new PlayerEntity();
         PlayerEntity player2 = new PlayerEntity();
         GameEntity gameEntity = new GameEntity(player, GameStatus.CREATED);
         gameEntity.setPlayer2(player2);
-        final int squareNumber = 1;
         SquareEntity squareEntity = new SquareEntity(squareNumber, Letter.A);
         PieceEntity piece = new PieceEntity(gameEntity, Color.WHITE, squareEntity, "Pawn");
         gameEntity.getPieces().addAll(Arrays.asList(piece));
 
         return gameEntity;
+    }
+
+    private Player createPlayer(Color color) {
+        PlayerEntity playerEntity = new PlayerEntity();
+        playerEntity.setColor(color);
+        return new Player(playerEntity);
+    }
+
+    private Move createMove(GameEntity gameEntity) {
+        SquareEntity destination = new SquareEntity();
+        PieceEntity pieceEntity = new PieceEntity(gameEntity, BLACK, destination, "Pawn");
+        MoveEntity moveEntity = new MoveEntity(gameEntity, pieceEntity, destination);
+        return new Move(moveEntity);
     }
 }

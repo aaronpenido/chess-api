@@ -1,21 +1,18 @@
 package com.chessmasters.chessapi.services;
 
 import com.chessmasters.chessapi.entities.*;
-import com.chessmasters.chessapi.enums.Color;
-import com.chessmasters.chessapi.enums.ErrorMessage;
 import com.chessmasters.chessapi.enums.GameStatus;
 import com.chessmasters.chessapi.exceptions.GameNotStartedException;
-import com.chessmasters.chessapi.exceptions.InvalidMoveException;
 import com.chessmasters.chessapi.exceptions.PieceNotFoundException;
+import com.chessmasters.chessapi.models.Game;
 import com.chessmasters.chessapi.models.Move;
+import com.chessmasters.chessapi.models.Player;
 import com.chessmasters.chessapi.repositories.MoveRepository;
 import com.chessmasters.chessapi.repositories.PieceRepository;
 import com.chessmasters.chessapi.request.MoveRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,51 +32,21 @@ public class MoveService {
     }
 
     public Move createMove(Long gameId, MoveRequest request) {
-        GameEntity game = gameService.getById(gameId);
+        GameEntity gameEntity = getGameEntity(gameId);
+        PlayerEntity playerEntity = playerService.getById(request.getPlayerId());
+        PieceEntity pieceEntity = getPieceEntity(request);
+        MoveEntity moveEntity = createMoveEntity(request, gameEntity, pieceEntity);
+        Move move = new Move(moveEntity);
+        Game game = new Game(gameEntity);
+        Player player = new Player(playerEntity);
 
-        if(!game.getStatus().equals(GameStatus.STARTED)) {
-            throw new GameNotStartedException(gameId);
-        }
+        move = game.move(player, move);
+        moveEntity.setMoveOrder(move.getOrder());
+        moveEntity = moveRepository.save(moveEntity);
 
-        PlayerEntity player = playerService.getById(request.getPlayerId());
+        gameService.addMoveToGame(gameEntity, moveEntity);
 
-        PieceEntity pieceEntity = pieceRepository.findOne(request.getPieceId());
-
-        if(pieceEntity == null) {
-            throw new PieceNotFoundException(request.getPieceId());
-        }
-
-        throwExceptionIfPlayerTriesToMoveOpponentsPiece(player, pieceEntity);
-        throwExceptionIfMoveIsDoneSequentiallyByThePlayer(game, player);
-
-        final SquareEntity destination = new SquareEntity(
-                request.getDestination().getNumber(),
-                request.getDestination().getLetter());
-
-        MoveEntity move = new MoveEntity(game, pieceEntity, destination, generateMoveOrder(gameId));
-
-        return new Move(moveRepository.save(move));
-    }
-
-    private void throwExceptionIfPlayerTriesToMoveOpponentsPiece(PlayerEntity playerEntity, PieceEntity pieceEntity) {
-        if(!pieceEntity.getColor().equals(playerEntity.getColor())) {
-            throw new InvalidMoveException(String.valueOf(ErrorMessage.INVALID_MOVE_ITS_OPPONENTS_PIECE));
-        }
-    }
-
-    private void throwExceptionIfMoveIsDoneSequentiallyByThePlayer(GameEntity game, PlayerEntity player) {
-        MoveEntity moveEntity = moveRepository.findTopByGameOrderByMoveOrderDesc(game);
-
-        if(moveEntity != null) {
-            final boolean lastMoveColorIsEqualsToPlayerColor =
-                    moveEntity.getPiece().getColor().equals(player.getColor());
-
-            if(lastMoveColorIsEqualsToPlayerColor) {
-                throw new InvalidMoveException(String.valueOf(ErrorMessage.INVALID_MOVE_ITS_OPPONENTS_TURN));
-            }
-        } else if (!player.getColor().equals(Color.WHITE)) {
-            throw new InvalidMoveException(String.valueOf(ErrorMessage.INVALID_MOVE_ITS_OPPONENTS_TURN));
-        }
+        return new Move(moveEntity);
     }
 
     public List<Move> getMoves(Long gameId) {
@@ -91,17 +58,29 @@ public class MoveService {
                 .collect(Collectors.toList());
     }
 
-    private int generateMoveOrder(Long gameId) {
-        int order = 1;
+    private GameEntity getGameEntity(Long gameId) {
+        GameEntity gameEntity = gameService.getById(gameId);
 
-        Optional<Move> moveModel = getMoves(gameId)
-                .stream()
-                .max(Comparator.comparingInt(m -> m.getOrder()));
-
-        if(moveModel.isPresent()) {
-            order = moveModel.get().getOrder() + 1;
+        if(!gameEntity.getStatus().equals(GameStatus.STARTED)) {
+            throw new GameNotStartedException(gameId);
         }
+        return gameEntity;
+    }
 
-        return order;
+    private PieceEntity getPieceEntity(MoveRequest request) {
+        PieceEntity pieceEntity = pieceRepository.findOne(request.getPieceId());
+
+        if(pieceEntity == null) {
+            throw new PieceNotFoundException(request.getPieceId());
+        }
+        return pieceEntity;
+    }
+
+    private MoveEntity createMoveEntity(MoveRequest request, GameEntity gameEntity, PieceEntity pieceEntity) {
+        final SquareEntity destination = new SquareEntity(
+                request.getDestination().getNumber(),
+                request.getDestination().getLetter());
+
+        return new MoveEntity(gameEntity, pieceEntity, destination);
     }
 }

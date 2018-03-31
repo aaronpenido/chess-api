@@ -1,6 +1,7 @@
 package com.chessmasters.chessapi.services;
 
 import com.chessmasters.chessapi.entities.GameEntity;
+import com.chessmasters.chessapi.entities.MoveEntity;
 import com.chessmasters.chessapi.entities.PlayerEntity;
 import com.chessmasters.chessapi.enums.ErrorMessage;
 import com.chessmasters.chessapi.enums.GameStatus;
@@ -71,5 +72,11 @@ public class GameService {
         }
 
         return game;
+    }
+
+    public void addMoveToGame(GameEntity gameEntity, MoveEntity moveEntity) {
+        gameEntity.getMoves().add(moveEntity);
+
+        gameRepository.save(gameEntity);
     }
 }

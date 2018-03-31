@@ -3,10 +3,14 @@ package com.chessmasters.chessapi.models;
 import com.chessmasters.chessapi.entities.GameEntity;
 import com.chessmasters.chessapi.entities.PlayerEntity;
 import com.chessmasters.chessapi.enums.Color;
+import com.chessmasters.chessapi.enums.ErrorMessage;
 import com.chessmasters.chessapi.enums.GameStatus;
+import com.chessmasters.chessapi.exceptions.InvalidMoveException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -18,6 +22,7 @@ public class Game {
     private Player player2;
     private List<Piece> pieces;
     private GameEntity gameEntity;
+    private List<Move> moves;
 
     public Game(@JsonProperty("gameEntity") GameEntity gameEntity) {
         this.gameEntity = gameEntity;
@@ -27,6 +32,7 @@ public class Game {
         this.player2 = new Player(gameEntity.getPlayer2());
 
         mapPieceEntityListToPieceList();
+        mapMoveEntityListToMoveList();
     }
 
     public void start(PlayerEntity player2) {
@@ -38,11 +44,29 @@ public class Game {
         updatePieces();
     }
 
+    public Move move(Player player, Move move) {
+        throwExceptionIfPlayerTriesToMoveOpponentsPiece(player, move.getPiece());
+        throwExceptionIfMoveIsDoneSequentiallyByThePlayer(player);
+
+        move.setOrder(getNextMoveOrder());
+
+        return move;
+    }
+
     private void mapPieceEntityListToPieceList() {
         if(gameEntity.getPieces() != null) {
             this.pieces = gameEntity.getPieces()
                     .stream()
                     .map(Pawn::new)
+                    .collect(Collectors.toList());
+        }
+    }
+
+    private void mapMoveEntityListToMoveList() {
+        if(gameEntity.getMoves() != null) {
+            this.moves = gameEntity.getMoves()
+                    .stream()
+                    .map(Move::new)
                     .collect(Collectors.toList());
         }
     }
@@ -70,6 +94,45 @@ public class Game {
         mapPieceEntityListToPieceList();
     }
 
+    private void throwExceptionIfPlayerTriesToMoveOpponentsPiece(Player player, Piece piece) {
+        if(!piece.getColor().equals(player.getColor())) {
+            throw new InvalidMoveException(String.valueOf(ErrorMessage.INVALID_MOVE_ITS_OPPONENTS_PIECE));
+        }
+    }
+
+    private void throwExceptionIfMoveIsDoneSequentiallyByThePlayer(Player player) {
+        Move previousMove = previousMove();
+
+        if(previousMove != null) {
+            final boolean lastMoveColorIsEqualsToPlayerColor =
+                    previousMove.getPiece().getColor().equals(player.getColor());
+
+            if(lastMoveColorIsEqualsToPlayerColor) {
+                throw new InvalidMoveException(String.valueOf(ErrorMessage.INVALID_MOVE_ITS_OPPONENTS_TURN));
+            }
+        } else if (!player.getColor().equals(Color.WHITE)) {
+            throw new InvalidMoveException(String.valueOf(ErrorMessage.INVALID_MOVE_ITS_OPPONENTS_TURN));
+        }
+    }
+
+    private Move previousMove() {
+        Optional<Move> previousMove = moves
+                .stream()
+                .max(Comparator.comparing(Move::getOrder));
+
+        return previousMove.orElse(null);
+    }
+
+    private int getNextMoveOrder() {
+        Move previousMove = previousMove();
+
+        if(previousMove != null) {
+            return previousMove.getOrder() + 1;
+        }
+
+        return 1;
+    }
+
     public Long getId() {
         return id;
     }
@@ -88,5 +151,9 @@ public class Game {
 
     public List<Piece> getPieces() {
         return pieces;
+    }
+
+    public List<Move> getMoves() {
+        return moves;
     }
 }

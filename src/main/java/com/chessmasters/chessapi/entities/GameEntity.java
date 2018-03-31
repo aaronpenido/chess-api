@@ -23,6 +23,8 @@ public class GameEntity {
     private PlayerEntity player2;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PieceEntity> pieces = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MoveEntity> moves = new ArrayList<>();
 
     public GameEntity() {
     }
@@ -58,6 +60,10 @@ public class GameEntity {
 
     public List<PieceEntity> getPieces() {
         return pieces;
+    }
+
+    public List<MoveEntity> getMoves() {
+        return moves;
     }
 
     @Override

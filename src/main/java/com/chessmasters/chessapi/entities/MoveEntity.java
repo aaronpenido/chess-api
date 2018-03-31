@@ -9,7 +9,6 @@ public class MoveEntity {
     @GeneratedValue
     private Long id;
     @ManyToOne
-    @JoinColumn(name="game_id")
     private GameEntity game;
     @OneToOne
     private PieceEntity piece;
@@ -23,11 +22,10 @@ public class MoveEntity {
     public MoveEntity() {
     }
 
-    public MoveEntity(GameEntity game, PieceEntity piece, SquareEntity destination, int moveOrder) {
+    public MoveEntity(GameEntity game, PieceEntity piece, SquareEntity destination) {
         this.game = game;
         this.piece = piece;
         this.destination = destination;
-        this.moveOrder = moveOrder;
     }
 
     public Long getId() {
@@ -48,5 +46,9 @@ public class MoveEntity {
 
     public int getMoveOrder() {
         return moveOrder;
+    }
+
+    public void setMoveOrder(int moveOrder) {
+        this.moveOrder = moveOrder;
     }
 }

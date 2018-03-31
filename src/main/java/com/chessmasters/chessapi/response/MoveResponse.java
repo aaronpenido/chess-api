@@ -14,7 +14,7 @@ public class MoveResponse {
 
     public MoveResponse(@JsonProperty("move") Move move) {
         this.gameId = move.getGameId();
-        this.piece = move.getPieceModel();
+        this.piece = move.getPiece();
         this.destination = move.getDestination();
         this.order = move.getOrder();
     }
