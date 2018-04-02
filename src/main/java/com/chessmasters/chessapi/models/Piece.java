@@ -2,26 +2,14 @@ package com.chessmasters.chessapi.models;
 
 import com.chessmasters.chessapi.entities.PieceEntity;
 import com.chessmasters.chessapi.enums.Color;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
-import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+import com.chessmasters.chessapi.enums.PieceType;
 
-@JsonTypeInfo(use = Id.NAME,
-        include = As.PROPERTY,
-        property = "type",
-        visible = true)
-@JsonSubTypes({
-        @Type(value = Pawn.class),
-        @Type(value = Knight.class)
-})
-public abstract class Piece {
+public class Piece {
 
     private Long id;
     private Square square;
     private Color color;
-    private String type;
+    private PieceType type;
 
     public Piece(PieceEntity pieceEntity) {
         if(pieceEntity != null) {
@@ -44,7 +32,7 @@ public abstract class Piece {
         return color;
     }
 
-    public String getType() {
+    public PieceType getType() {
         return type;
     }
 }

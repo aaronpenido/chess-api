@@ -4,6 +4,7 @@ import com.chessmasters.chessapi.entities.GameEntity;
 import com.chessmasters.chessapi.entities.PieceEntity;
 import com.chessmasters.chessapi.entities.SquareEntity;
 import com.chessmasters.chessapi.enums.Letter;
+import com.chessmasters.chessapi.enums.PieceType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +12,7 @@ import java.util.List;
 
 import static com.chessmasters.chessapi.enums.Color.BLACK;
 import static com.chessmasters.chessapi.enums.Color.WHITE;
+import static com.chessmasters.chessapi.enums.PieceType.*;
 
 public class BoardInitializer {
 
@@ -37,21 +39,21 @@ public class BoardInitializer {
     }
 
     private void addKings() {
-        final String pieceType = "King";
+        final PieceType pieceType = KING;
         final Letter initialSquareLetter = Letter.E;
 
         addPieces(pieceType, initialSquareLetter);
     }
 
     private void addQueens() {
-        final String pieceType = "Queen";
+        final PieceType pieceType = QUEEN;
         final Letter initialSquareLetter = Letter.D;
 
         addPieces(pieceType, initialSquareLetter);
     }
 
     private void addBishops() {
-        final String pieceType = "Bishop";
+        final PieceType pieceType = BISHOP;
         final Letter firstInitialSquareLetter = Letter.C;
         final Letter secondInitialSquareLetter = Letter.F;
 
@@ -60,7 +62,7 @@ public class BoardInitializer {
     }
 
     private void addKnights() {
-        final String pieceType = "Knight";
+        final PieceType pieceType = KNIGHT;
         final Letter firstInitialSquareLetter = Letter.B;
         final Letter secondInitialSquareLetter = Letter.G;
 
@@ -69,7 +71,7 @@ public class BoardInitializer {
     }
 
     private void addRooks() {
-        final String pieceType = "Rook";
+        final PieceType pieceType = ROOK;
         final Letter firstInitialSquareLetter = Letter.A;
         final Letter secondInitialSquareLetter = Letter.H;
 
@@ -78,7 +80,7 @@ public class BoardInitializer {
     }
 
     private void addPawns() {
-        final String pieceType = "Pawn";
+        final PieceType pieceType = PAWN;
         final int whiteInitialSquareNumber = 2;
         final int blackInitialSquareNumber = 7;
 
@@ -90,14 +92,14 @@ public class BoardInitializer {
         );
     }
 
-    private void addPieces(final String pieceType, final Letter initialSquareLetter) {
+    private void addPieces(final PieceType pieceType, final Letter initialSquareLetter) {
         final SquareEntity whiteSquare = new SquareEntity(WHITE_INITIAL_SQUARE_NUMBER, initialSquareLetter);
         final SquareEntity blackSquare = new SquareEntity(BLACK_INITIAL_SQUARE_NUMBER, initialSquareLetter);
 
         addPieces(pieceType, whiteSquare, blackSquare);
     }
 
-    private void addPieces(final String pieceType, final SquareEntity whiteSquare, final SquareEntity blackSquare) {
+    private void addPieces(final PieceType pieceType, final SquareEntity whiteSquare, final SquareEntity blackSquare) {
         final PieceEntity whitePiece = new PieceEntity(gameEntity, WHITE, whiteSquare, pieceType);
         final PieceEntity blackPiece = new PieceEntity(gameEntity, BLACK, blackSquare, pieceType);
 

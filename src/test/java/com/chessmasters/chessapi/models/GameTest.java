@@ -14,6 +14,7 @@ import java.util.Collections;
 
 import static com.chessmasters.chessapi.enums.Color.BLACK;
 import static com.chessmasters.chessapi.enums.Color.WHITE;
+import static com.chessmasters.chessapi.enums.PieceType.PAWN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -98,7 +99,7 @@ public class GameTest {
     public void throwInvalidMoveExceptionWhenNextMoveIsFromRepeatedColor() {
         final GameEntity gameEntity = createGameEntity();
         SquareEntity destination = new SquareEntity();
-        PieceEntity pieceEntity = new PieceEntity(gameEntity, WHITE, destination, "Pawn");
+        PieceEntity pieceEntity = new PieceEntity(gameEntity, WHITE, destination, PAWN);
         MoveEntity previousMove = new MoveEntity(gameEntity, pieceEntity, destination);
         ReflectionTestUtils.setField(gameEntity, "moves", Collections.singletonList(previousMove));
         Game game = new Game(gameEntity);
@@ -130,7 +131,7 @@ public class GameTest {
         GameEntity gameEntity = new GameEntity(player, GameStatus.CREATED);
         gameEntity.setPlayer2(player2);
         SquareEntity squareEntity = new SquareEntity(squareNumber, Letter.A);
-        PieceEntity piece = new PieceEntity(gameEntity, Color.WHITE, squareEntity, "Pawn");
+        PieceEntity piece = new PieceEntity(gameEntity, Color.WHITE, squareEntity, PAWN);
         gameEntity.getPieces().addAll(Arrays.asList(piece));
 
         return gameEntity;
@@ -144,7 +145,7 @@ public class GameTest {
 
     private Move createMove(GameEntity gameEntity) {
         SquareEntity destination = new SquareEntity();
-        PieceEntity pieceEntity = new PieceEntity(gameEntity, BLACK, destination, "Pawn");
+        PieceEntity pieceEntity = new PieceEntity(gameEntity, BLACK, destination, PAWN);
         MoveEntity moveEntity = new MoveEntity(gameEntity, pieceEntity, destination);
         return new Move(moveEntity);
     }

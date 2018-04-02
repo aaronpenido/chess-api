@@ -5,6 +5,7 @@ import com.chessmasters.chessapi.entities.PieceEntity;
 import com.chessmasters.chessapi.entities.SquareEntity;
 import com.chessmasters.chessapi.enums.Color;
 import com.chessmasters.chessapi.enums.Letter;
+import com.chessmasters.chessapi.enums.PieceType;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 import static com.chessmasters.chessapi.enums.Color.BLACK;
 import static com.chessmasters.chessapi.enums.Color.WHITE;
 import static com.chessmasters.chessapi.enums.Letter.*;
+import static com.chessmasters.chessapi.enums.PieceType.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BoardInitializerTest {
@@ -41,7 +43,7 @@ public class BoardInitializerTest {
 
     @Test
     public void kingsAreInE1AndE8Squares() {
-        final String pieceType = "King";
+        final PieceType pieceType = KING;
         final Letter initialLetter = E;
 
         PieceEntity whitePiece = createPieceEntity(WHITE, pieceType, initialLetter, WHITE_INITIAL_NUMBER);
@@ -54,7 +56,7 @@ public class BoardInitializerTest {
     
     @Test
     public void queensAreInD1AndD8Squares() {
-        final String pieceType = "Queen";
+        final PieceType pieceType = QUEEN;
         final Letter initialLetter = D;
 
         PieceEntity whitePiece = createPieceEntity(WHITE, pieceType, initialLetter, WHITE_INITIAL_NUMBER);
@@ -67,7 +69,7 @@ public class BoardInitializerTest {
 
     @Test
     public void bishopsAreInC1AndF1AndC8AndF8Squares() {
-        final String pieceType = "Bishop";
+        final PieceType pieceType = BISHOP;
         final Letter firstInitialLetter = C;
         final Letter secondInitialLetter = F;
 
@@ -84,7 +86,7 @@ public class BoardInitializerTest {
 
     @Test
     public void knightsAreInB1AndG1AndB8AndG8Squares() {
-        final String pieceType = "Knight";
+        final PieceType pieceType = KNIGHT;
         final Letter firstInitialLetter = B;
         final Letter secondInitialLetter = G;
 
@@ -101,7 +103,7 @@ public class BoardInitializerTest {
 
     @Test
     public void rooksAreInA1AndH1AndA8AndH8Squares() {
-        final String pieceType = "Rook";
+        final PieceType pieceType = ROOK;
         final Letter firstInitialLetter = A;
         final Letter secondInitialLetter = H;
 
@@ -118,7 +120,7 @@ public class BoardInitializerTest {
 
     @Test
     public void pawnsAreInSecondAndSeventhRows() {
-        final String pieceType = "Pawn";
+        final PieceType pieceType = PAWN;
         final int whiteInitialNumber = 2;
         final int blackInitialNumber = 7;
         final int randomLetterIndex = new Random().nextInt(Letter.values().length);
@@ -132,7 +134,7 @@ public class BoardInitializerTest {
         assertThat(pawns).contains(whitePiece, blackPiece);
     }
 
-    private PieceEntity createPieceEntity(final Color color, final String pieceType,
+    private PieceEntity createPieceEntity(final Color color, final PieceType pieceType,
                                           final Letter initialLetter, final int initialNumber) {
 
         SquareEntity whiteSquare = new SquareEntity(initialNumber, initialLetter);
@@ -140,7 +142,7 @@ public class BoardInitializerTest {
         return new PieceEntity(gameEntity, color, whiteSquare, pieceType);
     }
 
-    private List<PieceEntity> getPiecesFromType(final String type) {
+    private List<PieceEntity> getPiecesFromType(final PieceType type) {
         return pieces
                 .stream()
                 .filter(p -> p.getType().equals(type))

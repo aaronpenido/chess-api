@@ -16,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import static com.chessmasters.chessapi.enums.PieceType.PAWN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Matchers.any;
@@ -116,7 +117,7 @@ public class MoveServiceTest {
         PlayerEntity playerEntity = new PlayerEntity();
         playerEntity.setColor(Color.WHITE);
         GameEntity gameEntity = new GameEntity(playerEntity, GameStatus.STARTED);
-        PieceEntity pieceEntity = new PieceEntity(gameEntity, Color.WHITE, squareEntity, "Pawn");
+        PieceEntity pieceEntity = new PieceEntity(gameEntity, Color.WHITE, squareEntity, PAWN);
         MoveEntity moveEntity = new MoveEntity(gameEntity, pieceEntity, squareEntity);
         moveEntity.setMoveOrder(1);
 

@@ -41,7 +41,7 @@ public class Game {
 
         setPlayersColors();
         updateGameEntity(player2);
-        updatePieces();
+        initializePieces();
     }
 
     public Move move(Player player, Move move) {
@@ -57,7 +57,7 @@ public class Game {
         if(gameEntity.getPieces() != null) {
             this.pieces = gameEntity.getPieces()
                     .stream()
-                    .map(Pawn::new)
+                    .map(Piece::new)
                     .collect(Collectors.toList());
         }
     }
@@ -88,7 +88,7 @@ public class Game {
         return Color.values()[randomNumber];
     }
 
-    private void updatePieces() {
+    private void initializePieces() {
         BoardInitializer boardInitializer = new BoardInitializer(gameEntity);
         boardInitializer.initialize();
         mapPieceEntityListToPieceList();

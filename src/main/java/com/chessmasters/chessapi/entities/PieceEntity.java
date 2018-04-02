@@ -1,6 +1,7 @@
 package com.chessmasters.chessapi.entities;
 
 import com.chessmasters.chessapi.enums.Color;
+import com.chessmasters.chessapi.enums.PieceType;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -15,18 +16,19 @@ public class PieceEntity {
     private Color color;
     @Embedded
     private SquareEntity square;
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private PieceType type;
     @ManyToOne
-    private GameEntity gameEntity;
+    private GameEntity game;
 
     public PieceEntity() {
     }
 
-    public PieceEntity(GameEntity gameEntity, Color color, SquareEntity square, String type) {
+    public PieceEntity(GameEntity game, Color color, SquareEntity square, PieceType type) {
         this.color = color;
         this.square = square;
         this.type = type;
-        this.gameEntity = gameEntity;
+        this.game = game;
     }
 
     public Long getId() {
@@ -41,12 +43,12 @@ public class PieceEntity {
         return square;
     }
 
-    public String getType() {
+    public PieceType getType() {
         return type;
     }
 
-    public GameEntity getGameEntity() {
-        return gameEntity;
+    public GameEntity getGame() {
+        return game;
     }
 
     @Override
@@ -67,11 +69,11 @@ public class PieceEntity {
                 color == that.color &&
                 Objects.equals(square, that.square) &&
                 Objects.equals(type, that.type) &&
-                Objects.equals(gameEntity, that.gameEntity);
+                Objects.equals(game, that.game);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, color, square, type, gameEntity);
+        return Objects.hash(id, color, square, type, game);
     }
 }

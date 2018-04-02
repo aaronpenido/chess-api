@@ -20,6 +20,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static com.chessmasters.chessapi.enums.Color.BLACK;
 import static com.chessmasters.chessapi.enums.Color.WHITE;
+import static com.chessmasters.chessapi.enums.PieceType.PAWN;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.hamcrest.CoreMatchers.is;
 
@@ -86,7 +87,7 @@ public class MoveControllerComponentTest extends BaseComponentTest {
 
     private PieceEntity createPieceEntity(GameEntity gameEntity) {
         SquareEntity destination = new SquareEntity(1, Letter.A);
-        PieceEntity pieceEntity = new PieceEntity(gameEntity, WHITE, destination, "Pawn");
+        PieceEntity pieceEntity = new PieceEntity(gameEntity, WHITE, destination, PAWN);
         return pieceRepository.save(pieceEntity);
     }
 }

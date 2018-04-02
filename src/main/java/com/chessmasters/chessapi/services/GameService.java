@@ -50,9 +50,9 @@ public class GameService {
         Game game = new Game(gameEntity);
         game.start(player2);
 
-        gameRepository.save(gameEntity);
+        gameEntity = gameRepository.save(gameEntity);
 
-        return game;
+        return new Game(gameEntity);
     }
 
     public List<Game> getGames() {

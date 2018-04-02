@@ -12,7 +12,7 @@ public class Move {
     public Move(MoveEntity moveEntity) {
         if(moveEntity.getGame() != null) {
             this.gameId = moveEntity.getGame().getId();
-            this.piece = new Pawn(moveEntity.getPiece());
+            this.piece = new Piece(moveEntity.getPiece());
             this.order = moveEntity.getMoveOrder();
             this.destination = new Square(moveEntity.getDestination());
         }
