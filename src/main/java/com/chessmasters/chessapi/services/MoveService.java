@@ -2,6 +2,7 @@ package com.chessmasters.chessapi.services;
 
 import com.chessmasters.chessapi.entities.*;
 import com.chessmasters.chessapi.enums.GameStatus;
+import com.chessmasters.chessapi.enums.Letter;
 import com.chessmasters.chessapi.exceptions.GameNotStartedException;
 import com.chessmasters.chessapi.exceptions.PieceNotFoundException;
 import com.chessmasters.chessapi.models.Game;
@@ -42,8 +43,13 @@ public class MoveService {
 
         move = game.move(player, move);
         moveEntity.setMoveOrder(move.getOrder());
-        moveEntity = moveRepository.save(moveEntity);
 
+        final int number = move.getPiece().getSquare().getNumber();
+        final Letter letter = move.getPiece().getSquare().getLetter();
+        SquareEntity newPieceSquare = new SquareEntity(number, letter);
+        moveEntity.getPiece().setSquare(newPieceSquare);
+
+        moveEntity = moveRepository.save(moveEntity);
         gameService.addMoveToGame(gameEntity, moveEntity);
 
         return new Move(moveEntity);

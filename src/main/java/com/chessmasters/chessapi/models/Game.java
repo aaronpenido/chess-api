@@ -49,6 +49,7 @@ public class Game {
         throwExceptionIfMoveIsDoneSequentiallyByThePlayer(player);
 
         move.setOrder(getNextMoveOrder());
+        move.getPiece().setSquare(move.getDestination());
 
         return move;
     }

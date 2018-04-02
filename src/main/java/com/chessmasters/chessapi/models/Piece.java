@@ -28,6 +28,10 @@ public class Piece {
         return square;
     }
 
+    public void setSquare(Square square) {
+        this.square = square;
+    }
+
     public Color getColor() {
         return color;
     }

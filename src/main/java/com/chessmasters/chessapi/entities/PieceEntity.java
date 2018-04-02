@@ -43,6 +43,10 @@ public class PieceEntity {
         return square;
     }
 
+    public void setSquare(SquareEntity square) {
+        this.square = square;
+    }
+
     public PieceType getType() {
         return type;
     }
