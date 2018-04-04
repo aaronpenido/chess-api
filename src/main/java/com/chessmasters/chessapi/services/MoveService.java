@@ -2,12 +2,9 @@ package com.chessmasters.chessapi.services;
 
 import com.chessmasters.chessapi.entities.*;
 import com.chessmasters.chessapi.enums.GameStatus;
-import com.chessmasters.chessapi.enums.Letter;
 import com.chessmasters.chessapi.exceptions.GameNotStartedException;
 import com.chessmasters.chessapi.exceptions.PieceNotFoundException;
-import com.chessmasters.chessapi.models.Game;
 import com.chessmasters.chessapi.models.Move;
-import com.chessmasters.chessapi.models.Player;
 import com.chessmasters.chessapi.repositories.MoveRepository;
 import com.chessmasters.chessapi.repositories.PieceRepository;
 import com.chessmasters.chessapi.request.MoveRequest;
@@ -35,19 +32,10 @@ public class MoveService {
     public Move createMove(Long gameId, MoveRequest request) {
         GameEntity gameEntity = getGameEntity(gameId);
         PlayerEntity playerEntity = playerService.getById(request.getPlayerId());
-        PieceEntity pieceEntity = getPieceEntity(request);
-        MoveEntity moveEntity = createMoveEntity(request, gameEntity, pieceEntity);
+        MoveEntity moveEntity = createMoveEntity(request, gameEntity);
+
         Move move = new Move(moveEntity);
-        Game game = new Game(gameEntity);
-        Player player = new Player(playerEntity);
-
-        move = game.move(player, move);
-        moveEntity.setMoveOrder(move.getOrder());
-
-        final int number = move.getPiece().getSquare().getNumber();
-        final Letter letter = move.getPiece().getSquare().getLetter();
-        SquareEntity newPieceSquare = new SquareEntity(number, letter);
-        moveEntity.getPiece().setSquare(newPieceSquare);
+        move.movePiece(playerEntity);
 
         moveEntity = moveRepository.save(moveEntity);
         gameService.addMoveToGame(gameEntity, moveEntity);
@@ -82,8 +70,10 @@ public class MoveService {
         return pieceEntity;
     }
 
-    private MoveEntity createMoveEntity(MoveRequest request, GameEntity gameEntity, PieceEntity pieceEntity) {
-        final SquareEntity destination = new SquareEntity(
+    private MoveEntity createMoveEntity(MoveRequest request, GameEntity gameEntity) {
+        PieceEntity pieceEntity = getPieceEntity(request);
+
+        SquareEntity destination = new SquareEntity(
                 request.getDestination().getNumber(),
                 request.getDestination().getLetter());
 
