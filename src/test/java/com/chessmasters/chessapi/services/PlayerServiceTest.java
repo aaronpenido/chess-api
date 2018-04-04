@@ -1,6 +1,7 @@
 package com.chessmasters.chessapi.services;
 
 import com.chessmasters.chessapi.entities.PlayerEntity;
+import com.chessmasters.chessapi.enums.ErrorMessage;
 import com.chessmasters.chessapi.exceptions.PlayerNotFoundException;
 import com.chessmasters.chessapi.models.Player;
 import com.chessmasters.chessapi.repositories.PlayerRepository;
@@ -45,9 +46,20 @@ public class PlayerServiceTest {
     public void savePlayerOnDatabase() {
         final String name = "Player Name";
         PlayerRequest request = new PlayerRequest(name);
+        when(playerRepository.save(any(PlayerEntity.class))).thenReturn(new PlayerEntity());
 
         service.createPlayer(request);
         verify(playerRepository).save(any(PlayerEntity.class));
+    }
+
+    @Test
+    public void throwRuntimeExceptionWhenRepositoryReturnsNullOnSavePlayer() {
+        final String name = "";
+        when(playerRepository.save(any(PlayerEntity.class))).thenReturn(null);
+
+        assertThatThrownBy(() -> service.createPlayer(new PlayerRequest(name)))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessage(String.valueOf(ErrorMessage.CREATE_PLAYER_ERROR));
     }
 
     @Test
@@ -72,6 +84,7 @@ public class PlayerServiceTest {
         final Long id = 1L;
 
         when(playerRepository.findOne(id)).thenReturn(null);
+
         assertThatThrownBy(() -> service.getById(id))
                 .isInstanceOf(PlayerNotFoundException.class);
     }

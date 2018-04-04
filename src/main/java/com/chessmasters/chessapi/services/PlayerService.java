@@ -1,6 +1,7 @@
 package com.chessmasters.chessapi.services;
 
 import com.chessmasters.chessapi.entities.PlayerEntity;
+import com.chessmasters.chessapi.enums.ErrorMessage;
 import com.chessmasters.chessapi.exceptions.PlayerNotFoundException;
 import com.chessmasters.chessapi.models.Player;
 import com.chessmasters.chessapi.repositories.PlayerRepository;
@@ -22,11 +23,11 @@ public class PlayerService {
     public Player createPlayer(PlayerRequest playerRequest) {
         PlayerEntity player = repository.save(new PlayerEntity(playerRequest.getName()));
 
-        if(player != null) {
-            return new Player(player);
+        if(player == null) {
+            throw new RuntimeException(String.valueOf(ErrorMessage.CREATE_PLAYER_ERROR));
         }
 
-        return null;
+        return new Player(player);
     }
 
     public List<Player> getPlayers() {
