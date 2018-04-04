@@ -4,7 +4,6 @@ import com.chessmasters.chessapi.entities.GameEntity;
 import com.chessmasters.chessapi.entities.PlayerEntity;
 import com.chessmasters.chessapi.enums.Color;
 import com.chessmasters.chessapi.enums.GameStatus;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 import java.util.Random;
@@ -20,7 +19,7 @@ public class Game {
     private GameEntity gameEntity;
     private List<Move> moves;
 
-    public Game(@JsonProperty("gameEntity") GameEntity gameEntity) {
+    public Game(GameEntity gameEntity) {
         this.gameEntity = gameEntity;
         this.id = gameEntity.getId();
         this.status = gameEntity.getStatus();

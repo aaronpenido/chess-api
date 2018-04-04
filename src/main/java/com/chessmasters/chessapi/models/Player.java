@@ -2,7 +2,6 @@ package com.chessmasters.chessapi.models;
 
 import com.chessmasters.chessapi.entities.PlayerEntity;
 import com.chessmasters.chessapi.enums.Color;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Player {
 
@@ -10,7 +9,7 @@ public class Player {
     private String name;
     private Color color;
 
-    public Player(@JsonProperty("playerEntity") PlayerEntity playerEntity) {
+    public Player(PlayerEntity playerEntity) {
         if(playerEntity != null) {
             this.id = playerEntity.getId();
             this.name = playerEntity.getName();
