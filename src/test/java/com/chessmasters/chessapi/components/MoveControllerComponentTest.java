@@ -79,8 +79,7 @@ public class MoveControllerComponentTest extends BaseComponentTest {
     }
 
     private MoveRequest createMoveRequest(GameEntity gameEntity, Long pieceId) {
-        final SquareEntity destination = new SquareEntity(1, Letter.A);
-        final Square expectedDestination = new Square(destination);
+        final Square expectedDestination = new Square(1, Letter.A);
 
         return new MoveRequest(gameEntity.getPlayer().getId(), pieceId, expectedDestination);
     }

@@ -18,6 +18,11 @@ public class Square {
         }
     }
 
+    public Square(int number, Letter letter) {
+        this.number = number;
+        this.letter = letter;
+    }
+
     public int getNumber() {
         return number;
     }

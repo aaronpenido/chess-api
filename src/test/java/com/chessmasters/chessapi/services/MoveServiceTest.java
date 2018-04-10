@@ -16,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import static com.chessmasters.chessapi.enums.Letter.E;
 import static com.chessmasters.chessapi.enums.PieceType.PAWN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -75,7 +76,7 @@ public class MoveServiceTest {
         final Long gameId = 1L;
         final Long playerId = 1L;
         final Long pieceId = 1L;
-        Square destination = new Square(null);
+        Square destination = new Square(1, E);
         MoveRequest request = new MoveRequest(playerId, pieceId, destination);
         GameEntity gameEntity = new GameEntity(new PlayerEntity(), GameStatus.CREATED);
 
@@ -90,7 +91,7 @@ public class MoveServiceTest {
         final Long gameId = 1L;
         final Long playerId = 1L;
         final Long pieceId = 1L;
-        Square destination = new Square(null);
+        Square destination = new Square(1, E);
         GameEntity gameEntity = new GameEntity(new PlayerEntity(), GameStatus.STARTED);
         MoveRequest request = new MoveRequest(playerId, pieceId, destination);
 
@@ -104,8 +105,7 @@ public class MoveServiceTest {
     private MoveRequest createMoveRequest() {
         final Long playerId = 1L;
         final Long pieceId = 1L;
-        SquareEntity squareEntity = new SquareEntity();
-        Square destination = new Square(squareEntity);
+        Square destination = new Square(1, E);
         PlayerEntity playerEntity = new PlayerEntity();
         playerEntity.setColor(Color.WHITE);
 
