@@ -8,27 +8,27 @@ import java.util.Objects;
 
 public class Square {
 
-    private int number;
     private Letter letter;
+    private int number;
 
     public Square(@JsonProperty("squareEntity") SquareEntity squareEntity) {
         if(squareEntity != null) {
-            this.number = squareEntity.getNumber();
             this.letter = squareEntity.getLetter();
+            this.number = squareEntity.getNumber();
         }
     }
 
-    public Square(int number, Letter letter) {
-        this.number = number;
+    public Square(Letter letter, int number) {
         this.letter = letter;
-    }
-
-    public int getNumber() {
-        return number;
+        this.number = number;
     }
 
     public Letter getLetter() {
         return letter;
+    }
+
+    public int getNumber() {
+        return number;
     }
 
     @Override

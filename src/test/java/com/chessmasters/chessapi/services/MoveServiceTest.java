@@ -76,7 +76,7 @@ public class MoveServiceTest {
         final Long gameId = 1L;
         final Long playerId = 1L;
         final Long pieceId = 1L;
-        Square destination = new Square(1, E);
+        Square destination = new Square(E, 1);
         MoveRequest request = new MoveRequest(playerId, pieceId, destination);
         GameEntity gameEntity = new GameEntity(new PlayerEntity(), GameStatus.CREATED);
 
@@ -91,7 +91,7 @@ public class MoveServiceTest {
         final Long gameId = 1L;
         final Long playerId = 1L;
         final Long pieceId = 1L;
-        Square destination = new Square(1, E);
+        Square destination = new Square(E, 1);
         GameEntity gameEntity = new GameEntity(new PlayerEntity(), GameStatus.STARTED);
         MoveRequest request = new MoveRequest(playerId, pieceId, destination);
 
@@ -105,7 +105,7 @@ public class MoveServiceTest {
     private MoveRequest createMoveRequest() {
         final Long playerId = 1L;
         final Long pieceId = 1L;
-        Square destination = new Square(1, E);
+        Square destination = new Square(E, 1);
         PlayerEntity playerEntity = new PlayerEntity();
         playerEntity.setColor(Color.WHITE);
 
